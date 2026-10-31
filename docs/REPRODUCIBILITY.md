@@ -90,6 +90,36 @@ python scripts/build_decision_contrasts_figure.py
 Both write to `figures/` and use portable Matplotlib fonts. The decision
 contrast script reads its values directly from the released CSV tables.
 
+## Comparator configuration
+
+`results/manuscript/comparator_configurations.csv` records, for all twelve
+declared pipelines, the input features, time representation, censoring and cause
+handling, hyperparameters, tuning data, calibration, stopping rule, and software
+version. The benchmark compares these complete declared pipelines; it is not a
+matched comparison of estimator families under identical post-hoc calibration.
+
+## Episode-separated stopping sensitivity
+
+The focal library default selects its stopping iteration from expanded
+person-period rows. `scripts/run_early_stopping_sensitivity.py` provides the
+bounded reviewer-requested check: it selects the iteration count on an earlier
+chronological episode holdout, refits all declared training episodes with library
+early stopping disabled, preserves the calibration and final test partitions, and
+writes only aggregate outputs.
+
+```bash
+PYTHONPATH="$PWD/src" python scripts/run_early_stopping_sensitivity.py \
+  --wetlinks-dir /path/to/WetLinks/Preprocessed_Data \
+  --output-dir /tmp/leo-service-survival/early-stopping
+```
+
+The frozen aggregate audit is in `results/early_stopping_sensitivity/`. The
+chronological rule selected one boosting iteration. Its final-test Brier point
+estimate was slightly lower than the automatic-stopping result, but the four-block
+interval versus the feature-free reference still included zero and its 60-minute
+probabilities were highly compressed. The principal conclusion therefore did not
+change.
+
 ## EOS mechanism study
 
 The EOS mechanism runner requires the separately obtained EOS-Bench scenario

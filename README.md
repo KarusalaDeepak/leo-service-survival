@@ -28,6 +28,8 @@ ranking, reliable long-horizon calibration, or a better decision policy.
   controlled evaluations
 - `results/review_audit/` — focused aggregate checks added during the final
   review revision
+- `results/early_stopping_sensitivity/` — aggregate episode-separated stopping
+  sensitivity requested during final review
 - `results/eos_mechanism/` — redistribution-safe aggregate synthetic
   mechanism results
 - `results/gate_logic/` — aggregate fail-closed gate stress summaries

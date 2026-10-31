@@ -45,11 +45,12 @@ def known_survival_outcome(frame: pd.DataFrame, horizon: int) -> tuple[np.ndarra
 
 
 def _censoring_survival(frame: pd.DataFrame, query: np.ndarray, *, left_limit: bool) -> np.ndarray:
-    """Kaplan--Meier estimate of P(C >= t) for IPCW evaluation.
+    """Discrete Kaplan--Meier estimate of post-boundary ``P(C > t)``.
 
     Event rows are censored observations for the censoring distribution and
-    administrative-censoring rows are its events.  ``left_limit`` obtains
-    G(T-) for observed service failures; otherwise G(t) is returned.
+    administrative-censoring rows are its events.  ``left_limit=True`` returns
+    the pre-boundary value ``P(C >= t)`` when the query equals a boundary;
+    otherwise the post-boundary value ``P(C > t)`` is returned.
     """
 
     duration = frame["duration_bins"].to_numpy(int)
@@ -95,7 +96,16 @@ def ipcw_survival_targets(
     frame: pd.DataFrame,
     horizon: int,
 ) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
-    """Return evaluability, binary survival targets and IPCW weights."""
+    """Return evaluability, binary survival targets and IPCW weights.
+
+    ``duration_bins`` is the observed follow-up boundary ``U=min(T, C)`` and
+    ``event`` is the observed-event indicator.  Under the discrete convention,
+    a censoring boundary at ``u`` means that the outcome in bin ``u`` is
+    unknown, whereas an event at ``u`` is observed.  Thus a record is evaluable
+    at ``horizon`` only when an event is observed by the horizon or the observed
+    boundary lies strictly after it.  The post-boundary Kaplan--Meier value used
+    below estimates the corresponding ``P(C > u)`` denominator.
+    """
 
     duration = frame["duration_bins"].to_numpy(int)
     event = frame["event"].to_numpy(int)
@@ -114,6 +124,26 @@ def ipcw_survival_targets(
         )
         weights[survived] = 1.0 / g_horizon
     return known, target, weights
+
+
+def ipcw_restricted_duration_targets(
+    frame: pd.DataFrame,
+    horizon: int,
+) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """Return observed restricted-duration references and their IPCW weights.
+
+    For an event observed at ``U <= H``, the reference is ``U``.  For a record
+    known to survive beyond ``H``, the reference is ``H``.  A record censored at
+    or before ``H`` is not evaluable and receives a zero weight; its returned
+    reference is ``NaN`` so downstream code cannot accidentally treat the
+    censoring boundary as a realized event time.
+    """
+
+    known, _target, weights = ipcw_survival_targets(frame, int(horizon))
+    observed_time = frame["duration_bins"].to_numpy(float)
+    reference = np.full(len(frame), np.nan, dtype=float)
+    reference[known] = np.minimum(observed_time[known], float(horizon))
+    return known, reference, weights
 
 
 def stratified_ipcw_survival_targets(
@@ -314,15 +344,16 @@ def evaluate_survival_predictions(
             x=np.asarray([0, *horizons], dtype=float),
             axis=1,
         )
-    duration = frame["duration_bins"].to_numpy(float)
     # ``restricted_mean`` is the model's individual expected restricted
     # duration, 1 + sum_{h=1}^{H-1} S(h), under the positive-integer event-time
-    # convention.  The comparison target is the realized restricted duration
-    # min(T, H), not a second estimate of a population RMST.  IPCW makes the
-    # mean absolute error identifiable under the stated independent-censoring
-    # assumption; rows censored before H receive zero weight.
-    observed_rmst = np.minimum(duration, max_horizon)
-    rmst_known, _, rmst_weights = ipcw_survival_targets(frame, max_horizon)
+    # convention.  The comparison target is the observed restricted reference
+    # (event edge U when delta=1 and U<=H, or H when U>H), not a latent event
+    # time or a second estimate of a population RMST.  IPCW makes the mean
+    # absolute error identifiable under the stated independent-censoring
+    # assumption; rows censored at or before H receive zero weight.
+    rmst_known, observed_rmst, rmst_weights = ipcw_restricted_duration_targets(
+        frame, max_horizon
+    )
     absolute_error = np.abs(restricted_mean - observed_rmst)
     rmst_mae = (
         float(np.average(absolute_error[rmst_known], weights=rmst_weights[rmst_known]))

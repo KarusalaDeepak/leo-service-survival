@@ -460,6 +460,25 @@ def test_ipcw_failure_weight_respects_discrete_censoring_boundary_ties():
     assert np.isclose(weights[0], 1.5)
 
 
+def test_restricted_duration_cases_use_observed_follow_up_not_latent_time():
+    from leo_service_survival.metrics import ipcw_restricted_duration_targets
+
+    frame = pd.DataFrame(
+        {
+            # event before H; known survival beyond H; censor before H; censor at H
+            "duration_bins": [2, 4, 2, 3],
+            "event": [1, 0, 0, 0],
+        }
+    )
+    known, reference, weights = ipcw_restricted_duration_targets(frame, horizon=3)
+
+    assert known.tolist() == [True, True, False, False]
+    assert np.allclose(reference[:2], [2.0, 3.0])
+    assert np.isnan(reference[2:]).all()
+    # With this hand-checkable risk set, G(2)=3/4 and G(3)=3/8.
+    assert np.allclose(weights, [4.0 / 3.0, 8.0 / 3.0, 0.0, 0.0])
+
+
 def test_censoring_support_and_stratified_brier_are_explicit():
     frame = pd.DataFrame(
         {

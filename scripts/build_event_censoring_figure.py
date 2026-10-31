@@ -128,7 +128,7 @@ def build_figure(output: Path = OUTPUT) -> None:
             ax.text(22.5, y, "same-limit bad", color=RED, fontsize=5.35, fontweight="bold", ha="center", va="center", zorder=4)
             ax.plot(20, y, marker="X", markersize=6.7, markeredgewidth=1.1, color=RED, zorder=5)
             ax.annotate(
-                "onset/event: 20 min",
+                "assigned event edge: 20 min",
                 xy=(20, y + 0.02),
                 xytext=(18.6, y + 0.34),
                 fontsize=5.95,

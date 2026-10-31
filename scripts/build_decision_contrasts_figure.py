@@ -59,8 +59,8 @@ def build(results_dir: Path, output: Path) -> None:
             "footer": "60-s moving-block interval; one recorded campaign.",
         },
         {
-            "title": "(b) Survival scheduler minus EDF",
-            "label": "EDF",
+            "title": "(b) Survival-ranked minus earliest-feasible",
+            "label": "Earliest",
             "point": 100 * float(scheduler_row["mean_difference"]),
             "low": 100 * float(scheduler_row["ci_low"]),
             "high": 100 * float(scheduler_row["ci_high"]),

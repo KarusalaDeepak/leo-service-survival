@@ -1,0 +1,5 @@
+model_variant,horizon_bins,parameter,estimate,ideal_value,ci_low,ci_high,successful_block_resamples,failed_block_resamples,heldout_blocks,estimation_status,scope
+official_auto_early_stopping,12,intercept,4.261561855887284,0.0,2.640496264586978,7.167672575315213,400,0,4,estimable,IPCW pseudo-likelihood diagnostic with descriptive whole-block interval; not an ordinary likelihood-ratio test
+official_auto_early_stopping,12,slope,-0.9216837860834072,1.0,-1.863884528643135,-0.3765614792230005,400,0,4,estimable,IPCW pseudo-likelihood diagnostic with descriptive whole-block interval; not an ordinary likelihood-ratio test
+chronological_fixed_iteration_sensitivity,12,intercept,-15.57621847148871,0.0,-33.25333215216951,61.95150647947873,339,61,4,estimable,IPCW pseudo-likelihood diagnostic with descriptive whole-block interval; not an ordinary likelihood-ratio test
+chronological_fixed_iteration_sensitivity,12,slope,6.423399232596668,1.0,-22.22297246792869,13.133955330480333,339,61,4,estimable,IPCW pseudo-likelihood diagnostic with descriptive whole-block interval; not an ordinary likelihood-ratio test

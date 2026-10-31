@@ -1,0 +1,17 @@
+analysis_block,reference,baseline,metric,episodes,events,known_horizon_outcomes,ipcw_effective_sample_size_episode_horizons,reference_minus_baseline,weight_source
+2024-W07,chronological_fixed,official_auto,integrated_brier,210,5,1553,1488.803758833112,-0.0002723371468437278,one fixed full-test censoring Kaplan-Meier estimate
+2024-W08,chronological_fixed,official_auto,integrated_brier,228,29,1826,1752.7501661241304,-0.0005749493598319163,one fixed full-test censoring Kaplan-Meier estimate
+2024-W09,chronological_fixed,official_auto,integrated_brier,231,30,1918,1839.2200838482283,-0.00047552934305333106,one fixed full-test censoring Kaplan-Meier estimate
+2024-W10,chronological_fixed,official_auto,integrated_brier,152,19,1356,1298.645683547816,-3.992724467981943e-05,one fixed full-test censoring Kaplan-Meier estimate
+2024-W07,chronological_fixed,official_auto,binary_cross_entropy,210,5,1553,1488.803758833112,-0.0028697099352717687,one fixed full-test censoring Kaplan-Meier estimate
+2024-W08,chronological_fixed,official_auto,binary_cross_entropy,228,29,1826,1752.7501661241304,-0.006671405835238036,one fixed full-test censoring Kaplan-Meier estimate
+2024-W09,chronological_fixed,official_auto,binary_cross_entropy,231,30,1918,1839.2200838482283,-0.005306775109588572,one fixed full-test censoring Kaplan-Meier estimate
+2024-W10,chronological_fixed,official_auto,binary_cross_entropy,152,19,1356,1298.645683547816,-0.0007559741890120899,one fixed full-test censoring Kaplan-Meier estimate
+2024-W07,chronological_fixed,kaplan_meier,integrated_brier,210,5,1553,1488.803758833112,0.00010004366397824205,one fixed full-test censoring Kaplan-Meier estimate
+2024-W08,chronological_fixed,kaplan_meier,integrated_brier,228,29,1826,1752.7501661241304,-0.0012163621702916236,one fixed full-test censoring Kaplan-Meier estimate
+2024-W09,chronological_fixed,kaplan_meier,integrated_brier,231,30,1918,1839.2200838482283,-0.0013462306022858576,one fixed full-test censoring Kaplan-Meier estimate
+2024-W10,chronological_fixed,kaplan_meier,integrated_brier,152,19,1356,1298.645683547816,-0.0011307980696728744,one fixed full-test censoring Kaplan-Meier estimate
+2024-W07,chronological_fixed,kaplan_meier,binary_cross_entropy,210,5,1553,1488.803758833112,0.0011386519564332124,one fixed full-test censoring Kaplan-Meier estimate
+2024-W08,chronological_fixed,kaplan_meier,binary_cross_entropy,228,29,1826,1752.7501661241304,-0.014331227784553232,one fixed full-test censoring Kaplan-Meier estimate
+2024-W09,chronological_fixed,kaplan_meier,binary_cross_entropy,231,30,1918,1839.2200838482283,-0.015941539163756988,one fixed full-test censoring Kaplan-Meier estimate
+2024-W10,chronological_fixed,kaplan_meier,binary_cross_entropy,152,19,1356,1298.645683547816,-0.011439988621927381,one fixed full-test censoring Kaplan-Meier estimate
