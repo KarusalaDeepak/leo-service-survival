@@ -1,0 +1,4 @@
+scope,grid_rows,observed_rows,missing_rows,observed_segments,segment_mean_bins,segment_median_bins,segment_p95_bins,segment_max_bins,segment_mean_minutes,segment_median_minutes,segment_p95_minutes,segment_max_minutes
+overall,94523,79690,14833,6645,11.99247554552295,6.0,43.0,312,59.96237772761475,30.0,215.0,1560
+uos-rz,51763,44069,7694,2232,19.744175627240143,12.0,62.0,228,98.72087813620071,60.0,310.0,1140
+utwente,42760,35621,7139,4413,8.071833220031724,5.0,23.0,312,40.35916610015862,25.0,115.0,1560

@@ -1,0 +1,4 @@
+condition,paired_tasks,screened_completed,no_screen_completed,no_screen_minus_screen_completed,no_screen_selected_input_ineligible,no_screen_selected_input_ineligible_completed,screen_vs_no_screen_changed_selection,no_screen_improved_on_changed_selection,no_screen_regressed_on_changed_selection,raw_completed,calibrated_completed,calibrated_minus_raw_completed,raw_vs_calibrated_changed_selection,calibrated_improved_on_changed_selection,calibrated_regressed_on_changed_selection
+favorable,1000,729,728,-1,11,10,13,0,1,733,729,-4,26,1,5
+neutral,1000,618,625,7,25,20,30,9,2,619,618,-1,63,12,13
+adverse,1000,734,735,1,5,4,8,2,1,735,734,-1,11,0,1

@@ -1,0 +1,13 @@
+analysis,metric,source_block,reference,baseline,mean_difference,generated_scenarios_in_block
+final_calibrated_minus_raw_base,completion_rate_all,2024-W07,final_calibrated,raw_base,-0.0016666666666666774,30
+final_calibrated_minus_raw_base,completion_rate_all,2024-W08,final_calibrated,raw_base,-0.0037500000000000016,30
+final_calibrated_minus_raw_base,completion_rate_all,2024-W09,final_calibrated,raw_base,0.005416666666666666,30
+final_calibrated_minus_raw_base,completion_rate_all,2024-W10,final_calibrated,raw_base,0.002916666666666662,30
+final_calibrated_minus_raw_base,fairness,2024-W07,final_calibrated,raw_base,-0.003724840784713886,30
+final_calibrated_minus_raw_base,fairness,2024-W08,final_calibrated,raw_base,0.00444665318088513,30
+final_calibrated_minus_raw_base,fairness,2024-W09,final_calibrated,raw_base,0.0032184233665274085,30
+final_calibrated_minus_raw_base,fairness,2024-W10,final_calibrated,raw_base,-0.0032906270145541114,30
+final_calibrated_minus_raw_base,priority_reward,2024-W07,final_calibrated,raw_base,-0.001209927473850869,30
+final_calibrated_minus_raw_base,priority_reward,2024-W08,final_calibrated,raw_base,-0.005161921473017974,30
+final_calibrated_minus_raw_base,priority_reward,2024-W09,final_calibrated,raw_base,0.0034575103482232064,30
+final_calibrated_minus_raw_base,priority_reward,2024-W10,final_calibrated,raw_base,0.0015734810031318843,30

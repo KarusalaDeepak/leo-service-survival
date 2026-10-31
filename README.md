@@ -26,6 +26,8 @@ ranking, reliable long-horizon calibration, or a better decision policy.
 - `configs/` — frozen manuscript-evaluation configuration
 - `results/manuscript/` — compact aggregate tables from the measured and
   controlled evaluations
+- `results/review_audit/` — focused aggregate checks added during the final
+  review revision
 - `results/eos_mechanism/` — redistribution-safe aggregate synthetic
   mechanism results
 - `results/gate_logic/` — aggregate fail-closed gate stress summaries
@@ -34,6 +36,9 @@ ranking, reliable long-horizon calibration, or a better decision policy.
 Raw third-party datasets, row-level outputs with unresolved redistribution
 terms, unpublished manuscript files, superseded runs, and vendored simulator
 repositories are intentionally excluded.
+
+This is therefore an **auditable code and aggregate-results package**, not a
+self-contained one-command reproduction archive.
 
 ## Installation
 
@@ -80,6 +85,10 @@ The runner records seeds, arguments, versions, input hashes, and declared
 limitations. Use `--help` for all options. For a quick software check, reduce
 the bootstrap repetitions and scheduling scenarios and add
 `--skip-sensitivity`.
+
+See [the reproducibility guide](docs/REPRODUCIBILITY.md) for the exact input
+roles, focused audit command, figure builders, and the limits of what can be
+reproduced without redistributing third-party data.
 
 ## Data and evidence boundaries
 

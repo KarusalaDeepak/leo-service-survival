@@ -1,0 +1,5 @@
+endpoint_resolution,episodes,uos_rz_episodes,utwente_episodes,duration_mean_bins,duration_median_bins,current_rtt_mean_ms,current_rtt_median_ms,current_loss_mean_pct,current_loss_median_pct,start_utc_hour_mean,start_utc_hour_median
+internal_measurement_gap,6136,2082,4054,11.122229465449804,6.0,63.113618970013036,63.001000000000005,0.15029335071707953,0.0,11.542535853976531,12.0
+qualifying_event,367,171,196,14.482288828337875,8.0,62.33103269754769,61.936,0.24196185286103544,0.2,12.310626702997276,14.0
+unresolved_bad_onset_missing_confirmation,360,114,246,11.813888888888888,6.0,63.53862916666666,63.963,0.18333333333333332,0.0,11.688888888888888,13.0
+recording_ended_good,2,1,1,75.5,75.5,58.37475,58.37475,0.5,0.5,11.5,11.5
