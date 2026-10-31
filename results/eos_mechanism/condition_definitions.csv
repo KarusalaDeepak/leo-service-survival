@@ -1,0 +1,7 @@
+condition,path_profile_id,mean_snr_db,mean_rate_mbps,jitter_ms,outage_probability,handover_probability,declared_reliability_proxy,evidence_tier
+favorable,high_snr_path,14.0,0.032,8.0,0.045,0.045,0.8833022155207801,synthetic_simulation
+favorable,lower_snr_path,10.5,0.032,22.0,0.2,0.25,0.5494565260339954,synthetic_simulation
+neutral,high_snr_path,14.0,0.032,15.0,0.12,0.145,0.7085836350687887,synthetic_simulation
+neutral,lower_snr_path,10.5,0.032,15.0,0.12,0.145,0.7085836350687887,synthetic_simulation
+adverse,high_snr_path,14.0,0.032,22.0,0.2,0.25,0.5494565260339954,synthetic_simulation
+adverse,lower_snr_path,10.5,0.032,8.0,0.045,0.045,0.8833022155207801,synthetic_simulation

@@ -1,0 +1,17 @@
+feature,origin,nonmissing_episodes,missing_episodes,availability_fraction,coverage_status,covariate_model_handling
+latency_mean_ms,recorded ping field aggregated to five-minute bin,389,0,1.0,complete,observed value where finite; WetLinks-training median otherwise
+latency_std_ms,recorded ping field aggregated to five-minute bin,389,0,1.0,complete,observed value where finite; WetLinks-training median otherwise
+latency_max_ms,recorded ping field aggregated to five-minute bin,389,0,1.0,complete,observed value where finite; WetLinks-training median otherwise
+packet_loss_pct,recorded ping field aggregated to five-minute bin,389,0,1.0,complete,observed value where finite; WetLinks-training median otherwise
+download_mbps,unavailable in Palo Alto record,0,389,0.0,unavailable,WetLinks-training median; no Palo Alto fit
+upload_mbps,unavailable in Palo Alto record,0,389,0.0,unavailable,WetLinks-training median; no Palo Alto fit
+temperature_c,unavailable in Palo Alto record,0,389,0.0,unavailable,WetLinks-training median; no Palo Alto fit
+humidity_pct,unavailable in Palo Alto record,0,389,0.0,unavailable,WetLinks-training median; no Palo Alto fit
+rain_mm,unavailable in Palo Alto record,0,389,0.0,unavailable,WetLinks-training median; no Palo Alto fit
+wind_mps,unavailable in Palo Alto record,0,389,0.0,unavailable,WetLinks-training median; no Palo Alto fit
+pressure_hpa,unavailable in Palo Alto record,0,389,0.0,unavailable,WetLinks-training median; no Palo Alto fit
+latency_roll3,derived from recorded ping history,389,0,1.0,complete,observed value where finite; WetLinks-training median otherwise
+loss_roll3,derived from recorded ping history,389,0,1.0,complete,observed value where finite; WetLinks-training median otherwise
+rain_latency_interaction,unavailable in Palo Alto record,0,389,0.0,unavailable,WetLinks-training median; no Palo Alto fit
+hour_sin,unavailable in Palo Alto record,0,389,0.0,unavailable,WetLinks-training median; no Palo Alto fit
+hour_cos,unavailable in Palo Alto record,0,389,0.0,unavailable,WetLinks-training median; no Palo Alto fit

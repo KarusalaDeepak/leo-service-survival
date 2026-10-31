@@ -1,0 +1,79 @@
+{
+  "train_blocks": [
+    "2023-W37",
+    "2023-W38",
+    "2023-W39",
+    "2023-W40",
+    "2023-W41",
+    "2023-W42",
+    "2023-W43",
+    "2023-W44",
+    "2023-W45",
+    "2023-W46",
+    "2023-W47",
+    "2023-W48",
+    "2023-W49",
+    "2023-W50",
+    "2023-W51",
+    "2023-W52"
+  ],
+  "calibration_blocks": [
+    "2024-W02",
+    "2024-W03",
+    "2024-W04",
+    "2024-W05"
+  ],
+  "test_blocks": [
+    "2024-W07",
+    "2024-W08",
+    "2024-W09",
+    "2024-W10",
+    "2024-W11"
+  ],
+  "train_end": "2023-12-31T23:10:00+00:00",
+  "calibration_start": "2024-01-08T00:05:00+00:00",
+  "calibration_end": "2024-02-04T23:45:00+00:00",
+  "test_start": "2024-02-12T00:25:00+00:00",
+  "embargo_blocks_per_boundary": 1,
+  "train_label_resolution_end": "2023-12-31T23:50:00+00:00",
+  "calibration_label_resolution_end": "2024-02-05T00:50:00+00:00",
+  "train_analysis_label_end": "2023-12-31T23:50:00+00:00",
+  "calibration_analysis_label_end": "2024-02-05T00:50:00+00:00",
+  "label_lookahead_disjoint": true,
+  "inference_block_rule": {
+    "source_column": "calendar_block",
+    "output_column": "analysis_block",
+    "minimum_fraction_of_prior_median": 0.25,
+    "original_blocks": [
+      "2024-W07",
+      "2024-W08",
+      "2024-W09",
+      "2024-W10",
+      "2024-W11"
+    ],
+    "original_block_sizes": {
+      "2024-W07": 210,
+      "2024-W08": 228,
+      "2024-W09": 231,
+      "2024-W10": 149,
+      "2024-W11": 3
+    },
+    "merged": true,
+    "merged_terminal_block": "2024-W11",
+    "merged_into_block": "2024-W10",
+    "prior_block_size_median": 219.0,
+    "terminal_merge_threshold": 54.75,
+    "analysis_blocks": [
+      "2024-W07",
+      "2024-W08",
+      "2024-W09",
+      "2024-W10"
+    ],
+    "analysis_block_sizes": {
+      "2024-W07": 210,
+      "2024-W08": 228,
+      "2024-W09": 231,
+      "2024-W10": 152
+    }
+  }
+}

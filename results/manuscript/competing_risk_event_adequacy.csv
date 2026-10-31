@@ -1,0 +1,10 @@
+partition,cause,episodes,events,event_fraction_descriptive,sites_with_event,blocks_with_event,total_blocks,expanded_design_columns,events_per_design_column_heuristic,adequacy_status,interpretation
+train,loss,4452,82,0.018418688230008983,2,15,16,19,4.315789473684211,limited_clustered_support,descriptive clustered support only; no iid confidence interval and no post-hoc observed power
+train,latency,4452,18,0.004043126684636119,2,8,16,19,0.9473684210526315,sparse_relative_to_design,descriptive clustered support only; no iid confidence interval and no post-hoc observed power
+train,joint,4452,0,0.0,0,0,16,19,0.0,sparse_relative_to_design,descriptive clustered support only; no iid confidence interval and no post-hoc observed power
+calibration,loss,816,28,0.03431372549019608,2,3,4,19,1.4736842105263157,limited_clustered_support,descriptive clustered support only; no iid confidence interval and no post-hoc observed power
+calibration,latency,816,1,0.0012254901960784314,1,1,4,19,0.05263157894736842,sparse_relative_to_design,descriptive clustered support only; no iid confidence interval and no post-hoc observed power
+calibration,joint,816,0,0.0,0,0,4,19,0.0,not_estimable,descriptive clustered support only; no iid confidence interval and no post-hoc observed power
+test,loss,821,83,0.10109622411693057,2,4,4,19,4.368421052631579,limited_clustered_support,descriptive clustered support only; no iid confidence interval and no post-hoc observed power
+test,latency,821,0,0.0,0,0,4,19,0.0,insufficient_external_events,descriptive clustered support only; no iid confidence interval and no post-hoc observed power
+test,joint,821,0,0.0,0,0,4,19,0.0,not_estimable,descriptive clustered support only; no iid confidence interval and no post-hoc observed power

@@ -1,0 +1,2 @@
+evidence_tier,stable_campaigns,shift_campaigns,false_alarm_campaigns,detected_shift_campaigns,false_alarm_rate,false_alarm_rate_lower,false_alarm_rate_upper,detection_rate,detection_rate_lower,detection_rate_upper,median_detection_delay_rows,confidence,inference_unit,scope
+synthetic_simulation,30,30,0,30,0.0,0.0,0.11570330822202779,1.0,0.8842966917779722,1.0,0.0,0.95,campaign,Exact binomial intervals assume independent supplied campaigns; synthetic stress replicates are operating-characteristic evidence only.

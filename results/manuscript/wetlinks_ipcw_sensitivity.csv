@@ -1,0 +1,37 @@
+model,maximum_horizon_bins,maximum_horizon_minutes,censoring_weighting,integrated_brier,assumption
+calibrated_competing_risk,3,15,marginal,0.03135647500161426,independent censoring marginally
+calibrated_competing_risk,3,15,site_stratified,0.03150153658529126,independent censoring conditional on site
+calibrated_competing_risk,3,15,calendar_block_stratified,0.031081783524436534,independent censoring conditional on analysis_block
+calibrated_competing_risk,6,30,marginal,0.048411202457932075,independent censoring marginally
+calibrated_competing_risk,6,30,site_stratified,0.048514084557388586,independent censoring conditional on site
+calibrated_competing_risk,6,30,calendar_block_stratified,0.048005862749309534,independent censoring conditional on analysis_block
+calibrated_competing_risk,9,45,marginal,0.06244434316192915,independent censoring marginally
+calibrated_competing_risk,9,45,site_stratified,0.06245642915605302,independent censoring conditional on site
+calibrated_competing_risk,9,45,calendar_block_stratified,0.061883766768725264,independent censoring conditional on analysis_block
+calibrated_competing_risk,12,60,marginal,0.07745293899346359,independent censoring marginally
+calibrated_competing_risk,12,60,site_stratified,0.07801060524285193,independent censoring conditional on site
+calibrated_competing_risk,12,60,calendar_block_stratified,0.07640786182645234,independent censoring conditional on analysis_block
+competing_risk_uncalibrated,3,15,marginal,0.031524368049686134,independent censoring marginally
+competing_risk_uncalibrated,3,15,site_stratified,0.03166808055452604,independent censoring conditional on site
+competing_risk_uncalibrated,3,15,calendar_block_stratified,0.03125070914359079,independent censoring conditional on analysis_block
+competing_risk_uncalibrated,6,30,marginal,0.04892277654278576,independent censoring marginally
+competing_risk_uncalibrated,6,30,site_stratified,0.04901856962780594,independent censoring conditional on site
+competing_risk_uncalibrated,6,30,calendar_block_stratified,0.0485171618583162,independent censoring conditional on analysis_block
+competing_risk_uncalibrated,9,45,marginal,0.06347053875007365,independent censoring marginally
+competing_risk_uncalibrated,9,45,site_stratified,0.06347536953448385,independent censoring conditional on site
+competing_risk_uncalibrated,9,45,calendar_block_stratified,0.0629074390803394,independent censoring conditional on analysis_block
+competing_risk_uncalibrated,12,60,marginal,0.07933693728552929,independent censoring marginally
+competing_risk_uncalibrated,12,60,site_stratified,0.07990551288097526,independent censoring conditional on site
+competing_risk_uncalibrated,12,60,calendar_block_stratified,0.07827594370326312,independent censoring conditional on analysis_block
+cox_ph,3,15,marginal,0.031371041314179726,independent censoring marginally
+cox_ph,3,15,site_stratified,0.031509025958017634,independent censoring conditional on site
+cox_ph,3,15,calendar_block_stratified,0.031094518068948748,independent censoring conditional on analysis_block
+cox_ph,6,30,marginal,0.048623679705677825,independent censoring marginally
+cox_ph,6,30,site_stratified,0.0487034833084986,independent censoring conditional on site
+cox_ph,6,30,calendar_block_stratified,0.04821483850781046,independent censoring conditional on analysis_block
+cox_ph,9,45,marginal,0.06296043406094563,independent censoring marginally
+cox_ph,9,45,site_stratified,0.06292554465370254,independent censoring conditional on site
+cox_ph,9,45,calendar_block_stratified,0.06238061006944204,independent censoring conditional on analysis_block
+cox_ph,12,60,marginal,0.07863948544788735,independent censoring marginally
+cox_ph,12,60,site_stratified,0.07914725096151944,independent censoring conditional on site
+cox_ph,12,60,calendar_block_stratified,0.07754716768013965,independent censoring conditional on analysis_block

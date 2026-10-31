@@ -1,0 +1,6 @@
+dataset,records,events,sites_or_paths,role
+WetLinks empirical,6865,239.0,2,primary service-survival fit/calibration/test
+Palo Alto Starlink ping record,389,350.0,1,exploratory external transport-stress evaluation with fixed WetLinks-trained models
+COMMECT concurrent multi-access,15883,9201.0,3,single-campaign purged shadow replay
+LENS-derived released prediction artifact,149,36.0,15,exploratory diagnostic only
+Paper 1 TLE-derived windows,456,,456,controlled deterministic geometry bound

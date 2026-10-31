@@ -1,0 +1,3 @@
+source,site_contexts,operator_context,satellite_identity,rf_observation,handover_observation,beam_identity,gateway_identity,orbital_geometry,matched_rtt,eo_workload,action_or_completion,evidence_tier
+SatInView,1,Starlink,inferred trajectory/obstruction-map match,False,derived consecutive inferred-ID change,False,False,True,True,False,False,field_observational
+LENS OneWeb compact interval,1,OneWeb,terminal AIM SATELLITE_ID plus TLE name-key match,True,adjacent AIM satellite/track assignment changes,False,False,TLE association; no propagated look angles in this audit,True,False,False,field_observational

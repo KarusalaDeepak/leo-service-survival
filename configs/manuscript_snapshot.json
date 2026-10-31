@@ -1,0 +1,27 @@
+{
+  "classification": "exploratory manuscript snapshot, not confirmatory validation",
+  "random_seed": 17,
+  "scheduler_tuning_seed": 1017,
+  "wetlinks": {
+    "bin_minutes": 5,
+    "latency_limit_ms": 80.0,
+    "packet_loss_limit_pct": 1.0,
+    "sustained_bad_bins": 2,
+    "analysis_horizon_bins": 12,
+    "split": "common calendar weeks, 60% train, 20% calibration boundary, one-week embargo at both boundaries"
+  },
+  "commect": {
+    "bin_seconds": 1,
+    "latency_limit_ms": 60.0,
+    "label_lookahead_bins": 30,
+    "decision_horizon_seconds": 5,
+    "purge_bins": 30,
+    "evidence_gate": "abstain because only one acquisition campaign is available"
+  },
+  "bootstrap_repetitions": 400,
+  "scheduling_scenarios": 120,
+  "primary_comparator": "cox_ph",
+  "primary_score": "mean IPCW Brier score over horizons 1 through 12",
+  "censoring_assumption": "marginal non-informative censoring; report extreme missing-outcome sensitivity",
+  "claim_rule": "report endpoint-specific comparisons and limitations; do not claim universal dominance"
+}

@@ -1,0 +1,42 @@
+{
+  "evidence_role": "exploratory external transport-stress evaluation",
+  "source_record": "Zenodo 10.5281/zenodo.14987305",
+  "source_daily_files": 12,
+  "episodes": 389,
+  "events_in_full_episode_record": 387,
+  "events_within_60_minute_analysis_horizon": 350,
+  "non_event_records_after_horizon_truncation": 39,
+  "known_survivors_through_60_minute_horizon": 37,
+  "censored_with_unknown_status_at_or_before_horizon": 2,
+  "analysis_event_fraction": 0.8997429305912596,
+  "event_categories_within_horizon": {
+    "loss": 350
+  },
+  "sites": 1,
+  "calendar_blocks": 3,
+  "first_episode_timestamp_as_parsed": "2024-05-09T13:35:00+00:00",
+  "last_episode_timestamp_as_parsed": "2024-05-20T15:10:00+00:00",
+  "timestamp_note": "source timestamps have no stated time zone; UTC attachment is a parsing convention, and cyclical clock-time features are intentionally unavailable",
+  "analysis_horizon_bins": 12,
+  "bin_seconds": 300,
+  "evaluable_episodes_by_horizon": {
+    "1": 389,
+    "2": 388,
+    "3": 388,
+    "4": 388,
+    "5": 388,
+    "6": 388,
+    "7": 388,
+    "8": 388,
+    "9": 388,
+    "10": 388,
+    "11": 388,
+    "12": 387
+  },
+  "features_total": 16,
+  "features_unavailable": 10,
+  "features_partial": 0,
+  "features_complete": 6,
+  "model_application": "all models fixed after WetLinks training/calibration; no Palo Alto refit, recalibration, tuning, or model selection",
+  "interpretation": "descriptive performance under cross-geography transport and covariate shift; not confirmatory and not evidence of model superiority"
+}

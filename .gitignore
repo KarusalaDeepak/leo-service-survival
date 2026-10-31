@@ -1,0 +1,41 @@
+.DS_Store
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+build/
+dist/
+*.egg-info/
+
+# LaTeX build products
+*.aux
+*.bbl
+*.blg
+*.log
+*.out
+*.synctex.gz
+*.toc
+*.fdb_latexmk
+*.fls
+
+# Third-party data, upstream repositories, and local working artifacts
+data/
+upstream/
+archive/
+tmp/
+completion_run_*/
+manuscript_run_*/
+output/
+simulation/
+
+# Large or private release bundles
+*.zip
+*.7z
+*.tar
+*.tar.gz
+*.zst

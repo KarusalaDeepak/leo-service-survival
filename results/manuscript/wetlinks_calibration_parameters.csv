@@ -1,0 +1,7 @@
+horizon_bins,parameter,estimate,ideal_value,ci_low,ci_high,successful_block_resamples,failed_block_resamples,heldout_blocks,estimation_status,scope
+1,intercept,26.18337279832445,0.0,-12.905138103084449,32.136467101174695,265,135,4,estimable,IPCW pseudo-likelihood diagnostic with descriptive whole-block interval; not an ordinary likelihood-ratio test
+1,slope,-4.230790100315023,1.0,-5.40220265144555,3.2027945290149864,265,135,4,estimable,IPCW pseudo-likelihood diagnostic with descriptive whole-block interval; not an ordinary likelihood-ratio test
+6,intercept,4.1817812014924955,0.0,1.3413022654102777,9.339092479935058,400,0,4,estimable,IPCW pseudo-likelihood diagnostic with descriptive whole-block interval; not an ordinary likelihood-ratio test
+6,slope,-0.46836771048816406,1.0,-1.700944360481694,0.29570559325941886,400,0,4,estimable,IPCW pseudo-likelihood diagnostic with descriptive whole-block interval; not an ordinary likelihood-ratio test
+12,intercept,4.261561855887284,0.0,2.5184311847404484,7.167672575315165,400,0,4,estimable,IPCW pseudo-likelihood diagnostic with descriptive whole-block interval; not an ordinary likelihood-ratio test
+12,slope,-0.9216837860834072,1.0,-1.8638845286431183,-0.3704480744249358,400,0,4,estimable,IPCW pseudo-likelihood diagnostic with descriptive whole-block interval; not an ordinary likelihood-ratio test

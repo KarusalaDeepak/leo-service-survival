@@ -1,0 +1,7 @@
+{
+  "criterion": "matched_satellite_beam_gateway_handover_rf",
+  "evidence_tier": "field_observational",
+  "oneweb_assignment_transition_interpretation": "The two satellite/track changes are observed AIM assignment transitions, not operator-confirmed network handovers.",
+  "reason": "The public campaigns provide complementary satellite identity, transition, RF, geometry, and RTT evidence, but neither records measured beam and gateway identity, and the Starlink identity/transition labels are inferred. Unrelated campaigns are not joined to manufacture a complete row.",
+  "satisfied": false
+}

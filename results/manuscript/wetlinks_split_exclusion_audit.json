@@ -1,0 +1,33 @@
+{
+  "scope": "analysis-sample exclusions; not endpoint censoring",
+  "consistent_across_partitions": true,
+  "partition_audits": {
+    "train": {
+      "reason": "calendar_block_embargo",
+      "excluded_blocks": [
+        "2024-W01",
+        "2024-W06"
+      ],
+      "excluded_episode_count": 776,
+      "endpoint_censoring": false
+    },
+    "calibration": {
+      "reason": "calendar_block_embargo",
+      "excluded_blocks": [
+        "2024-W01",
+        "2024-W06"
+      ],
+      "excluded_episode_count": 776,
+      "endpoint_censoring": false
+    },
+    "test": {
+      "reason": "calendar_block_embargo",
+      "excluded_blocks": [
+        "2024-W01",
+        "2024-W06"
+      ],
+      "excluded_episode_count": 776,
+      "endpoint_censoring": false
+    }
+  }
+}
