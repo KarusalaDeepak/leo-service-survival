@@ -1,0 +1,8 @@
+artifact_class,public_release,license_or_terms,required_notice,excluded_content
+wetlinks_derived_predictions_and_scores,allowed,CC-BY-SA-4.0,"WetLinks citation; CC BY-SA 4.0 link; indicate episode construction, prediction, and scoring modifications",upstream raw measurement tables
+author_original_source,inspection_only_under_current_notice,NOTICE.md; no author code license granted,"retain copyright and NOTICE.md",third-party source code
+aggregate_results_with_cleared_boundary,allowed,repository NOTICE and cited upstream terms,"retain evidence-tier and source attribution",row-level source measurements
+unresolved_row_level_sources,prohibited_until_terms_resolved,source-specific terms unresolved,"do not publish",COMMECT; Palo Alto; SatInView; NEXASPHERE; EOS-Bench
+address_bearing_network_payloads,prohibited,privacy and upstream terms,"publish bounded aggregates and hashes only",raw addresses or address-bearing LENS rows
+fitted_model_objects,prohibited,docs/MODEL_OBJECT_POLICY.md,"retrain from source; do not deserialize public binaries",pkl; pickle; joblib; onnx; ubj; model
+

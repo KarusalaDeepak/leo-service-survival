@@ -33,11 +33,16 @@ ranking, reliable long-horizon calibration, or a better decision policy.
 - `results/eos_mechanism/` — redistribution-safe aggregate synthetic
   mechanism results
 - `results/gate_logic/` — aggregate fail-closed gate stress summaries
+- `results/reviewer_prediction_release/` — the complete 12-pipeline by
+  12-horizon WetLinks held-out prediction/score derivative, distributed under
+  a separate CC BY-SA 4.0 data notice
 - `docs/` — source provenance, evidence boundaries, and adapter details
 
 Raw third-party datasets, row-level outputs with unresolved redistribution
 terms, unpublished manuscript files, superseded runs, and vendored simulator
-repositories are intentionally excluded.
+repositories are intentionally excluded. The one included row-level derivative
+is the attributed WetLinks prediction/score audit above; it contains no
+upstream measurement table and does not grant permission for any other source.
 
 This is therefore an **auditable code and aggregate-results package**, not a
 self-contained one-command reproduction archive.
@@ -92,6 +97,20 @@ See [the reproducibility guide](docs/REPRODUCIBILITY.md) for the exact input
 roles, focused audit command, figure builders, and the limits of what can be
 reproduced without redistributing third-party data.
 
+To rebuild only the reviewer prediction derivative after obtaining WetLinks:
+
+```bash
+python scripts/build_prediction_release_artifacts.py \
+  --wetlinks-dir /path/to/WetLinks/Preprocessed_Data \
+  --output-dir /tmp/leo-service-survival/prediction-release
+```
+
+The focused builder fails closed unless all twelve pipelines produce all twelve
+horizons and the recomputed aggregate metrics match the canonical table. See
+[the artifact specification](docs/ARTIFACT_SPECIFICATION.md) for row keys,
+score formulas, calibration diagnostics, failure semantics, tolerances, and
+the derivative-data license boundary.
+
 ## Data and evidence boundaries
 
 The project keeps four evidence types separate:
@@ -114,12 +133,15 @@ calibration-attributable scheduler benefit.
 
 ## Citation
 
-Use [CITATION.cff](CITATION.cff). The versioned source snapshot is available at
-<https://github.com/KarusalaDeepak/leo-service-survival/tree/v1.0.0>.
+Use [CITATION.cff](CITATION.cff). This reviewer archive is frozen locally as
+version `1.1.0`; a public repository URL will be added only after the repository
+has been created and the matching tag has been pushed successfully.
 
 ## License and third-party material
 
 No license has yet been granted for the authors' original source code. Public
 visibility permits inspection but does not by itself grant reuse rights. See
 [NOTICE.md](NOTICE.md). Third-party datasets are not redistributed and remain
-subject to their own licenses and access terms.
+subject to their own licenses and access terms. The derived WetLinks files in
+`results/reviewer_prediction_release/` are separately identified as CC BY-SA
+4.0 and do not relicense the source code.

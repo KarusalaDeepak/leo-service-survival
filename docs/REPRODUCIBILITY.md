@@ -77,6 +77,37 @@ The builder omits the row-level observed-segment table by default. Use
 `--include-observed-segments` only when the output will be handled under the
 WetLinks attribution and share-alike requirements.
 
+## Complete primary prediction and score derivative
+
+The released reviewer derivative was rebuilt from the final public source, not
+reconstructed from selected-horizon tables. It contains all twelve declared
+pipelines at all horizons 1--12 on the same 821 ordered held-out episode IDs.
+Build it into a fresh directory with:
+
+```bash
+PYTHONPATH="$PWD/src" python scripts/build_prediction_release_artifacts.py \
+  --wetlinks-dir /path/to/WetLinks/Preprocessed_Data \
+  --output-dir /tmp/leo-service-survival/prediction-release
+```
+
+The builder refuses partial grids, non-finite probabilities, duplicate row
+identities, incomplete calibration audits, and aggregate metrics that differ
+from `results/manuscript/wetlinks_model_metrics.csv` beyond the declared
+software tolerance. It exports per-row IPCW weights and Brier/log-loss
+contributions, all-pipeline horizon diagnostics, both calibrated-pipeline fit
+audits, execution status, pre-imputation feature coverage, row-order digest,
+input/code/output hashes, and no model objects.
+
+Because this is a WetLinks-derived row-level artifact, retain the CC BY-SA 4.0
+attribution and modification notice in
+`results/reviewer_prediction_release/README.md`. Do not use this pathway to
+publish row-level COMMECT, Palo Alto, SatInView, NEXASPHERE, or EOS-Bench
+material; their redistribution boundaries are different or unresolved.
+
+Run `python scripts/build_result_to_script_manifest.py` after any permitted
+result update. It refreshes `results/result_to_script_manifest.csv`, which maps
+each public result or figure to one producer and records a portable hash.
+
 ## Figure builders
 
 The released aggregate tables are sufficient to regenerate two explanatory

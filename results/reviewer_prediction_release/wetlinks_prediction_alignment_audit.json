@@ -1,0 +1,39 @@
+{
+  "schema_version": "1.0",
+  "status": "passed",
+  "test_set_id": "wetlinks-heldout-d4317eff6d0f1d1b",
+  "episodes": 821,
+  "horizons": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+  ],
+  "pipelines": [
+    "constant_exponential",
+    "kaplan_meier",
+    "weibull_aft",
+    "cox_ph",
+    "additive_discrete_hazard",
+    "linear_discrete_hazard",
+    "boosted_discrete_hazard",
+    "random_forest_discrete_hazard",
+    "xgboost_discrete_hazard",
+    "calibrated_single_risk",
+    "competing_risk_uncalibrated",
+    "calibrated_competing_risk"
+  ],
+  "prediction_rows": 118224,
+  "episode_id_unique": true,
+  "episode_order_sha256": "d4317eff6d0f1d1b497175b0a9fb43a52ecac3a9b51d998f72955df0253866f9",
+  "row_order_rule": "test_row_index is the captured chronological test-frame order; every pipeline-horizon pair repeats exactly that ordered episode_id vector",
+  "assertion": "all 12 pipelines contain one finite [0,1] prediction for each held-out episode and each consecutive horizon"
+}

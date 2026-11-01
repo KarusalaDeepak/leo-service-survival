@@ -6,6 +6,13 @@ Primary empirical source: D. Laniewski, E. Lanfer, B. Meijerink, R. van Rijswijk
 
 The two supplied analysis tables contain longitudinal end-to-end RTT, loss, throughput, and local weather observations at Enschede and Osnabrück. They are nearby temperate-European locations. They do not provide serving-satellite, beam, gateway, handover, physical attenuation, or root-cause labels. The source project identifies CC BY-SA 4.0 terms.
 
+The reviewer artifact under `results/reviewer_prediction_release/` is an
+attributed WetLinks derivative released under the same CC BY-SA 4.0 terms. It
+contains episode identifiers, endpoint/censor status, model predictions, and
+score contributions, but not the upstream analysis tables. Its README states
+the aggregation, episode-construction, partitioning, prediction, and scoring
+modifications. This bounded permission does not apply to any other source.
+
 ## Palo Alto Starlink ping record
 
 Exploratory external transport-stress source: L. Borgianni, “11-Day Starlink Ping Measurements Dataset (Palo Alto, US, May 2024),” Zenodo, version 1, DOI: 10.5281/zenodo.14987305. The record is a supplement to L. Borgianni, D. Adami, S. Giordano, and C. Chafe, “Global Net Equity: The Role of LEO Satellites Towards 6G Connectivity Landscape,” IEEE MeditCom 2025, DOI: 10.1109/MeditCom64437.2025.11104460.

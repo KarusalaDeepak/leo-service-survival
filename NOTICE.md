@@ -14,6 +14,12 @@ redistribute those sources. Compact aggregate results are provided only where
 the publication audit found redistribution appropriate. Consult
 `docs/data_provenance.md` before acquiring data or interpreting an artifact.
 
+The derived WetLinks prediction and score files under
+`results/reviewer_prediction_release/` are a separate data artifact licensed
+under CC BY-SA 4.0, with attribution and modification details in that
+directory's `README.md`. That data license does not relicense the authors'
+source code or any other artifact in this repository.
+
 The repository excludes raw address-bearing LENS payloads, license-unresolved
 SatInView, NEXASPHERE, COMMECT, Palo Alto, and EOS-Bench material, and vendored
 ns-3 source trees. Simulator provenance and source licenses remain with their

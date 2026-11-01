@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0",
+  "exact_checks": {
+    "test_episodes": 821,
+    "pipeline_count": 12,
+    "horizons": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+    "prediction_rows": 118224,
+    "horizon_score_rows": 144,
+    "episode_order_sha256": "d4317eff6d0f1d1b497175b0a9fb43a52ecac3a9b51d998f72955df0253866f9",
+    "composite_keys_unique": true,
+    "file_hashes_exact": true
+  },
+  "numeric_checks": {
+    "canonical_aggregate_metric_rtol": 1e-10,
+    "canonical_aggregate_metric_atol": 1e-12,
+    "stage_identity_rtol": 1e-12,
+    "stage_identity_atol": 1e-12,
+    "survival_monotonicity_absolute_epsilon": 1e-12,
+    "probability_lower_bound": 0.0,
+    "probability_upper_bound": 1.0
+  },
+  "interpretation": "These are software reproduction tolerances, not confidence intervals, hypothesis-test thresholds, or evidence of statistical equivalence.",
+  "cross_platform_note": "The declared tolerances were checked in the reference environment; bitwise equality across different numerical libraries or hardware is not promised."
+}
+

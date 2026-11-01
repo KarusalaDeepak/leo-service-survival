@@ -1,0 +1,46 @@
+{
+  "all_passed": true,
+  "checks_csv": "ipcw_boundary_checks.csv",
+  "declared_convention": {
+    "administrative_horizon": "known survival through H is encoded at H+1",
+    "censor_boundary": "status in the censoring bin is unknown",
+    "censoring_survival_floor": 0.001,
+    "event_boundary": "event in the assigned bin is observed",
+    "weight_denominator": "post-boundary reverse-KM G(t)=P(C>t)"
+  },
+  "expected_survival_target_h3": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+  ],
+  "failed_checks": 0,
+  "fixture": {
+    "case_id": [
+      "event_t2",
+      "censor_t2",
+      "event_t3",
+      "censor_t3",
+      "administrative_h_plus_1"
+    ],
+    "duration_bins": [
+      2,
+      2,
+      3,
+      3,
+      4
+    ],
+    "event": [
+      1,
+      0,
+      1,
+      0,
+      0
+    ],
+    "horizon_bins": 3
+  },
+  "passed_checks": 23,
+  "schema_version": "ipcw-boundary-audit-v1",
+  "total_checks": 23
+}

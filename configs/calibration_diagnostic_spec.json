@@ -1,0 +1,68 @@
+{
+  "schema_version": "1.0",
+  "scope": "held-out WetLinks test set; descriptive diagnostics only",
+  "prediction_target": {
+    "quantity": "probability of surviving strictly beyond the discrete horizon",
+    "event_by_horizon": "known target 0 when event=1 and duration_bins<=h",
+    "survivor_through_horizon": "known target 1 when duration_bins>h",
+    "censored_at_or_before_horizon": "unknown target NA with IPCW weight 0"
+  },
+  "ipcw": {
+    "estimator": "marginal reverse Kaplan-Meier within the diagnostic scope",
+    "censoring_survival": "post-boundary G(t)=P(C>t)",
+    "g_floor": 0.001,
+    "failure_weight": "1/G(duration_bins)",
+    "survivor_weight": "1/G(horizon)",
+    "unknown_weight": 0.0
+  },
+  "scores": {
+    "brier": "mean over all held-out episodes of weight*(target-prediction)^2",
+    "brier_probability_clip": [0.000001, 0.999999],
+    "log_loss": "sum(weight*binary_log_loss)/sum(positive weights)",
+    "integrated_brier": "arithmetic mean of pointwise Brier scores on integer horizons 1..H",
+    "log_loss_probability_clip": [0.000001, 0.999999],
+    "ece": {
+      "bins": 10,
+      "binning": "equal-width bins on [0,1]",
+      "weights": "IPCW"
+    }
+  },
+  "heldout_logistic_diagnostic": {
+    "free_slope_equation": "logit(P(Y=1))=alpha+beta*logit(predicted_survival)",
+    "calibration_in_the_large_equation": "logit(P(Y=1))=alpha+logit(predicted_survival)",
+    "probability_clip": [0.00001, 0.99999],
+    "initial_free_slope_coefficients": [0.0, 1.0],
+    "initial_fixed_slope_intercept": 0.0,
+    "maximum_newton_steps": 100,
+    "step_tolerance": 1e-08,
+    "solve_diagonal_ridge": 1e-10,
+    "fitted_variance_floor": 1e-08,
+    "minimum_evaluable_rows": 5,
+    "requires_both_target_classes": true,
+    "not_estimable_reasons": [
+      "fewer_than_five_evaluable_rows",
+      "single_class_evaluable_targets",
+      "weighted_logistic_solver_failed"
+    ]
+  },
+  "calibration_fit": {
+    "partition": "disjoint chronological WetLinks calibration partition",
+    "pipelines": [
+      "calibrated_single_risk",
+      "calibrated_competing_risk"
+    ],
+    "model": "per-horizon IPCW logistic regression on logit raw survival",
+    "probability_clip": [0.000001, 0.999999],
+    "C": 0.1,
+    "maximum_iterations": 1000,
+    "random_seed": 17,
+    "fallback_if_evaluable_below": 25,
+    "fallback_if_single_class": true,
+    "post_fit_projection": "cumulative minimum across horizons"
+  },
+  "orientation": {
+    "risk": "1-predicted_survival_at_maximum_horizon",
+    "test_informed_inversion_allowed": false
+  }
+}
+

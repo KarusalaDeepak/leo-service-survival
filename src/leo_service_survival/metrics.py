@@ -354,12 +354,16 @@ def evaluate_survival_predictions(
     rmst_known, observed_rmst, rmst_weights = ipcw_restricted_duration_targets(
         frame, max_horizon
     )
-    absolute_error = np.abs(restricted_mean - observed_rmst)
-    rmst_mae = (
-        float(np.average(absolute_error[rmst_known], weights=rmst_weights[rmst_known]))
-        if rmst_known.any() and rmst_weights[rmst_known].sum() > 0
-        else float("nan")
-    )
+    evaluable_weights = rmst_weights[rmst_known]
+    if rmst_known.any() and evaluable_weights.sum() > 0:
+        # Mask before subtraction: censored-at-or-before-H references are NaN,
+        # and zero IPCW weight does not make arithmetic with NaN well defined.
+        evaluable_error = np.abs(
+            restricted_mean[rmst_known] - observed_rmst[rmst_known]
+        )
+        rmst_mae = float(np.average(evaluable_error, weights=evaluable_weights))
+    else:
+        rmst_mae = float("nan")
     return {
         "integrated_brier": float(np.mean(briers)) if briers else float("nan"),
         "mean_calibration_error": float(np.mean(eces)) if eces else float("nan"),
