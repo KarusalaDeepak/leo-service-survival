@@ -2,10 +2,10 @@
   "schema_version": "1.0",
   "builder": "scripts/build_prediction_release_artifacts.py",
   "producer_function": "main",
-  "generated_at_utc": "2026-11-04T04:12:54.976320+00:00",
+  "generated_at_utc": "2026-11-04T04:18:16.616127+00:00",
   "git_state": {
-    "base_commit": "1781c4154324cd53cf3c798325612d2f6f0d8d7d",
-    "tracked_worktree_clean": false,
+    "base_commit": "ad61d5a5d908768e4bb1aca789e4eb14dfc4d9e4",
+    "tracked_worktree_clean": true,
     "interpretation": "code-file hashes below are authoritative when the run includes uncommitted release-builder changes"
   },
   "command_profile": "python scripts/build_prediction_release_artifacts.py --wetlinks-dir <lawfully-obtained-WetLinks/Preprocessed_Data> --output-dir <fresh-output-directory>",
@@ -151,13 +151,13 @@
   "files": [
     {
       "path": "wetlinks_all_pipeline_horizon_predictions.csv.gz",
-      "bytes": 4303947,
-      "sha256": "342be120e903c3094b027a4442167538859b5e4bd51a895dfb9907c3873854bb"
+      "bytes": 4303950,
+      "sha256": "31675fbafa87758e12cf50706144f09d3d61006df8c57d004b30b9f5abc0e2c8"
     },
     {
       "path": "wetlinks_all_pipeline_horizon_scores.csv",
-      "bytes": 60313,
-      "sha256": "821938b123670a2a6e9e57a46ef95f68c0e85b3e65fa5d5af770f9a91cdf933b"
+      "bytes": 60317,
+      "sha256": "985c5db0bab07333a16a824e52ed6e2b6f2f19b93f2aa6b0ff13ab6066601cc6"
     },
     {
       "path": "wetlinks_pipeline_execution_status.csv",
