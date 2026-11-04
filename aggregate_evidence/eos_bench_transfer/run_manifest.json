@@ -1,0 +1,43 @@
+{
+  "completed_utc": "2026-11-03T08:27:38.186874+00:00",
+  "protocol_id": "racs-eos-bench-transfer-v1",
+  "claim_boundary": "EOS-Bench supplies orbital and observation fields. All ground-service windows, link rates, releases, deadlines, and delivery outcomes in this audit are simulated, not measured and not supplied by EOS-Bench.",
+  "source_audit": {
+    "repository_commit": "ee282656e8b2f6fd0d3cf84677b40966e2780ef3",
+    "huggingface_revision": "ea7d9371afac3edefee7d290381ef2a6341fb470",
+    "metadata_sha256": "9d9337085fb90525100a932e5d424242ee8f1824f37b22ff933ca86a32288c69",
+    "archive_sha256": {
+      "output_re_s1.7z": "9a5d34321221f3b0d1f58abff98fbfe3b1aae497820d0908438660d5890d3155",
+      "output_re_s3.7z": "73b18fa6fa80bef98987d9cba9e30330c5485d2d7cd30c893e5eaa7444aa2219",
+      "output_s1.7z": "0f9d1cfa46c1eee21da07e44c13c231b03c0e2112d81c367b11da99b587b64bb",
+      "output_s3.7z": "1e800d24ce698ee382389ea05f92311f2c3955f92601ca22ea70dc251b8842c1"
+    },
+    "license_status": "No license file or Hugging Face license tag was present in the locally archived metadata; do not redistribute source inputs without permission."
+  },
+  "input_files": 24,
+  "source_subsets": [
+    "output_re_s1",
+    "output_re_s3",
+    "output_s1",
+    "output_s3"
+  ],
+  "evaluated_schedule_rows": 384,
+  "validated_schedule_rows": 384,
+  "validation": "Every saved schedule passed matched_scheduler.validate_schedule during evaluation.",
+  "retuning": "none",
+  "python": "3.11.5",
+  "platform": "macOS-26.7.1-arm64-arm-64bit",
+  "source_sha256": {
+    "run_eos_bench_transfer_audit.py": "7cc25af049b15700a512542932ec7523eb504d1e4b93848edce85d54ae3412fd",
+    "matched_scheduler.py": "0c87ea6135f917dc31b486d42459ef1c44cd0b922efc5a55b3dff932a40766f6",
+    "eos_bench_transfer_protocol.json": "9b62330e2a9262a4fd047af518910f22d6c13e831a2c20349c565ab31c7a059f"
+  },
+  "output_sha256": {
+    "protocol.json": "2541a13a58fe3ea9d57caf15b430e3196eaf910acb286e69e7f801df7dc52bed",
+    "input_manifest.json": "c5843369e7873ee2a73998a5a3435d4dad2355273338f2eb0d7bd864dee17157",
+    "schedules.jsonl": "e95ab408ba2d8aef10e626aba8c218d999489705b12f7657dff878ee4c5f6940",
+    "instance_results.csv": "77431d6b06709d7add0119b6590f19287a15595bb8fc2caf853a3a5bd7c58e32",
+    "comparison_summary.csv": "26a64bbd97483881b7e91354ba61030c4246e17b31ec54b3d991c159e6a98462",
+    "paired_statistics.csv": "3f11708d4961f8ab820c35eacdc394038f725129563efaefe1ba53177e0827cd"
+  }
+}

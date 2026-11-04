@@ -1,0 +1,63 @@
+{
+  "baseline_path_id": "reactive_baseline",
+  "candidate_path_ids": [
+    "cellular",
+    "leo"
+  ],
+  "claim_boundary": "FAKE_DRIVER_TEST exercises software paths only. Gate metrics are derived from hash-locked fake opportunity tables, not field captures. This is not live hardware, an independent field campaign, a prospective installed action, an EO outcome, or evidence of candidate benefit. Field execution remains NOT_RUN.",
+  "contract": {
+    "commands_use_shell": false,
+    "first_packet_exit_zero": "observed",
+    "first_packet_stdout_first_line": "resolved packet path",
+    "install_exit_zero": "acknowledged",
+    "live_mutation_default": false,
+    "snapshot_stdout_first_line": "resolved path"
+  },
+  "destination": "198.51.100.10",
+  "evidence_source": "FAKE_DRIVER_TEST",
+  "first_packet_commands": {
+    "cellular": [
+      "/usr/bin/true"
+    ],
+    "leo": [
+      "/usr/bin/true"
+    ],
+    "reactive_baseline": [
+      "/usr/bin/true"
+    ]
+  },
+  "first_packet_timeout_ms": 500.0,
+  "install_commands": {
+    "cellular": [
+      "/usr/bin/true"
+    ],
+    "leo": [
+      "/usr/bin/true"
+    ],
+    "reactive_baseline": [
+      "/usr/bin/true"
+    ]
+  },
+  "isolated_rollback_drill": {
+    "inject_fault_command": [
+      "/usr/bin/true"
+    ],
+    "isolation_attested": true,
+    "namespace_id": "FAKE-ISOLATED-ROLLBACK-NAMESPACE",
+    "observe_first_packet_command": [
+      "/usr/bin/true"
+    ],
+    "restore_baseline_command": [
+      "/usr/bin/true"
+    ],
+    "verify_baseline_command": [
+      "/usr/bin/true"
+    ]
+  },
+  "maximum_total_loop_ms": 100.0,
+  "schema_version": "1.0.0",
+  "snapshot_command": [
+    "/usr/bin/true"
+  ],
+  "status": "FAKE_DRIVER_TEST"
+}

@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/o4/application-outcome-acknowledgement.schema.json",
+  "title": "Objective 4 application outcome acknowledgement",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "artifact_type",
+    "evidence_status",
+    "evidence_origin",
+    "acknowledgement_id",
+    "acknowledgement_source",
+    "acknowledged_wall_ns",
+    "claim_boundary",
+    "study_id",
+    "trial_id",
+    "protocol_version",
+    "campaign_id",
+    "acquisition_family_id",
+    "session_id",
+    "task_id",
+    "decision_id",
+    "model_sha256",
+    "config_sha256",
+    "required_bytes",
+    "delivered_bytes",
+    "deadline_wall_ns",
+    "completion_wall_ns",
+    "observation_valid",
+    "application_complete",
+    "no_action",
+    "controller_failure",
+    "late_install",
+    "missingness_reason"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "artifact_type": {"const": "application_outcome_acknowledgement"},
+    "evidence_status": {"enum": ["LIVE_APPLICATION_ACKNOWLEDGEMENT", "FAKE_DRIVER_TEST"]},
+    "evidence_origin": {"enum": ["executed_live", "fake_driver_test"]},
+    "acknowledgement_id": {"type": "string", "minLength": 1},
+    "acknowledgement_source": {"type": "string", "minLength": 1},
+    "acknowledged_wall_ns": {"type": "integer", "minimum": 0},
+    "claim_boundary": {"type": "string", "minLength": 1},
+    "study_id": {"type": "string", "minLength": 1},
+    "trial_id": {"type": "string", "minLength": 1},
+    "protocol_version": {"type": "string", "minLength": 1},
+    "campaign_id": {"type": "string", "minLength": 1},
+    "acquisition_family_id": {"type": "string", "minLength": 1},
+    "session_id": {"type": "string", "minLength": 1},
+    "task_id": {"type": "string", "minLength": 1},
+    "decision_id": {"type": "string", "minLength": 1},
+    "model_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "config_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "required_bytes": {"type": "integer", "minimum": 0},
+    "delivered_bytes": {"type": "integer", "minimum": 0},
+    "deadline_wall_ns": {"type": "integer", "minimum": 0},
+    "completion_wall_ns": {"type": "integer", "minimum": 0},
+    "observation_valid": {"type": "boolean"},
+    "application_complete": {"type": "boolean"},
+    "no_action": {"type": "boolean"},
+    "controller_failure": {"type": "boolean"},
+    "late_install": {"type": "boolean"},
+    "missingness_reason": {"type": "string"},
+    "artifact_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "authentication": {
+      "type": "object",
+      "required": ["algorithm", "purpose", "key_id", "signature"],
+      "properties": {
+        "algorithm": {"const": "HMAC-SHA256"},
+        "purpose": {"const": "O4_APPLICATION_OUTCOME_ACKNOWLEDGEMENT_V1"},
+        "key_id": {"type": "string", "pattern": "^[0-9a-f]{16}$"},
+        "signature": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      },
+      "additionalProperties": false
+    }
+  },
+  "not": {
+    "anyOf": [
+      {"required": ["met_deadline"]},
+      {"required": ["conservative_on_time_completion"]},
+      {"required": ["failure_stage"]}
+    ]
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"evidence_status": {"const": "LIVE_APPLICATION_ACKNOWLEDGEMENT"}}},
+      "then": {"required": ["artifact_sha256", "authentication"]}
+    }
+  ],
+  "additionalProperties": false
+}

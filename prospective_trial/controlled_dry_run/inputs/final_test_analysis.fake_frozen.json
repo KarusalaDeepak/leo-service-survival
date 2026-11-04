@@ -1,0 +1,19 @@
+{
+  "baseline_arm": "reactive_baseline",
+  "bootstrap_replicates": 1000,
+  "bootstrap_seed": 20261103,
+  "candidate_arm": "gated_candidate",
+  "claim_boundary": "FAKE_DRIVER_TEST exercises software paths only. Gate metrics are derived from hash-locked fake opportunity tables, not field captures. This is not live hardware, an independent field campaign, a prospective installed action, an EO outcome, or evidence of candidate benefit. Field execution remains NOT_RUN.",
+  "cluster_field": "block_id",
+  "confidence_level": 0.95,
+  "config_sha256": "18ab0a75f48de3f09f56a5255ec679efd70dd874a42856855a2406621453a665",
+  "endpoint": "conservative_on_time_task_completion",
+  "estimand": "intention_to_treat_risk_difference_candidate_minus_baseline",
+  "evidence_status": "FAKE_DRIVER_TEST",
+  "minimum_independent_clusters_per_arm": 10,
+  "minimum_practical_gain": 0.02,
+  "missing_outcome_rule": "count_as_failure",
+  "model_sha256": "c3d550f15e5e763a4efaf0f8b94882478042bd6caa3a9df2813f0bb2695ebb29",
+  "schema_version": "1.0.0",
+  "status": "FROZEN_ANALYSIS_SPEC"
+}

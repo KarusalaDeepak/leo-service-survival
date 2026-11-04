@@ -1,0 +1,26 @@
+{
+  "analysis_benefit_claim_supported": false,
+  "claim_boundary": "FAKE_DRIVER_TEST exercises software paths only. Gate metrics are derived from hash-locked fake opportunity tables, not field captures. This is not live hardware, an independent field campaign, a prospective installed action, an EO outcome, or evidence of candidate benefit. Field execution remains NOT_RUN.",
+  "evidence_status": "FAKE_DRIVER_TEST",
+  "field_trial_status": "NOT_RUN",
+  "gate_evidence_status": "FAKE_RAW_OPPORTUNITY_DERIVED_AND_HASH_LOCKED",
+  "live_campaigns_collected": false,
+  "live_hardware_obtained": false,
+  "prospective_live_actions_installed": false,
+  "raw_evidence_derived_gate_run": true,
+  "raw_evidence_source": "FAKE_DRIVER_TEST_OPPORTUNITY_TABLES",
+  "schema_version": "1.0.0",
+  "software_rehearsal_complete": true,
+  "steps": {
+    "1_testbed_qualification": "FAKE_DRIVER_TEST_PASS",
+    "2_role_separated_campaign_lock": "FAKE_DRIVER_TEST_PASS",
+    "3_synchronized_loss_preserving_telemetry": "FAKE_DRIVER_TEST_PASS",
+    "4_frozen_gate_authorized_fixture": "AUTHORIZED",
+    "4_frozen_gate_rejected_fixture": "REJECTED",
+    "5_baseline_retention_and_rollback": "VERIFIED",
+    "6_canary_checkpoint": "CANARY_CHECKPOINT_PASSED",
+    "6_untouched_final_test_unlock": "UNTOUCHED_FINAL_TEST_UNLOCKED",
+    "7_prespecified_analysis": "FAKE_DRIVER_TEST_ONLY:ANALYSIS_COMPLETE",
+    "7_trace_to_outcome_audit": "FAKE_DRIVER_TEST_ONLY:FINAL_TEST_DATA_READY_FOR_PRESPECIFIED_ANALYSIS"
+  }
+}

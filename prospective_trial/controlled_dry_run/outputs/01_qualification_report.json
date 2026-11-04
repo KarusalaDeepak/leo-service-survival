@@ -1,0 +1,195 @@
+{
+  "claim_boundary": "FAKE_DRIVER_TEST exercises software paths only. Gate metrics are derived from hash-locked fake opportunity tables, not field captures. This is not live hardware, an independent field campaign, a prospective installed action, an EO outcome, or evidence of candidate benefit. Field execution remains NOT_RUN.",
+  "evidence_status": "FAKE_DRIVER_TEST",
+  "field_trial_status": "NOT_RUN",
+  "live_eligible": false,
+  "passed": true,
+  "probe_results": [
+    {
+      "command_sha256": "3d8455a32560861ba0d4e30193298bd3e29ede3531d782227f37fe7f7aab1ac1",
+      "evidence_origin": "fake_driver_test",
+      "evidence_sha256": "7dbd72c3d52ba26cbc4e6a34eb7e71abc4195ed6d4d7a5b9777c48fc9ace8f6c",
+      "observed": "{\"command\": [\"/usr/bin/true\"], \"probe_id\": \"cellular_link\", \"result\": \"pass\"}",
+      "passed": true,
+      "probe_id": "cellular_link"
+    },
+    {
+      "command_sha256": "3d8455a32560861ba0d4e30193298bd3e29ede3531d782227f37fe7f7aab1ac1",
+      "evidence_origin": "fake_driver_test",
+      "evidence_sha256": "01b4606227ea75db471bdb6304e003243294eeaa2621b4a2fd6e4a2e1cfe7b2d",
+      "observed": "{\"command\": [\"/usr/bin/true\"], \"probe_id\": \"clock_error\", \"result\": \"pass\"}",
+      "passed": true,
+      "probe_id": "clock_error"
+    },
+    {
+      "command_sha256": "3d8455a32560861ba0d4e30193298bd3e29ede3531d782227f37fe7f7aab1ac1",
+      "evidence_origin": "fake_driver_test",
+      "evidence_sha256": "2bce0c89585d9f85a8a74d0fcb5acfde1466bc3d4ef9f5aa7cf25c30f1f6496f",
+      "observed": "{\"command\": [\"/usr/bin/true\"], \"probe_id\": \"dual_interface\", \"result\": \"pass\"}",
+      "passed": true,
+      "probe_id": "dual_interface"
+    },
+    {
+      "command_sha256": "3d8455a32560861ba0d4e30193298bd3e29ede3531d782227f37fe7f7aab1ac1",
+      "evidence_origin": "fake_driver_test",
+      "evidence_sha256": "1a4985d2ba47f29137e1c330a1ac1bfc0da3972996d19ce843a0b02211c2b24f",
+      "observed": "{\"command\": [\"/usr/bin/true\"], \"probe_id\": \"leo_link\", \"result\": \"pass\"}",
+      "passed": true,
+      "probe_id": "leo_link"
+    },
+    {
+      "command_sha256": "3d8455a32560861ba0d4e30193298bd3e29ede3531d782227f37fe7f7aab1ac1",
+      "evidence_origin": "fake_driver_test",
+      "evidence_sha256": "1c513b4fba40d544060fe6144e43ac4c7eff39de51287a434c23018ffbf12797",
+      "observed": "{\"command\": [\"/usr/bin/true\"], \"probe_id\": \"permission_bundle\", \"result\": \"pass\"}",
+      "passed": true,
+      "probe_id": "permission_bundle"
+    },
+    {
+      "command_sha256": "3d8455a32560861ba0d4e30193298bd3e29ede3531d782227f37fe7f7aab1ac1",
+      "evidence_origin": "fake_driver_test",
+      "evidence_sha256": "021571e31abe044f20ebe4415d98fe17de52410efdbd414031858042b8b06e26",
+      "observed": "{\"command\": [\"/usr/bin/true\"], \"probe_id\": \"remote_anchor\", \"result\": \"pass\"}",
+      "passed": true,
+      "probe_id": "remote_anchor"
+    },
+    {
+      "command_sha256": "3d8455a32560861ba0d4e30193298bd3e29ede3531d782227f37fe7f7aab1ac1",
+      "evidence_origin": "fake_driver_test",
+      "evidence_sha256": "b535477be435cbc13774e31a591e982c909baa4ed49153ee7e072fb04fe6aa87",
+      "observed": "{\"command\": [\"/usr/bin/true\"], \"probe_id\": \"session_continuity\", \"result\": \"pass\"}",
+      "passed": true,
+      "probe_id": "session_continuity"
+    }
+  ],
+  "route_checks": [
+    {
+      "check": "route.evidence_source",
+      "details": "FAKE_DRIVER_TEST",
+      "passed": true
+    },
+    {
+      "check": "route.fake_driver_explicit_opt_in",
+      "details": "fake=True; allow_fake_driver=True",
+      "passed": true
+    },
+    {
+      "check": "route.status",
+      "details": "FAKE_DRIVER_TEST",
+      "passed": true
+    },
+    {
+      "check": "route.destination",
+      "details": "198.51.100.10",
+      "passed": true
+    },
+    {
+      "check": "route.path_ids",
+      "details": "baseline=reactive_baseline; candidates=['cellular', 'leo']",
+      "passed": true
+    },
+    {
+      "check": "route.command_safety",
+      "details": "commands=7",
+      "passed": true
+    },
+    {
+      "check": "route.complete_path_commands",
+      "details": "install=['cellular', 'leo', 'reactive_baseline']; packet=['cellular', 'leo', 'reactive_baseline']",
+      "passed": true
+    },
+    {
+      "check": "route.fail_closed_contract",
+      "details": "{'snapshot_stdout_first_line': 'resolved path', 'install_exit_zero': 'acknowledged', 'first_packet_exit_zero': 'observed', 'first_packet_stdout_first_line': 'resolved packet path', 'commands_use_shell': False, 'live_mutation_default': False}",
+      "passed": true
+    },
+    {
+      "check": "route.timing_budgets",
+      "details": "maximum_total_loop_ms=100.0; first_packet_timeout_ms=500.0",
+      "passed": true
+    },
+    {
+      "check": "route.isolated_rollback_drill",
+      "details": "namespace_id=FAKE-ISOLATED-ROLLBACK-NAMESPACE; commands=['inject_fault_command', 'observe_first_packet_command', 'restore_baseline_command', 'verify_baseline_command']",
+      "passed": true
+    }
+  ],
+  "route_evidence_status": "FAKE_DRIVER_TEST",
+  "route_live_eligible": false,
+  "schema_version": "1.0.0",
+  "step": 1,
+  "testbed_checks": [
+    {
+      "check": "testbed.evidence_source",
+      "details": "FAKE_DRIVER_TEST",
+      "passed": true
+    },
+    {
+      "check": "testbed.fake_driver_explicit_opt_in",
+      "details": "fake=True; allow_fake_driver=True",
+      "passed": true
+    },
+    {
+      "check": "testbed.qualification_status",
+      "details": "FAKE_DRIVER_TEST",
+      "passed": true
+    },
+    {
+      "check": "testbed.no_false_trial_completion",
+      "details": "field_trial_completed=False",
+      "passed": true
+    },
+    {
+      "check": "testbed.required_components",
+      "details": "complete",
+      "passed": true
+    },
+    {
+      "check": "testbed.component_identifiers",
+      "details": "['FAKE-CELLULAR_5G_TERMINAL', 'FAKE-CLOCK_SYNC', 'FAKE-DUAL_ACCESS_GATEWAY', 'FAKE-LEO_TERMINAL', 'FAKE-REMOTE_ANCHOR', 'FAKE-SESSION_PRESERVING_PATH']",
+      "passed": true
+    },
+    {
+      "check": "testbed.component_evidence_hashes",
+      "details": "count=6",
+      "passed": true
+    },
+    {
+      "check": "testbed.component_states",
+      "details": "['FAKE_DRIVER_TEST', 'FAKE_DRIVER_TEST', 'FAKE_DRIVER_TEST', 'FAKE_DRIVER_TEST', 'FAKE_DRIVER_TEST', 'FAKE_DRIVER_TEST']",
+      "passed": true
+    },
+    {
+      "check": "testbed.component_capabilities",
+      "details": "qualified",
+      "passed": true
+    },
+    {
+      "check": "testbed.permissions",
+      "details": "complete",
+      "passed": true
+    },
+    {
+      "check": "testbed.clock_budget",
+      "details": "{'asset_or_service_id': 'FAKE-CLOCK_SYNC', 'status': 'FAKE_DRIVER_TEST', 'evidence_sha256': '2f2d3446459d9b84c24fff233b65221566b2b279b7ce8537c142221931ad4b1f', 'method': 'FAKE_DETERMINISTIC', 'maximum_error_ms': 0.0}",
+      "passed": true
+    },
+    {
+      "check": "testbed.session_continuity",
+      "details": "{'asset_or_service_id': 'FAKE-SESSION_PRESERVING_PATH', 'status': 'FAKE_DRIVER_TEST', 'evidence_sha256': '2d9f40be271059f95cc3c68c96fd48ff35ed38582b0eea2ac5446d63b1887f68', 'mechanism': 'FAKE_DETERMINISTIC', 'preserves_session_identity': True}",
+      "passed": true
+    },
+    {
+      "check": "testbed.read_only_probe_contract",
+      "details": "missing=[]",
+      "passed": true
+    },
+    {
+      "check": "testbed.probe_evidence",
+      "details": "supplied=['cellular_link', 'clock_error', 'dual_interface', 'leo_link', 'permission_bundle', 'remote_anchor', 'session_continuity']; duplicates=False; observation_hashes=True; command_hashes=True; live_execution_origin=False",
+      "passed": true
+    }
+  ],
+  "testbed_evidence_status": "FAKE_DRIVER_TEST",
+  "testbed_live_eligible": false
+}

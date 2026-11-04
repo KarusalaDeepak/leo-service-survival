@@ -1,0 +1,35 @@
+{
+  "claim_boundary": "The decision integrates controlled scheduling evidence and a frozen EOS-Bench transfer audit. It does not establish operational EO or live network benefit.",
+  "criteria": {
+    "alpha": 0.05,
+    "baseline_policy": "full_margin",
+    "benchmark_condition": "combined",
+    "bootstrap_resamples": 10000,
+    "bootstrap_seed": 20261103,
+    "candidate_policy": "cross_fitted_racs",
+    "learned_comparator": "selected_random_forest",
+    "minimum_benchmark_units": 9,
+    "minimum_completion_difference": 0.0,
+    "minimum_transfer_scenarios": 24,
+    "minimum_transfer_schedule_rows": 384,
+    "transfer_baseline": "full_margin",
+    "transfer_candidate": "full_racs_candidate6"
+  },
+  "evidence_tier": "controlled_offline_integration",
+  "input_sha256": {
+    "matched_instance_results": "0b059121f4af7f8a2d0b1ef3e0f3c8f6ecce6985193b93280b161c4887bdb9b4",
+    "paired_racs_rf_evidence": "81a03149fbfd47bc3c7c6353320df409806b2ee02b798b217d36d6fd221f1317",
+    "score_outer_results": "124a9a0e9758d2dbf8c60eb465f1d037515dfb4e8722ce604e8e6338cc5e1253",
+    "transfer_instance_results": "77431d6b06709d7add0119b6590f19287a15595bb8fc2caf853a3a5bd7c58e32",
+    "transfer_manifest": "d87d612d238d9bf4d1c4b8d082cf6086a2e5dde1d0d8f18f8efe0ecb0f4262dd",
+    "transfer_paired_statistics": "3f11708d4961f8ab820c35eacdc394038f725129563efaefe1ba53177e0827cd",
+    "transfer_summary": "26a64bbd97483881b7e91354ba61030c4246e17b31ec54b3d991c159e6a98462"
+  },
+  "output_sha256": {
+    "scheduler_evidence_summary.csv": "d2f820ce632c5b21698ec3954992f4d50ff71340f7bde8692e4f4e9c866e3abc",
+    "scheduler_release_checks.csv": "eb7c154e6549423d23332cc4d1763defc4042136bf27b1e2e78d9f743179f391",
+    "scheduler_release_decision.json": "3574e2aa4b5ce5ef7aa25cc304db62d75ad75ce9560f60996f42c938e90f028c",
+    "scheduler_release_ledger.csv": "cc23fbd8b38e3773a1b2b8de876d700f05eee4c367e9eb4a1e592e4c6cd6731c"
+  },
+  "protocol": "racs-paper4-release-integration-v1"
+}

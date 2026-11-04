@@ -1,0 +1,124 @@
+{
+  "package_version": "2.0.0",
+  "as_of_date": "2026-11-03",
+  "objective_4_scope": "BOUNDED_OFFLINE_INTEGRATION_AND_EVALUATION",
+  "objective_4_status": "COMPLETE_WITHIN_DECLARED_OFFLINE_SCOPE",
+  "prospective_field_validation_role": "FUTURE_DEPLOYMENT_EXTENSION",
+  "protocol_status": "DRAFT_NOT_REGISTERED",
+  "field_trial_status": "NOT_RUN",
+  "field_trial_completed": false,
+  "gate_evidence_collected": false,
+  "gate_decision_available": false,
+  "candidate_authorized": false,
+  "canary_started": false,
+  "canary_completed": false,
+  "untouched_final_test_opened": false,
+  "benefit_claim_supported": false,
+  "local_implementation_status": "OBJECTIVE_4_BOUNDED_OFFLINE_SCOPE_COMPLETE",
+  "software_pipeline_status": "SEVEN_STEP_PIPELINE_IMPLEMENTED_AND_TESTED",
+  "controlled_rehearsal_status": "FAKE_DRIVER_TEST_COMPLETE",
+  "controlled_rehearsal_status_path": "prospective_trial/controlled_dry_run/STATUS.json",
+  "software_steps": [
+    {
+      "step": 1,
+      "status": "IMPLEMENTED_AND_TESTED",
+      "live_execution_status": "NOT_RUN",
+      "mechanism": "Signed testbed qualification checks active 5G and LEO service, independent route observation, emergency restore, clocks, session preservation, permissions, and the frozen ledger schema."
+    },
+    {
+      "step": 2,
+      "status": "IMPLEMENTED_AND_TESTED",
+      "live_execution_status": "NOT_RUN",
+      "mechanism": "An immutable campaign-registry lock enforces development, gate-evidence, canary, and untouched-test roles, minimum campaign and acquisition-family eligibility, non-overlap, raw-telemetry hashes, and separately bound gate-opportunity hashes."
+    },
+    {
+      "step": 3,
+      "status": "IMPLEMENTED_AND_TESTED",
+      "live_execution_status": "NOT_RUN",
+      "mechanism": "Loss-preserving synchronized telemetry ingestion retains replies, losses, timeouts, RF, beam, handover, route, timing, and application or EO outcome fields with identity and hash audits."
+    },
+    {
+      "step": 4,
+      "status": "IMPLEMENTED_AND_TESTED",
+      "live_execution_status": "NOT_RUN",
+      "mechanism": "The signed frozen gate accepts confirmatory evidence only when metrics are recomputed from role-correct, hash-locked per-campaign opportunity tables bound to the trial freeze."
+    },
+    {
+      "step": 5,
+      "status": "IMPLEMENTED_AND_TESTED",
+      "live_execution_status": "NOT_RUN",
+      "mechanism": "The rejection branch blocks candidate mutation, independently verifies baseline FIB and first-packet state, exercises rollback, and signs the resulting proof."
+    },
+    {
+      "step": 6,
+      "status": "IMPLEMENTED_AND_TESTED",
+      "live_execution_status": "NOT_RUN",
+      "mechanism": "The authorization branch freezes canary assignment, evaluates all registered safety triggers, verifies stopped-canary rollback, requires signed no-retuning approval, and separately freezes the untouched final-test plan."
+    },
+    {
+      "step": 7,
+      "status": "IMPLEMENTED_AND_TESTED",
+      "live_execution_status": "NOT_RUN",
+      "mechanism": "The action-outcome ledger reconciles intended, installed, acknowledged, first-packet, rollback, full-loop timing, assignment, and authenticated endpoint outcome records before conservative intention-to-treat analysis."
+    }
+  ],
+  "campaign_count_boundary": {
+    "confirmatory_gate_campaign_floor": 5,
+    "confirmatory_gate_family_floor": 3,
+    "interpretation": "Conservative confirmatory eligibility profile only; not a universal statistical minimum and not a substitute for blinded pilot power and precision planning."
+  },
+  "external_dependencies": [
+    "Supervisor and operator approval of the endpoint effect margin and safety thresholds",
+    "Cellular/5G modem with timestamped telemetry and an active data plan",
+    "LEO terminal with permitted telemetry and an active service plan",
+    "Dual-access gateway capable of verified route or tunnel installation",
+    "Session-preserving MP-QUIC MPTCP or anchored-tunnel path control",
+    "Remote anchor and application endpoint under experimenter control",
+    "Synchronized clocks with recorded worst-case error",
+    "Role-separated development gate-evidence and untouched final-test acquisition families",
+    "Timestamped packet loss timeouts route state and first-packet observations",
+    "Operational application or EO tasks with sizes deadlines validity and final delivery outcomes",
+    "Required institutional ethics spectrum network-change and operator permissions"
+  ],
+  "external_execution_steps": [
+    {
+      "step": 1,
+      "status": "NOT_RUN",
+      "action": "Obtain approved cellular/5G and LEO terminals, a dual-access gateway, a controlled remote anchor, active service, and required institutional and operator permissions."
+    },
+    {
+      "step": 2,
+      "status": "NOT_RUN",
+      "action": "Collect role-separated development, gate-evidence, and untouched final-test acquisition families."
+    },
+    {
+      "step": 3,
+      "status": "NOT_RUN",
+      "action": "Preserve synchronized losses, timeouts, RF/beam/handover observations, installed-route evidence, and operational application or EO outcomes."
+    },
+    {
+      "step": 4,
+      "status": "NOT_RUN",
+      "action": "Run the frozen evidence gate."
+    },
+    {
+      "step": 5,
+      "status": "NOT_RUN",
+      "condition": "gate_rejected",
+      "action": "Verify safe baseline retention and complete the registered rollback drill.",
+      "claim_boundary": "A verified negative gate decision is a valid prospective safety result but does not support candidate benefit."
+    },
+    {
+      "step": 6,
+      "status": "NOT_RUN",
+      "condition": "gate_authorized",
+      "action": "Execute the predefined canary and then the untouched final test without retuning; assess benefit only against the prespecified performance and safety criteria."
+    },
+    {
+      "step": 7,
+      "status": "NOT_RUN",
+      "action": "Reconcile proposed and installed routes, installation acknowledgements, first post-installation packets, complete controller-loop latency, and final application or EO outcomes."
+    }
+  ],
+  "claim_boundary": "Objective 4 is complete within the declared bounded offline integration and evaluation scope. All seven protocol mechanisms are implemented and adversarially tested in software, including a FAKE_DRIVER_TEST rehearsal of rejection and authorization branches. The repository does not contain completed live field observations and must not be described as a completed prospective field trial or as evidence of deployment benefit."
+}

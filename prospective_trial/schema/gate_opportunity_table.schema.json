@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/o4/gate-opportunity-table.schema.json",
+  "title": "Objective 4 raw paired gate-opportunity table",
+  "description": "CSV rows represented as JSON objects. The CSV byte hash must equal the campaign gate_opportunity_sha256 frozen in the Step-2 campaign registry lock. raw_capture_sha256 is reserved for the synchronized telemetry capture.",
+  "type": "array",
+  "minItems": 1,
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "campaign_id",
+      "acquisition_family_id",
+      "opportunity_group_id",
+      "cluster_id",
+      "feature_present_count",
+      "feature_required_count",
+      "ood_flag",
+      "predicted_success_probability",
+      "candidate_success",
+      "baseline_success",
+      "control_loop_ms"
+    ],
+    "properties": {
+      "campaign_id": {"type": "string", "minLength": 1},
+      "acquisition_family_id": {"type": "string", "minLength": 1},
+      "opportunity_group_id": {"type": "string", "minLength": 1},
+      "cluster_id": {"type": "string", "minLength": 1},
+      "feature_present_count": {"type": "integer", "minimum": 0},
+      "feature_required_count": {"type": "integer", "minimum": 1},
+      "ood_flag": {"type": "integer", "enum": [0, 1]},
+      "predicted_success_probability": {"type": "number", "minimum": 0, "maximum": 1},
+      "candidate_success": {"type": "integer", "enum": [0, 1]},
+      "baseline_success": {"type": "integer", "enum": [0, 1]},
+      "control_loop_ms": {"type": "number", "minimum": 0}
+    }
+  }
+}
+

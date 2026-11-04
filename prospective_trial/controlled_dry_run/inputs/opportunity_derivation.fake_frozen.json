@@ -1,0 +1,10 @@
+{
+  "bootstrap_replicates": 1000,
+  "bootstrap_seed": 20261103,
+  "calibration_metric": "absolute_mean_probability_error",
+  "claim_boundary": "FAKE_DRIVER_TEST exercises software paths only. Gate metrics are derived from hash-locked fake opportunity tables, not field captures. This is not live hardware, an independent field campaign, a prospective installed action, an EO outcome, or evidence of candidate benefit. Field execution remains NOT_RUN.",
+  "cluster_column": "cluster_id",
+  "confidence_level": 0.95,
+  "evidence_status": "FAKE_DRIVER_TEST",
+  "schema_version": "1.0.0"
+}

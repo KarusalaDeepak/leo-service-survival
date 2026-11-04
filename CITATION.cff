@@ -2,7 +2,7 @@ cff-version: 1.2.0
 message: "If you use this software, cite this repository and the accompanying manuscript."
 title: "Code for Censoring-Aware Evaluation of Usable-Service Duration Predictions for LEO Network Decisions"
 type: software
-version: 1.2.2
+version: 1.3.0
 date-released: 2026-11-04
 authors:
   - family-names: Chowdary
@@ -12,9 +12,9 @@ authors:
   - family-names: Hegadi
     given-names: Rajendra
 abstract: >-
-  Python code, tests, configurations, and redistribution-safe aggregate results
-  for censoring-aware evaluation of usable-service duration predictions and
-  bounded LEO network decision studies.
+  Python code, tests, configurations, redistribution-safe aggregate results,
+  and a fail-closed prospective protocol for censoring-aware usable-service
+  prediction and bounded LEO network decision studies.
 keywords:
   - low-Earth-orbit networks
   - survival analysis

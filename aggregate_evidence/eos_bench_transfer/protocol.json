@@ -1,0 +1,103 @@
+{
+  "protocol_id": "racs-eos-bench-transfer-v1",
+  "frozen_utc": "2026-11-02T00:00:00Z",
+  "status": "controlled_simulation_transfer_audit",
+  "claim_boundary": "EOS-Bench supplies orbital and observation fields. All ground-service windows, link rates, releases, deadlines, and delivery outcomes in this audit are simulated, not measured and not supplied by EOS-Bench.",
+  "source": {
+    "repository_url": "https://github.com/Ethan19YQ/EOS-Bench.git",
+    "repository_commit": "ee282656e8b2f6fd0d3cf84677b40966e2780ef3",
+    "huggingface_dataset": "Ethan19YQ/EOS-Bench",
+    "huggingface_revision": "ea7d9371afac3edefee7d290381ef2a6341fb470",
+    "license_status": "No license file or Hugging Face license tag was present in the locally archived metadata; do not redistribute source inputs without permission.",
+    "archive_sha256": {
+      "output_re_s1.7z": "9a5d34321221f3b0d1f58abff98fbfe3b1aae497820d0908438660d5890d3155",
+      "output_re_s3.7z": "73b18fa6fa80bef98987d9cba9e30330c5485d2d7cd30c893e5eaa7444aa2219",
+      "output_s1.7z": "0f9d1cfa46c1eee21da07e44c13c231b03c0e2112d81c367b11da99b587b64bb",
+      "output_s3.7z": "1e800d24ce698ee382389ea05f92311f2c3955f92601ca22ea70dc251b8842c1"
+    }
+  },
+  "inputs": {
+    "subsets": [
+      "output_re_s1",
+      "output_re_s3",
+      "output_s1",
+      "output_s3"
+    ],
+    "expected_files": 24,
+    "use_role": "untouched_external_transfer_audit",
+    "no_external_retuning": true
+  },
+  "mapping": {
+    "one_mission_per_request": true,
+    "one_atomic_observation_per_request": true,
+    "release_seconds": 0,
+    "deadline_rule": "scenario_start_plus_metadata_duration",
+    "payload_rule": "maximum positive EOS sensor data_rate_Mbps in the source scenario times mission duration_s divided by 8000 to obtain decimal GB; this keeps missions with no opportunity in the denominator",
+    "observation_rule": "use only provider windows that reference known missions, satellites, and sensors and that can contain the required duration",
+    "storage_rule": "use provider satellite_specs.max_data_storage_GB",
+    "isl_rule": "no ISL because the audited source files supply none"
+  },
+  "simulated_ground_service_overlay": {
+    "ground_station_id": "SIM_GS_0",
+    "first_window_offset_seconds": 10800,
+    "period_seconds": 21600,
+    "window_duration_seconds": 600,
+    "rate_gbps": 0.01,
+    "sharing_rule": "Every satellite receives the same periodic service opportunity; the single shared ground-station resource can serve only one reserved window at a time.",
+    "geometry_claim": "The overlay is a controlled service schedule, not a propagated visibility calculation and not an operational contact trace."
+  },
+  "policies": {
+    "primary": "full_racs_candidate6",
+    "comparators": [
+      "single_margin",
+      "full_earliest",
+      "full_margin",
+      "full_congestion",
+      "full_random",
+      "full_racs_equal"
+    ],
+    "random_seeds": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    "candidate6_weights": {
+      "margin": 0.03554565218316529,
+      "spread": 0.05582189396755972,
+      "congestion": 0.01386588504028293,
+      "risk": 0.3127594672666224,
+      "relay": 0.19010118281117863,
+      "delay": 0.3919059187311909
+    },
+    "equal_weights": {
+      "margin": 0.16666666666666666,
+      "spread": 0.16666666666666666,
+      "congestion": 0.16666666666666666,
+      "risk": 0.16666666666666666,
+      "relay": 0.16666666666666666,
+      "delay": 0.16666666666666666
+    },
+    "weight_provenance": "candidate 6 was selected without held-out feedback in three of four original fleet-size folds; equal weights were the fourth-fold selection. Both are frozen before this audit and neither is selected from EOS-Bench outcomes."
+  },
+  "statistics": {
+    "independent_unit": "source scenario JSON after averaging random seeds within scenario",
+    "primary_metric": "request completion fraction",
+    "secondary_metrics": [
+      "priority reward",
+      "reserved-capacity occupancy",
+      "runtime_ms"
+    ],
+    "paired_bootstrap_resamples": 10000,
+    "bootstrap_seed": 20261102,
+    "multiplicity": "Holm correction over primary RACS-vs-comparator completion tests",
+    "scope_warning": "The 24 files include related scenario families; inference is exploratory and must not be described as 24 independent operational campaigns."
+  },
+  "protocol_source_sha256": "9b62330e2a9262a4fd047af518910f22d6c13e831a2c20349c565ab31c7a059f"
+}

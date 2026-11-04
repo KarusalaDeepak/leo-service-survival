@@ -1,0 +1,4 @@
+evidence,candidate,baseline,units,candidate_completion,baseline_completion,difference,ci_low,ci_high,p_value,claim_boundary
+controlled_combined_stress,cross_fitted_racs,full_margin,9,0.6018518518518519,0.6055555555555556,-0.003703703703703703,-0.011111111111111108,0.0,1.0,controlled synthetic benchmark
+equal_budget_random_forest,cross_fitted_racs,selected_random_forest,9,,,0.0055555555555555,0.0,0.0129629629629629,1.0,nested equal-budget controlled benchmark
+eos_bench_frozen_transfer,full_racs_candidate6,full_margin,24,0.2679166666666667,0.2679166666666667,0.0,0.0,0.0,1.0,provider observation fields plus simulated delivery overlay

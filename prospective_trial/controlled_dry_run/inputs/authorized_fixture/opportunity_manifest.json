@@ -1,0 +1,38 @@
+{
+  "campaign_registry_sha256": "bab1985b7d99a2a651b8c3a6764d92b7a36ce9eb258ec27facccc88ca58ece64",
+  "claim_boundary": "FAKE_DRIVER_TEST exercises software paths only. Gate metrics are derived from hash-locked fake opportunity tables, not field captures. This is not live hardware, an independent field campaign, a prospective installed action, an EO outcome, or evidence of candidate benefit. Field execution remains NOT_RUN.",
+  "evidence_status": "FAKE_DRIVER_TEST",
+  "schema_version": "1.0.0",
+  "tables": [
+    {
+      "acquisition_family_id": "FAKE-GATE-F01",
+      "campaign_id": "FAKE-GATE-01",
+      "path": "/private/tmp/P04_Integrated_Offline_Evaluation_Submission_R1/prospective_trial/controlled_dry_run/inputs/authorized_fixture/opportunities/FAKE-GATE-01.csv",
+      "sha256": "508ac2e6b2268166fb543d8b04e293504d72f559b0169a60d3369d1f00f46131"
+    },
+    {
+      "acquisition_family_id": "FAKE-GATE-F02",
+      "campaign_id": "FAKE-GATE-02",
+      "path": "/private/tmp/P04_Integrated_Offline_Evaluation_Submission_R1/prospective_trial/controlled_dry_run/inputs/authorized_fixture/opportunities/FAKE-GATE-02.csv",
+      "sha256": "44add13e2e26f6b2380df300f44bde4ff2ff42b021f6209e0876cb0355ad0f2a"
+    },
+    {
+      "acquisition_family_id": "FAKE-GATE-F03",
+      "campaign_id": "FAKE-GATE-03",
+      "path": "/private/tmp/P04_Integrated_Offline_Evaluation_Submission_R1/prospective_trial/controlled_dry_run/inputs/authorized_fixture/opportunities/FAKE-GATE-03.csv",
+      "sha256": "3f5f45f3dabf1d01842d735c44cadd01acfe43998e3b6296eb7b85ea7993593a"
+    },
+    {
+      "acquisition_family_id": "FAKE-GATE-F01",
+      "campaign_id": "FAKE-GATE-04",
+      "path": "/private/tmp/P04_Integrated_Offline_Evaluation_Submission_R1/prospective_trial/controlled_dry_run/inputs/authorized_fixture/opportunities/FAKE-GATE-04.csv",
+      "sha256": "6171ce258c88ad3ee4c46f03f2bc77cbda17d0c727ef872694eabcce84d2724a"
+    },
+    {
+      "acquisition_family_id": "FAKE-GATE-F02",
+      "campaign_id": "FAKE-GATE-05",
+      "path": "/private/tmp/P04_Integrated_Offline_Evaluation_Submission_R1/prospective_trial/controlled_dry_run/inputs/authorized_fixture/opportunities/FAKE-GATE-05.csv",
+      "sha256": "00e4330dc1c414109e2d3a43e25bbab49aa4396213d4750de9f782ebb77801d0"
+    }
+  ]
+}

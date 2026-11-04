@@ -1,0 +1,36 @@
+{
+  "artifact_sha256": "f1b968cc939ca76a1823d88ff7d83278f33990f522f43e68a44752d89a18c16f",
+  "artifact_type": "untouched_final_test_unlock",
+  "authentication": {
+    "algorithm": "HMAC-SHA256",
+    "key_id": "825fd5c2110468fc",
+    "purpose": "O4_FINAL_TEST_UNLOCK_V1",
+    "signature": "d517ee44c856f08e0e67cf61f5f80e340418070bf17a3e1f0801a97957fec83d"
+  },
+  "canary_plan_sha256": "0154163d74d9bb96c8c2e62634a14750e7ca239a595433d434e6b76e0281350a",
+  "checkpoint_approval_id": "FAKE-APPROVAL-NOT-VALID-FOR-LIVE-USE",
+  "checkpoint_report_sha256": "cecba3fc355541ae3aaf0d31cecc3df2f4d02404e5d0e8f42fc07865f5780c34",
+  "claim_boundary": "This token authorizes collection under frozen artifacts. It is not evidence that the final test ran or that the candidate improved outcomes.",
+  "created_wall_ns": 1800000000000000600,
+  "final_test_campaign_ids": [
+    "FAKE-TEST-01"
+  ],
+  "final_test_family_ids": [
+    "FAKE-TEST-F01"
+  ],
+  "frozen_artifacts": {
+    "campaign_registry_lock_sha256": "739e39321084159838d1c7db8f3be0e80d256443e3da10b358f46b22566d96b0",
+    "config_sha256": "18ab0a75f48de3f09f56a5255ec679efd70dd874a42856855a2406621453a665",
+    "evidence_sha256": "e77f95b2c664c64741ff480657e3fee459d799e9c2da849db479163580ee916a",
+    "ledger_schema_sha256": "1df8d0ba6a7ac774654b95d0caf1d2d70f0da199595b6e14d084bbf137726ded",
+    "model_sha256": "c3d550f15e5e763a4efaf0f8b94882478042bd6caa3a9df2813f0bb2695ebb29",
+    "register_sha256": "739e39321084159838d1c7db8f3be0e80d256443e3da10b358f46b22566d96b0",
+    "route_config_sha256": "ddb787efbc06188485b2d734bc8bfc0a62c2d64f76f28ce9137718059530fa61",
+    "testbed_qualification_sha256": "55922e858a7cb19a622f8d272da849f48641f4957fea29ec41e86b3f52f54f68"
+  },
+  "gate_report_sha256": "a9308176d2ab3a18d08aaee5f54414637bb0056864bf0f183597063c403e8478",
+  "no_retuning_attestation": true,
+  "register_sha256_at_unlock": "563de7eb8447f629e1042dfa7f361aba5b540af06b371c99b48d96a1285aa8fc",
+  "schema_version": "1.0.0",
+  "status": "UNTOUCHED_FINAL_TEST_UNLOCKED"
+}

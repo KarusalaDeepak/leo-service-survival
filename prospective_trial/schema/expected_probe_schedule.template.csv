@@ -1,0 +1,3 @@
+probe_id,campaign_id,session_id,path_id,scheduled_wall_time_ns,status
+TBD-PROBE-000001,TBD-CAMPAIGN,TBD-SESSION,cellular,0,NOT_RUN
+TBD-PROBE-000002,TBD-CAMPAIGN,TBD-SESSION,leo,0,NOT_RUN

@@ -1,0 +1,87 @@
+{
+  "checks": [
+    {
+      "check": "telemetry.nonempty",
+      "details": "records=10",
+      "passed": true
+    },
+    {
+      "check": "telemetry.hash_chain",
+      "details": "valid",
+      "passed": true
+    },
+    {
+      "check": "telemetry.unique_source_sequence",
+      "details": "duplicates=0",
+      "passed": true
+    },
+    {
+      "check": "telemetry.monotonic_per_source",
+      "details": "invalid_sources=0",
+      "passed": true
+    },
+    {
+      "check": "telemetry.contiguous_source_sequence",
+      "details": "sources_with_gaps=0",
+      "passed": true
+    },
+    {
+      "check": "telemetry.synchronized_clock_epoch",
+      "details": "clock_epochs=1; clock_evidence_hashes=1",
+      "passed": true
+    },
+    {
+      "check": "telemetry.loss_preserving_probe_schedule",
+      "details": "missing=[]; extra=[]; duplicates=0",
+      "passed": true
+    },
+    {
+      "check": "telemetry.required_record_types",
+      "details": "missing=[]",
+      "passed": true
+    },
+    {
+      "check": "telemetry.route_lifecycle",
+      "details": "incomplete_decisions=0",
+      "passed": true
+    },
+    {
+      "check": "telemetry.route_stage_order",
+      "details": "misordered_decisions=0",
+      "passed": true
+    },
+    {
+      "check": "telemetry.route_path_reconciliation",
+      "details": "mismatched_decisions=0",
+      "passed": true
+    },
+    {
+      "check": "telemetry.action_outcome_link",
+      "details": "missing_outcomes=0",
+      "passed": true
+    },
+    {
+      "check": "telemetry.unique_outcome_per_decision",
+      "details": "duplicates=0",
+      "passed": true
+    },
+    {
+      "check": "telemetry.route_outcome_task_identity",
+      "details": "mismatches=0",
+      "passed": true
+    },
+    {
+      "check": "telemetry.campaign_lock_identity",
+      "details": "errors=0",
+      "passed": true
+    },
+    {
+      "check": "telemetry.single_evidence_status",
+      "details": "['FAKE_DRIVER_TEST']",
+      "passed": true
+    }
+  ],
+  "claim_boundary": "FAKE_DRIVER_TEST exercises software paths only. Gate metrics are derived from hash-locked fake opportunity tables, not field captures. This is not live hardware, an independent field campaign, a prospective installed action, an EO outcome, or evidence of candidate benefit. Field execution remains NOT_RUN.",
+  "evidence_status": "FAKE_DRIVER_TEST",
+  "live_eligible": false
+}

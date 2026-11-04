@@ -1,0 +1,16 @@
+{
+  "authorized": false,
+  "decision": "RETAIN_MATCHED_SIMPLE_BASELINE",
+  "failed_checks": [
+    "benchmark_point_difference",
+    "benchmark_interval_lower_bound",
+    "benchmark_p_value",
+    "learned_comparator_interval_lower_bound",
+    "learned_comparator_holm_p",
+    "transfer_positive_difference"
+  ],
+  "field_claim": false,
+  "installed_scheduler": "full_margin",
+  "interpretation": "The scheduling component is implemented and evaluated, but the RACS ranking rule does not clear the frozen release checks. The matched full-capability margin selector therefore remains active and RACS remains in shadow evaluation. This is a successful fail-closed integration result, not evidence that scheduling research failed.",
+  "shadow_scheduler": "cross_fitted_racs"
+}

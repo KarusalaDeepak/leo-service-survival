@@ -1,0 +1,19 @@
+{
+  "continuous_outcome_experiment_completed": false,
+  "evidence_tier": "synthetic_interface_audit",
+  "installed_scheduler": "full_margin",
+  "mapping_complete": true,
+  "path_candidate_rows_exposed": 56,
+  "permitted_claim": "The frozen scheduler-release outcome is applied at the integration boundary: full_margin supplies validated EO plans, and every selected observation is traceable to the Paper 4 path-candidate interface on the same EOS-Bench geometry.",
+  "plans_with_exact_geometry_mapping": 28,
+  "prohibited_claims": [
+    "The bridge is an operational EO experiment.",
+    "Paper 3 and Paper 4 completion rates are directly comparable.",
+    "The RACS score is deployed or superior.",
+    "The path candidates caused the Paper 3 completion outcomes."
+  ],
+  "protocol": "racs-full-margin-to-paper4-path-handoff-v1",
+  "reason_outcome_not_combined": "Paper 3 uses a deterministic simulated ground-service overlay with release zero and a scenario-horizon deadline. Paper 4 uses independently generated releases, deadlines, rates, gateway identifiers, and post-decision outcomes. The exact geometry handoff is valid, but completion outcomes cannot be merged without changing either frozen experiment.",
+  "scheduled_plans": 28,
+  "shadow_scheduler": "cross_fitted_racs"
+}

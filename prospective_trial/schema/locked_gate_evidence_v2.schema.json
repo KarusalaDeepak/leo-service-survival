@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/o4/locked-gate-evidence-v2.schema.json",
+  "title": "Objective 4 recomputed locked gate evidence",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "evidence_status",
+    "execution_mode",
+    "protocol_id",
+    "config_sha256",
+    "model_sha256",
+    "trial_freeze_manifest_sha256",
+    "campaign_registry_sha256",
+    "opportunity_manifest_sha256",
+    "opportunity_derivation_sha256",
+    "campaigns",
+    "pooled_metrics",
+    "point_estimates",
+    "bootstrap",
+    "claim_boundary"
+  ],
+  "properties": {
+    "schema_version": {"const": "2.0.0"},
+    "evidence_status": {"enum": ["LOCKED_GATE_EVIDENCE", "FAKE_DRIVER_TEST"]},
+    "execution_mode": {"enum": ["confirmatory_live", "controlled_fixture"]},
+    "protocol_id": {"type": "string", "minLength": 1},
+    "config_sha256": {"$ref": "#/$defs/sha256"},
+    "model_sha256": {"$ref": "#/$defs/sha256"},
+    "trial_freeze_manifest_sha256": {"$ref": "#/$defs/sha256"},
+    "campaign_registry_sha256": {"$ref": "#/$defs/sha256"},
+    "opportunity_manifest_sha256": {"$ref": "#/$defs/sha256"},
+    "opportunity_derivation_sha256": {"$ref": "#/$defs/sha256"},
+    "campaigns": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["campaign_id", "acquisition_family_id", "paired_opportunity_groups", "raw_evidence_sha256", "row_count"],
+        "properties": {
+          "campaign_id": {"type": "string", "minLength": 1},
+          "acquisition_family_id": {"type": "string", "minLength": 1},
+          "paired_opportunity_groups": {"type": "integer", "minimum": 1},
+          "raw_evidence_sha256": {"$ref": "#/$defs/sha256"},
+          "row_count": {"type": "integer", "minimum": 1}
+        }
+      }
+    },
+    "pooled_metrics": {"$ref": "#/$defs/gateMetrics"},
+    "point_estimates": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["feature_coverage", "ood_fraction", "calibration_gap", "candidate_minus_baseline_effect", "control_loop_p95_ms"],
+      "properties": {
+        "feature_coverage": {"type": "number", "minimum": 0, "maximum": 1},
+        "ood_fraction": {"type": "number", "minimum": 0, "maximum": 1},
+        "calibration_gap": {"type": "number", "minimum": 0, "maximum": 1},
+        "candidate_minus_baseline_effect": {"type": "number", "minimum": -1, "maximum": 1},
+        "control_loop_p95_ms": {"type": "number", "minimum": 0}
+      }
+    },
+    "bootstrap": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["method", "cluster_column", "seed", "replicates", "confidence_level", "effect_two_sided_lower", "effect_two_sided_upper"],
+      "properties": {
+        "method": {"const": "nonparametric_cluster_bootstrap"},
+        "cluster_column": {"const": "cluster_id"},
+        "seed": {"type": "integer"},
+        "replicates": {"type": "integer", "minimum": 500},
+        "confidence_level": {"type": "number", "exclusiveMinimum": 0.5, "exclusiveMaximum": 1},
+        "effect_two_sided_lower": {"type": "number", "minimum": -1, "maximum": 1},
+        "effect_two_sided_upper": {"type": "number", "minimum": -1, "maximum": 1}
+      }
+    },
+    "claim_boundary": {"type": "string", "minLength": 1}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "gateMetrics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["paired_opportunity_groups", "feature_coverage", "ood_fraction", "calibration_gap_upper", "candidate_minus_baseline_effect_lower", "effect_ci_half_width", "control_loop_p95_ms"],
+      "properties": {
+        "paired_opportunity_groups": {"type": "integer", "minimum": 1},
+        "feature_coverage": {"type": "number", "minimum": 0, "maximum": 1},
+        "ood_fraction": {"type": "number", "minimum": 0, "maximum": 1},
+        "calibration_gap_upper": {"type": "number", "minimum": 0, "maximum": 1},
+        "candidate_minus_baseline_effect_lower": {"type": "number", "minimum": -1, "maximum": 1},
+        "effect_ci_half_width": {"type": "number", "minimum": 0, "maximum": 1},
+        "control_loop_p95_ms": {"type": "number", "minimum": 0}
+      }
+    }
+  }
+}
+

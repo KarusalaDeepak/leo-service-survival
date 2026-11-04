@@ -1,0 +1,107 @@
+{
+  "artifact_sha256": "a5688f82bd3a93658b74fe02339c4c05ab85d27e04f195f1a3aeb7795e553a6c",
+  "artifact_type": "frozen_evidence_gate_report",
+  "authentication": {
+    "algorithm": "HMAC-SHA256",
+    "key_id": "825fd5c2110468fc",
+    "purpose": "O4_FROZEN_EVIDENCE_GATE_V1",
+    "signature": "a460fc6065733ac2ade43e756249cb3072129a0ce498979ddbce93af379b4f1e"
+  },
+  "candidate_authorized": false,
+  "claim_boundary": "Authorization permits only the frozen canary. Rejection or insufficient evidence requires the reactive baseline. FAKE_DRIVER_TEST is software evidence only. This report alone does not establish deployment benefit or completion of the field trial.",
+  "created_wall_ns": 1800000000000000100,
+  "decision": "REJECTED",
+  "eligibility_checks": [
+    {
+      "condition": "independent_gate_campaigns",
+      "direction": "at_least",
+      "observed": 5,
+      "passed": true,
+      "threshold": 5
+    },
+    {
+      "condition": "independent_gate_families",
+      "direction": "at_least",
+      "observed": 3,
+      "passed": true,
+      "threshold": 3
+    },
+    {
+      "condition": "paired_opportunity_groups",
+      "direction": "at_least",
+      "observed": 100,
+      "passed": true,
+      "threshold": 5
+    }
+  ],
+  "evidence_status": "FAKE_DRIVER_TEST",
+  "execution_mode": "controlled_fixture",
+  "failed_conditions": [
+    "ood_fraction"
+  ],
+  "fallback_action": "retain_reactive_baseline",
+  "field_execution_status": "FAKE_DRIVER_TEST",
+  "frozen_artifacts": {
+    "campaign_registry_lock_sha256": "88dd322c4fc8bc3aa594b3e41665584568217768cc9c142759620e6384c66570",
+    "config_sha256": "18ab0a75f48de3f09f56a5255ec679efd70dd874a42856855a2406621453a665",
+    "evidence_sha256": "c5e3df3e785fd5231bf227b6bcdff25d58d21bfb0a3046ad2678f71cb1288742",
+    "ledger_schema_sha256": "1df8d0ba6a7ac774654b95d0caf1d2d70f0da199595b6e14d084bbf137726ded",
+    "model_sha256": "c3d550f15e5e763a4efaf0f8b94882478042bd6caa3a9df2813f0bb2695ebb29",
+    "register_sha256": "88dd322c4fc8bc3aa594b3e41665584568217768cc9c142759620e6384c66570",
+    "route_config_sha256": "ddb787efbc06188485b2d734bc8bfc0a62c2d64f76f28ce9137718059530fa61",
+    "testbed_qualification_sha256": "55922e858a7cb19a622f8d272da849f48641f4957fea29ec41e86b3f52f54f68"
+  },
+  "gate_profile_id": "confirmatory_release_v1",
+  "independent_counts": {
+    "gate_campaigns": 5,
+    "gate_families": 3,
+    "paired_opportunity_groups": 100
+  },
+  "performance_checks": [
+    {
+      "condition": "feature_coverage",
+      "direction": "at_least",
+      "observed": 1.0,
+      "passed": true,
+      "threshold": 0.95
+    },
+    {
+      "condition": "ood_fraction",
+      "direction": "at_most",
+      "observed": 1.0,
+      "passed": false,
+      "threshold": 0.1
+    },
+    {
+      "condition": "calibration_gap_upper",
+      "direction": "at_most",
+      "observed": 0.0,
+      "passed": true,
+      "threshold": 0.05
+    },
+    {
+      "condition": "candidate_minus_baseline_effect_lower",
+      "direction": "at_least",
+      "observed": 1.0,
+      "passed": true,
+      "threshold": -0.02
+    },
+    {
+      "condition": "effect_ci_half_width",
+      "direction": "at_most",
+      "observed": 0.0,
+      "passed": true,
+      "threshold": 0.05
+    },
+    {
+      "condition": "control_loop_p95_ms",
+      "direction": "at_most",
+      "observed": 40.0,
+      "passed": true,
+      "threshold": 100.0
+    }
+  ],
+  "protocol_id": "O4-PROSPECTIVE-CLOSED-LOOP-V1",
+  "schema_version": "1.0.0",
+  "trial_freeze_manifest_sha256": "c3a8b7e128f5a912e5a7a52e33bb7d7f99280d2f27247887f5f9d9831e665f42"
+}

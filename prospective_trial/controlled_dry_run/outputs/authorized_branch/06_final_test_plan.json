@@ -1,0 +1,116 @@
+{
+  "allocation_seed_commitment": "f95c555cf3282226f8d951ae2a80cd62c195c608b2a49d40d54c88760c82931c",
+  "analysis_spec_sha256": "0bbf5553aa29414fde156412d4981a59299309411ceedae06d856e3e8edc7d45",
+  "artifact_sha256": "42a5bd54ae43da469e6f03c32909a3409bd6465a7bb11dca557ca7c12d08589e",
+  "artifact_type": "fixed_final_test_plan",
+  "assignments": [
+    {
+      "assigned_arm": "reactive_baseline",
+      "block_id": "FAKE-FINAL-BLOCK-00"
+    },
+    {
+      "assigned_arm": "reactive_baseline",
+      "block_id": "FAKE-FINAL-BLOCK-01"
+    },
+    {
+      "assigned_arm": "reactive_baseline",
+      "block_id": "FAKE-FINAL-BLOCK-02"
+    },
+    {
+      "assigned_arm": "gated_candidate",
+      "block_id": "FAKE-FINAL-BLOCK-03"
+    },
+    {
+      "assigned_arm": "gated_candidate",
+      "block_id": "FAKE-FINAL-BLOCK-04"
+    },
+    {
+      "assigned_arm": "reactive_baseline",
+      "block_id": "FAKE-FINAL-BLOCK-05"
+    },
+    {
+      "assigned_arm": "gated_candidate",
+      "block_id": "FAKE-FINAL-BLOCK-06"
+    },
+    {
+      "assigned_arm": "gated_candidate",
+      "block_id": "FAKE-FINAL-BLOCK-07"
+    },
+    {
+      "assigned_arm": "gated_candidate",
+      "block_id": "FAKE-FINAL-BLOCK-08"
+    },
+    {
+      "assigned_arm": "gated_candidate",
+      "block_id": "FAKE-FINAL-BLOCK-09"
+    },
+    {
+      "assigned_arm": "reactive_baseline",
+      "block_id": "FAKE-FINAL-BLOCK-10"
+    },
+    {
+      "assigned_arm": "reactive_baseline",
+      "block_id": "FAKE-FINAL-BLOCK-11"
+    },
+    {
+      "assigned_arm": "reactive_baseline",
+      "block_id": "FAKE-FINAL-BLOCK-12"
+    },
+    {
+      "assigned_arm": "gated_candidate",
+      "block_id": "FAKE-FINAL-BLOCK-13"
+    },
+    {
+      "assigned_arm": "gated_candidate",
+      "block_id": "FAKE-FINAL-BLOCK-14"
+    },
+    {
+      "assigned_arm": "reactive_baseline",
+      "block_id": "FAKE-FINAL-BLOCK-15"
+    },
+    {
+      "assigned_arm": "gated_candidate",
+      "block_id": "FAKE-FINAL-BLOCK-16"
+    },
+    {
+      "assigned_arm": "gated_candidate",
+      "block_id": "FAKE-FINAL-BLOCK-17"
+    },
+    {
+      "assigned_arm": "reactive_baseline",
+      "block_id": "FAKE-FINAL-BLOCK-18"
+    },
+    {
+      "assigned_arm": "reactive_baseline",
+      "block_id": "FAKE-FINAL-BLOCK-19"
+    }
+  ],
+  "authentication": {
+    "algorithm": "HMAC-SHA256",
+    "key_id": "825fd5c2110468fc",
+    "purpose": "O4_FIXED_FINAL_TEST_PLAN_V1",
+    "signature": "3e9dfe53ebe49ba16c40ef42aeb5db3c806e89d7e1f71bff23fdfc4977b8a05a"
+  },
+  "baseline_blocks": 10,
+  "candidate_allocation_fraction": 0.5,
+  "candidate_blocks": 10,
+  "claim_boundary": "This signed plan fixes final-test ITT assignment after unlock. It is not evidence that any assigned action or outcome occurred.",
+  "created_wall_ns": 1800000000000000650,
+  "final_test_unlock_sha256": "f1b968cc939ca76a1823d88ff7d83278f33990f522f43e68a44752d89a18c16f",
+  "frozen_artifacts": {
+    "campaign_registry_lock_sha256": "739e39321084159838d1c7db8f3be0e80d256443e3da10b358f46b22566d96b0",
+    "config_sha256": "18ab0a75f48de3f09f56a5255ec679efd70dd874a42856855a2406621453a665",
+    "evidence_sha256": "e77f95b2c664c64741ff480657e3fee459d799e9c2da849db479163580ee916a",
+    "ledger_schema_sha256": "1df8d0ba6a7ac774654b95d0caf1d2d70f0da199595b6e14d084bbf137726ded",
+    "model_sha256": "c3d550f15e5e763a4efaf0f8b94882478042bd6caa3a9df2813f0bb2695ebb29",
+    "register_sha256": "739e39321084159838d1c7db8f3be0e80d256443e3da10b358f46b22566d96b0",
+    "route_config_sha256": "ddb787efbc06188485b2d734bc8bfc0a62c2d64f76f28ce9137718059530fa61",
+    "testbed_qualification_sha256": "55922e858a7cb19a622f8d272da849f48641f4957fea29ec41e86b3f52f54f68"
+  },
+  "gate_report_sha256": "a9308176d2ab3a18d08aaee5f54414637bb0056864bf0f183597063c403e8478",
+  "release_phase": "final_test",
+  "retuning_permitted": false,
+  "schema_version": "1.0.0",
+  "status": "PLANNED_NOT_EXECUTED",
+  "total_blocks": 20
+}

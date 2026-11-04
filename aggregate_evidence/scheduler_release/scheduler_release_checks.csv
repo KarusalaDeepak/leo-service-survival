@@ -1,0 +1,10 @@
+check,passed,observed,required
+benchmark_unit_floor,True,9.0,9
+benchmark_point_difference,False,-0.003703703703703703,> 0.0
+benchmark_interval_lower_bound,False,-0.011111111111111108,>= 0.0
+benchmark_p_value,False,1.0,<= 0.05
+learned_comparator_interval_lower_bound,False,0.0,> 0.0
+learned_comparator_holm_p,False,1.0,<= 0.05
+transfer_scenario_floor,True,24.0,24
+transfer_schedule_floor,True,384.0,384
+transfer_positive_difference,False,0.0,> 0.0

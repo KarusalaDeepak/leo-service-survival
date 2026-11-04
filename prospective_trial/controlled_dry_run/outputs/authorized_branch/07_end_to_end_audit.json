@@ -1,0 +1,111 @@
+{
+  "action_reconciliation_discrepancies": {
+    "final_test_assignment_mismatch": 0,
+    "final_test_release_hash_mismatch": 0,
+    "first_packet_missing": 0,
+    "first_packet_path_mismatch": 0,
+    "install_not_acknowledged": 0,
+    "installed_final_fib_mismatch_without_rollback": 0,
+    "intended_installed_mismatch": 0,
+    "missing_mature_outcome": 0,
+    "register_changed_after_unlock": 0,
+    "rollback_unverified": 0,
+    "unregistered_campaign": 0
+  },
+  "analysis_integrity_passed": true,
+  "analysis_lifecycle_audit_passed": true,
+  "artifact_sha256": "a8b0a6a0147933cdeb05d5fdfb9b05d0a5e7f7e490b19d8bb999ed4cceea9983",
+  "artifact_type": "end_to_end_trial_audit",
+  "authentication": {
+    "algorithm": "HMAC-SHA256",
+    "key_id": "825fd5c2110468fc",
+    "purpose": "O4_END_TO_END_AUDIT_V1",
+    "signature": "fc786b8470336508e24263fddb0fa90deee5408995cf3c095a188d0450414148"
+  },
+  "benefit_claim_supported": false,
+  "checkpoint_report_sha256": "cecba3fc355541ae3aaf0d31cecc3df2f4d02404e5d0e8f42fc07865f5780c34",
+  "claim_boundary": "This audit establishes trace-to-action accountability and identifies whether frozen final-test data are ready for the prespecified statistical analysis. It never converts operational integrity into a benefit claim; the registered effect analysis and uncertainty bounds remain required.",
+  "claim_level": "FINAL_TEST_DATA_READY_FOR_PRESPECIFIED_ANALYSIS",
+  "conservative_completion_fraction": 0.5,
+  "counts": {
+    "actions": 20,
+    "candidate_actions": 10,
+    "conservative_on_time_completions": 10,
+    "fallback_actions": 10,
+    "final_test_actions": 20,
+    "final_test_outcomes": 20,
+    "outcomes": 20,
+    "rollbacks": 0
+  },
+  "created_wall_ns": 1800000000000000700,
+  "final_test_plan_sha256": "42a5bd54ae43da469e6f03c32909a3409bd6465a7bb11dca557ca7c12d08589e",
+  "final_test_unlock_sha256": "f1b968cc939ca76a1823d88ff7d83278f33990f522f43e68a44752d89a18c16f",
+  "gate_report_sha256": "a9308176d2ab3a18d08aaee5f54414637bb0056864bf0f183597063c403e8478",
+  "hash_chain_passed": true,
+  "integrity_passed": true,
+  "ledger_last_record_sha256": "04726e21f484744b7b2daceb00e308a27787e0f2fc7ae30f6d9aae8fb58cc726",
+  "ledger_schema_sha256": "1df8d0ba6a7ac774654b95d0caf1d2d70f0da199595b6e14d084bbf137726ded",
+  "ledger_sha256": "9d27fee1eb48bb7288af458da69a25a89c68390361b6eadb1b4942bda41caa9b",
+  "lifecycle_audit_passed": true,
+  "register_audit_passed": true,
+  "register_sha256": "563de7eb8447f629e1042dfa7f361aba5b540af06b371c99b48d96a1285aa8fc",
+  "schema_version": "1.0.0",
+  "switching_interruption": {
+    "max_ms": 1.0,
+    "mean_ms": 1.0,
+    "n": 20,
+    "p50_ms": 1.0,
+    "p95_ms": 1.0
+  },
+  "timing": {
+    "collect_ms": {
+      "max_ms": 1.0,
+      "mean_ms": 1.0,
+      "n": 20,
+      "p50_ms": 1.0,
+      "p95_ms": 1.0
+    },
+    "decision_ms": {
+      "max_ms": 1.0,
+      "mean_ms": 1.0,
+      "n": 20,
+      "p50_ms": 1.0,
+      "p95_ms": 1.0
+    },
+    "disseminate_ms": {
+      "max_ms": 1.0,
+      "mean_ms": 1.0,
+      "n": 20,
+      "p50_ms": 1.0,
+      "p95_ms": 1.0
+    },
+    "feature_ms": {
+      "max_ms": 1.0,
+      "mean_ms": 1.0,
+      "n": 20,
+      "p50_ms": 1.0,
+      "p95_ms": 1.0
+    },
+    "install_ms": {
+      "max_ms": 1.0,
+      "mean_ms": 1.0,
+      "n": 20,
+      "p50_ms": 1.0,
+      "p95_ms": 1.0
+    },
+    "switch_ms": {
+      "max_ms": 1.0,
+      "mean_ms": 1.0,
+      "n": 20,
+      "p50_ms": 1.0,
+      "p95_ms": 1.0
+    },
+    "total_loop_ms": {
+      "max_ms": 6.0,
+      "mean_ms": 6.0,
+      "n": 20,
+      "p50_ms": 6.0,
+      "p95_ms": 6.0
+    }
+  }
+}

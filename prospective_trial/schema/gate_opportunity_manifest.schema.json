@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/o4/gate-opportunity-manifest.schema.json",
+  "title": "Objective 4 per-campaign raw opportunity manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "evidence_status", "campaign_registry_sha256", "tables"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "evidence_status": {"enum": ["live_hardware", "FAKE_DRIVER_TEST"]},
+    "campaign_registry_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "tables": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["campaign_id", "acquisition_family_id", "path", "sha256"],
+        "properties": {
+          "campaign_id": {"type": "string", "minLength": 1},
+          "acquisition_family_id": {"type": "string", "minLength": 1},
+          "path": {"type": "string", "minLength": 1},
+          "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+        }
+      }
+    }
+  }
+}
+

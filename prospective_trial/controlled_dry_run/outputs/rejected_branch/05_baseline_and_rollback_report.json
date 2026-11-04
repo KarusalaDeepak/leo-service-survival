@@ -1,0 +1,36 @@
+{
+  "artifact_sha256": "5d1b7b211475245e08e348332447b2bc79b70ac16996e37838e11fcc9a684bd8",
+  "artifact_type": "rejection_branch_report",
+  "authentication": {
+    "algorithm": "HMAC-SHA256",
+    "key_id": "825fd5c2110468fc",
+    "purpose": "O4_REJECTION_BRANCH_V1",
+    "signature": "7d88a2e95d6b0e4498bc68df851971464674cb9d422a3d7e37d08b793523c208"
+  },
+  "benefit_claim_supported": false,
+  "candidate_installed_in_production": false,
+  "claim_boundary": "A VERIFIED rejection branch demonstrates fail-closed baseline retention and rollback readiness only; it cannot support a candidate-benefit claim.",
+  "created_wall_ns": 1800000000000000200,
+  "gate_decision": "REJECTED",
+  "gate_report_sha256": "a5688f82bd3a93658b74fe02339c4c05ab85d27e04f195f1a3aeb7795e553a6c",
+  "isolated_rollback_drill": {
+    "baseline_verified": true,
+    "details": "FAKE isolated rollback 198.51.100.10 to reactive_baseline; no production route was changed",
+    "fault_injected": true,
+    "first_packet_observed": true,
+    "isolated_namespace_id": "FAKE-ISOLATED-ROLLBACK-NAMESPACE",
+    "rollback_acknowledged": true
+  },
+  "production_baseline_verification": {
+    "final_fib_path_id": "reactive_baseline",
+    "first_packet_observed": true,
+    "install_acknowledged": true,
+    "install_verified": true,
+    "installed_path_id": "reactive_baseline",
+    "intended_path_id": "reactive_baseline",
+    "passed": true,
+    "total_loop_ms": 6.0
+  },
+  "schema_version": "1.0.0",
+  "status": "VERIFIED"
+}

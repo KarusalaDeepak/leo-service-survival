@@ -1,0 +1,106 @@
+{
+  "schema_version": "1.0.0",
+  "description": "Loss-preserving synchronized telemetry contract for Objective 4. The contract does not represent collected field data.",
+  "evidence_status_values": [
+    "LIVE_REQUIRED",
+    "FAKE_DRIVER_TEST",
+    "live_hardware"
+  ],
+  "record_types": {
+    "network_probe": {
+      "required": [
+        "probe_id",
+        "path_id",
+        "disposition",
+        "sent_wall_time_ns",
+        "received_wall_time_ns",
+        "rtt_ms",
+        "failure_reason"
+      ],
+      "disposition_values": [
+        "reply",
+        "loss",
+        "timeout"
+      ],
+      "rule": "Every scheduled probe must produce exactly one record. A loss or timeout retains a null receive time and RTT plus a nonempty reason."
+    },
+    "rf_beam_handover": {
+      "required": [
+        "path_id",
+        "access_type",
+        "rf_metrics",
+        "beam_id",
+        "satellite_id",
+        "gateway_id",
+        "handover_event"
+      ],
+      "handover_event_values": [
+        "none",
+        "start",
+        "complete",
+        "failure"
+      ]
+    },
+    "route_observation": {
+      "required": [
+        "decision_id",
+        "task_id",
+        "stage",
+        "path_id",
+        "destination",
+        "acknowledged",
+        "evidence_sha256"
+      ],
+      "stage_values": [
+        "proposed",
+        "install_request",
+        "install_ack",
+        "pre_fib",
+        "post_fib",
+        "first_packet",
+        "final_fib",
+        "rollback"
+      ]
+    },
+    "application_eo_outcome": {
+      "required": [
+        "decision_id",
+        "task_id",
+        "workload_type",
+        "required_bytes",
+        "delivered_bytes",
+        "deadline_wall_time_ns",
+        "completion_wall_time_ns",
+        "application_complete",
+        "met_deadline",
+        "no_action",
+        "failure_reason"
+      ],
+      "workload_type_values": [
+        "application",
+        "earth_observation"
+      ]
+    }
+  },
+  "common_required": [
+    "schema_version",
+    "record_type",
+    "evidence_status",
+    "wall_time_ns",
+    "monotonic_time_ns",
+    "clock_epoch_id",
+    "maximum_clock_error_ms",
+    "clock_evidence_sha256",
+    "study_id",
+    "campaign_id",
+    "acquisition_family_id",
+    "session_id",
+    "source_id",
+    "sequence_number"
+  ],
+  "storage": {
+    "format": "UTF-8 JSON Lines",
+    "integrity": "Append-only SHA-256 hash chain",
+    "overwrite": false
+  }
+}

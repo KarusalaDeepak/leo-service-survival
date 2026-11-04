@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0.0",
+  "evidence_status": "TEMPLATE_NOT_EVIDENCE",
+  "protocol_id": "O4-PROSPECTIVE-CLOSED-LOOP-V1",
+  "config_sha256": "REPLACE_AFTER_PROTOCOL_FREEZE",
+  "model_sha256": "REPLACE_AFTER_MODEL_FREEZE",
+  "campaigns": [
+    {
+      "campaign_id": "REPLACE_WITH_LOCKED_GATE_CAMPAIGN",
+      "acquisition_family_id": "REPLACE_WITH_ROLE_SEPARATED_FAMILY",
+      "paired_opportunity_groups": 0,
+      "raw_evidence_sha256": "REPLACE_WITH_RAW_EVIDENCE_SHA256"
+    }
+  ],
+  "pooled_metrics": {
+    "paired_opportunity_groups": 0,
+    "feature_coverage": 0.0,
+    "ood_fraction": 1.0,
+    "calibration_gap_upper": 1.0,
+    "candidate_minus_baseline_effect_lower": -1.0,
+    "effect_ci_half_width": 1.0,
+    "control_loop_p95_ms": 1000000.0
+  },
+  "claim_boundary": "Template only. Replace placeholders, lock the role-separated evidence, and preserve all raw hashes before running the frozen gate."
+}

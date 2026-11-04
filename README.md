@@ -42,6 +42,10 @@ ranking, reliable long-horizon calibration, or a better decision policy.
 - `results/reviewer_prediction_release/` — the complete 12-pipeline by
   12-horizon WetLinks held-out prediction/score derivative, distributed under
   a separate CC BY-SA 4.0 data notice
+- `aggregate_evidence/` — bounded, redistribution-safe scheduling-transfer,
+  scheduler-release, and scheduler-to-path summaries
+- `prospective_trial/` — frozen schemas, runbooks, gate/canary/rollback rules,
+  and a deterministic fake-data rehearsal for future installed-action testing
 - `docs/` — source provenance, evidence boundaries, parameter governance, and
   adapter details
 
@@ -73,11 +77,31 @@ python -m pip install -r requirements.txt
 python -m pytest -q
 ```
 
-The public test suite exercises event/censor boundaries, chronological split
+The test suite exercises event/censor boundaries, chronological split
 isolation, survival identities, calibration diagnostics, prediction alignment,
-decision adapters, and fail-closed gating. One frozen-evidence audit is skipped
-unless the separately held row-level EOS bundle is present; its aggregate
-results are included in this repository.
+decision adapters, fail-closed gating, scheduler/path interfaces, prospective
+trial freezing, installed-action ledgers, application acknowledgements,
+canary/rollback behavior, and reproducibility manifests. One frozen-evidence
+audit is skipped unless the separately held row-level EOS bundle is present;
+its aggregate results are included in this repository.
+
+Verified release status for version `1.3.0`: **234 passed, 1 expected skip**
+under the pinned Python 3.11 environment.
+
+## Objective 4 integration boundary
+
+The repository includes the complete bounded offline integration interface and
+the executable seven-stage prospective protocol. The included controlled dry
+run uses explicitly fake inputs and exercises both authorization and rejection
+branches. It verifies software behavior, record binding, baseline retention,
+canary planning, rollback, and final-outcome analysis; it is not a live field
+trial.
+
+Actual synchronized 5G--LEO hardware execution remains `NOT_RUN`. Operational
+benefit requires independently collected campaigns, installed-route
+acknowledgements, first post-installation packets, full loop latency, and real
+application or EO outcomes. See `prospective_trial/STATUS.json` and
+`REDISTRIBUTION_BOUNDARY.md` for the exact boundary.
 
 ## Reproduce the primary evaluation
 
@@ -146,7 +170,7 @@ calibration-attributable scheduler benefit.
 ## Citation
 
 Use [CITATION.cff](CITATION.cff). This reviewer archive is frozen as version
-`1.2.2`. The source repository is initially maintained as a private GitHub
+`1.3.0`. The source repository is initially maintained as a private GitHub
 backup; a public URL will be advertised only after source-code licensing and
 coauthor review are complete.
 

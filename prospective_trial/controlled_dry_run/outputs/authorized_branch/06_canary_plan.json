@@ -1,0 +1,112 @@
+{
+  "allocation_fraction": 0.1,
+  "allocation_seed_commitment": "f9246877b1518d1776d0043c6231e734143bb1fbcf9518d1450c2b82189933cb",
+  "artifact_sha256": "0154163d74d9bb96c8c2e62634a14750e7ca239a595433d434e6b76e0281350a",
+  "artifact_type": "fixed_canary_plan",
+  "assignments": [
+    {
+      "assigned_arm": "reactive_baseline",
+      "block_id": "FAKE-CANARY-BLOCK-00"
+    },
+    {
+      "assigned_arm": "reactive_baseline",
+      "block_id": "FAKE-CANARY-BLOCK-01"
+    },
+    {
+      "assigned_arm": "reactive_baseline",
+      "block_id": "FAKE-CANARY-BLOCK-02"
+    },
+    {
+      "assigned_arm": "reactive_baseline",
+      "block_id": "FAKE-CANARY-BLOCK-03"
+    },
+    {
+      "assigned_arm": "reactive_baseline",
+      "block_id": "FAKE-CANARY-BLOCK-04"
+    },
+    {
+      "assigned_arm": "reactive_baseline",
+      "block_id": "FAKE-CANARY-BLOCK-05"
+    },
+    {
+      "assigned_arm": "gated_candidate",
+      "block_id": "FAKE-CANARY-BLOCK-06"
+    },
+    {
+      "assigned_arm": "gated_candidate",
+      "block_id": "FAKE-CANARY-BLOCK-07"
+    },
+    {
+      "assigned_arm": "reactive_baseline",
+      "block_id": "FAKE-CANARY-BLOCK-08"
+    },
+    {
+      "assigned_arm": "reactive_baseline",
+      "block_id": "FAKE-CANARY-BLOCK-09"
+    },
+    {
+      "assigned_arm": "reactive_baseline",
+      "block_id": "FAKE-CANARY-BLOCK-10"
+    },
+    {
+      "assigned_arm": "reactive_baseline",
+      "block_id": "FAKE-CANARY-BLOCK-11"
+    },
+    {
+      "assigned_arm": "reactive_baseline",
+      "block_id": "FAKE-CANARY-BLOCK-12"
+    },
+    {
+      "assigned_arm": "reactive_baseline",
+      "block_id": "FAKE-CANARY-BLOCK-13"
+    },
+    {
+      "assigned_arm": "reactive_baseline",
+      "block_id": "FAKE-CANARY-BLOCK-14"
+    },
+    {
+      "assigned_arm": "reactive_baseline",
+      "block_id": "FAKE-CANARY-BLOCK-15"
+    },
+    {
+      "assigned_arm": "reactive_baseline",
+      "block_id": "FAKE-CANARY-BLOCK-16"
+    },
+    {
+      "assigned_arm": "reactive_baseline",
+      "block_id": "FAKE-CANARY-BLOCK-17"
+    },
+    {
+      "assigned_arm": "reactive_baseline",
+      "block_id": "FAKE-CANARY-BLOCK-18"
+    },
+    {
+      "assigned_arm": "reactive_baseline",
+      "block_id": "FAKE-CANARY-BLOCK-19"
+    }
+  ],
+  "authentication": {
+    "algorithm": "HMAC-SHA256",
+    "key_id": "825fd5c2110468fc",
+    "purpose": "O4_FIXED_CANARY_PLAN_V1",
+    "signature": "cfab29146fa6a59d8aefc738d83acafc9de4b89b6d1d3f1ed3ee8a9663c7d338"
+  },
+  "candidate_blocks": 2,
+  "claim_boundary": "This plan fixes allocation; it is not evidence that canary blocks ran.",
+  "created_wall_ns": 1800000000000000400,
+  "frozen_artifacts": {
+    "campaign_registry_lock_sha256": "739e39321084159838d1c7db8f3be0e80d256443e3da10b358f46b22566d96b0",
+    "config_sha256": "18ab0a75f48de3f09f56a5255ec679efd70dd874a42856855a2406621453a665",
+    "evidence_sha256": "e77f95b2c664c64741ff480657e3fee459d799e9c2da849db479163580ee916a",
+    "ledger_schema_sha256": "1df8d0ba6a7ac774654b95d0caf1d2d70f0da199595b6e14d084bbf137726ded",
+    "model_sha256": "c3d550f15e5e763a4efaf0f8b94882478042bd6caa3a9df2813f0bb2695ebb29",
+    "register_sha256": "739e39321084159838d1c7db8f3be0e80d256443e3da10b358f46b22566d96b0",
+    "route_config_sha256": "ddb787efbc06188485b2d734bc8bfc0a62c2d64f76f28ce9137718059530fa61",
+    "testbed_qualification_sha256": "55922e858a7cb19a622f8d272da849f48641f4957fea29ec41e86b3f52f54f68"
+  },
+  "gate_report_sha256": "a9308176d2ab3a18d08aaee5f54414637bb0056864bf0f183597063c403e8478",
+  "retuning_permitted": false,
+  "schema_version": "1.0.0",
+  "status": "PLANNED_NOT_EXECUTED",
+  "total_blocks": 20
+}

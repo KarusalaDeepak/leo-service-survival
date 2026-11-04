@@ -1,0 +1,75 @@
+{
+  "bootstrap": {
+    "cluster_column": "cluster_id",
+    "confidence_level": 0.95,
+    "effect_two_sided_lower": 1.0,
+    "effect_two_sided_upper": 1.0,
+    "method": "nonparametric_cluster_bootstrap",
+    "replicates": 1000,
+    "seed": 20261103
+  },
+  "campaign_registry_sha256": "bab1985b7d99a2a651b8c3a6764d92b7a36ce9eb258ec27facccc88ca58ece64",
+  "campaigns": [
+    {
+      "acquisition_family_id": "FAKE-GATE-F01",
+      "campaign_id": "FAKE-GATE-01",
+      "paired_opportunity_groups": 20,
+      "raw_evidence_sha256": "508ac2e6b2268166fb543d8b04e293504d72f559b0169a60d3369d1f00f46131",
+      "row_count": 20
+    },
+    {
+      "acquisition_family_id": "FAKE-GATE-F02",
+      "campaign_id": "FAKE-GATE-02",
+      "paired_opportunity_groups": 20,
+      "raw_evidence_sha256": "44add13e2e26f6b2380df300f44bde4ff2ff42b021f6209e0876cb0355ad0f2a",
+      "row_count": 20
+    },
+    {
+      "acquisition_family_id": "FAKE-GATE-F03",
+      "campaign_id": "FAKE-GATE-03",
+      "paired_opportunity_groups": 20,
+      "raw_evidence_sha256": "3f5f45f3dabf1d01842d735c44cadd01acfe43998e3b6296eb7b85ea7993593a",
+      "row_count": 20
+    },
+    {
+      "acquisition_family_id": "FAKE-GATE-F01",
+      "campaign_id": "FAKE-GATE-04",
+      "paired_opportunity_groups": 20,
+      "raw_evidence_sha256": "6171ce258c88ad3ee4c46f03f2bc77cbda17d0c727ef872694eabcce84d2724a",
+      "row_count": 20
+    },
+    {
+      "acquisition_family_id": "FAKE-GATE-F02",
+      "campaign_id": "FAKE-GATE-05",
+      "paired_opportunity_groups": 20,
+      "raw_evidence_sha256": "00e4330dc1c414109e2d3a43e25bbab49aa4396213d4750de9f782ebb77801d0",
+      "row_count": 20
+    }
+  ],
+  "claim_boundary": "Metrics were recomputed from Step-2 hash-locked opportunity tables. FAKE_DRIVER_TEST is software evidence only and is never live field evidence.",
+  "config_sha256": "18ab0a75f48de3f09f56a5255ec679efd70dd874a42856855a2406621453a665",
+  "evidence_status": "FAKE_DRIVER_TEST",
+  "execution_mode": "controlled_fixture",
+  "model_sha256": "c3d550f15e5e763a4efaf0f8b94882478042bd6caa3a9df2813f0bb2695ebb29",
+  "opportunity_derivation_sha256": "280cdd3d37496aecd0832ce7fc6baa02d2efc7b0135b385c9f2612a88577a350",
+  "opportunity_manifest_sha256": "839d0872d8115b86faf141f0f3a17dfdf0c4a1d20dee59eaf0e284e9777d381b",
+  "point_estimates": {
+    "calibration_gap": 0.0,
+    "candidate_minus_baseline_effect": 1.0,
+    "control_loop_p95_ms": 40.0,
+    "feature_coverage": 1.0,
+    "ood_fraction": 0.0
+  },
+  "pooled_metrics": {
+    "calibration_gap_upper": 0.0,
+    "candidate_minus_baseline_effect_lower": 1.0,
+    "control_loop_p95_ms": 40.0,
+    "effect_ci_half_width": 0.0,
+    "feature_coverage": 1.0,
+    "ood_fraction": 0.0,
+    "paired_opportunity_groups": 100
+  },
+  "protocol_id": "O4-PROSPECTIVE-CLOSED-LOOP-V1",
+  "schema_version": "2.0.0",
+  "trial_freeze_manifest_sha256": "3e4882a9e4cd13335a1e78a88b45228caabdb7013e92056684259e7c49939ab8"
+}

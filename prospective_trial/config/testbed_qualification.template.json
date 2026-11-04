@@ -1,0 +1,101 @@
+{
+  "schema_version": "1.0.0",
+  "qualification_status": "NOT_RUN",
+  "evidence_source": "LIVE_REQUIRED",
+  "field_trial_completed": false,
+  "maximum_clock_error_ms": 10.0,
+  "components": {
+    "cellular_5g_terminal": {
+      "asset_or_service_id": "",
+      "interface": "",
+      "service_active": false,
+      "telemetry_export_available": false,
+      "status": "NOT_RUN",
+      "evidence_sha256": ""
+    },
+    "leo_terminal": {
+      "asset_or_service_id": "",
+      "interface": "",
+      "service_active": false,
+      "telemetry_export_available": false,
+      "status": "NOT_RUN",
+      "evidence_sha256": ""
+    },
+    "dual_access_gateway": {
+      "asset_or_service_id": "",
+      "cellular_interface": "",
+      "leo_interface": "",
+      "independent_fib_observer": false,
+      "emergency_baseline_restore": false,
+      "status": "NOT_RUN",
+      "evidence_sha256": ""
+    },
+    "remote_anchor": {
+      "asset_or_service_id": "",
+      "controlled_endpoint": false,
+      "application_acknowledgement": false,
+      "status": "NOT_RUN",
+      "evidence_sha256": ""
+    },
+    "clock_sync": {
+      "asset_or_service_id": "",
+      "method": "NTP_AUDITED",
+      "maximum_error_ms": 10.0,
+      "status": "NOT_RUN",
+      "evidence_sha256": ""
+    },
+    "session_preserving_path": {
+      "asset_or_service_id": "",
+      "mechanism": "anchored_tunnel",
+      "preserves_session_identity": true,
+      "status": "NOT_RUN",
+      "evidence_sha256": ""
+    }
+  },
+  "permissions": {
+    "institutional": {
+      "status": "NOT_RUN",
+      "approval_id": "",
+      "evidence_sha256": ""
+    },
+    "operator": {
+      "status": "NOT_RUN",
+      "approval_id": "",
+      "evidence_sha256": ""
+    },
+    "network_change": {
+      "status": "NOT_RUN",
+      "approval_id": "",
+      "evidence_sha256": ""
+    },
+    "ethics_or_exemption": {
+      "status": "NOT_RUN",
+      "approval_id": "",
+      "evidence_sha256": ""
+    }
+  },
+  "read_only_probes": {
+    "cellular_link": [
+      "/opt/o4/bin/probe-cellular-link"
+    ],
+    "leo_link": [
+      "/opt/o4/bin/probe-leo-link"
+    ],
+    "dual_interface": [
+      "/opt/o4/bin/probe-dual-interface"
+    ],
+    "remote_anchor": [
+      "/opt/o4/bin/probe-anchor"
+    ],
+    "clock_error": [
+      "/opt/o4/bin/probe-clock-error"
+    ],
+    "session_continuity": [
+      "/opt/o4/bin/probe-session-continuity"
+    ],
+    "permission_bundle": [
+      "/opt/o4/bin/verify-permission-bundle"
+    ]
+  },
+  "claim_boundary": "This is an unexecuted qualification template. Replace every empty identifier, collect immutable live evidence, and pass all read-only probes before LIVE_QUALIFIED may be reported."
+}

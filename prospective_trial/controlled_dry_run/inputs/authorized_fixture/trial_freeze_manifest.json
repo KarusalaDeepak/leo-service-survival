@@ -1,0 +1,51 @@
+{
+  "artifacts": {
+    "analysis_plan": {
+      "path": "/private/tmp/P04_Integrated_Offline_Evaluation_Submission_R1/prospective_trial/controlled_dry_run/inputs/final_test_analysis.fake_frozen.json",
+      "sha256": "0bbf5553aa29414fde156412d4981a59299309411ceedae06d856e3e8edc7d45"
+    },
+    "campaign_registry_lock": {
+      "path": "/private/tmp/P04_Integrated_Offline_Evaluation_Submission_R1/prospective_trial/controlled_dry_run/inputs/authorized_fixture/campaign_registry_lock.json",
+      "sha256": "739e39321084159838d1c7db8f3be0e80d256443e3da10b358f46b22566d96b0"
+    },
+    "ledger_schema": {
+      "path": "/private/tmp/P04_Integrated_Offline_Evaluation_Submission_R1/prospective_trial/schema/decision_ledger.schema.json",
+      "sha256": "1df8d0ba6a7ac774654b95d0caf1d2d70f0da199595b6e14d084bbf137726ded"
+    },
+    "model": {
+      "path": "/private/tmp/P04_Integrated_Offline_Evaluation_Submission_R1/prospective_trial/controlled_dry_run/inputs/fake_model_artifact.bin",
+      "sha256": "c3d550f15e5e763a4efaf0f8b94882478042bd6caa3a9df2813f0bb2695ebb29"
+    },
+    "opportunity_derivation": {
+      "path": "/private/tmp/P04_Integrated_Offline_Evaluation_Submission_R1/prospective_trial/controlled_dry_run/inputs/opportunity_derivation.fake_frozen.json",
+      "sha256": "280cdd3d37496aecd0832ce7fc6baa02d2efc7b0135b385c9f2612a88577a350"
+    },
+    "route_config": {
+      "path": "/private/tmp/P04_Integrated_Offline_Evaluation_Submission_R1/prospective_trial/controlled_dry_run/inputs/route_config.json",
+      "sha256": "ddb787efbc06188485b2d734bc8bfc0a62c2d64f76f28ce9137718059530fa61"
+    },
+    "testbed_qualification": {
+      "path": "/private/tmp/P04_Integrated_Offline_Evaluation_Submission_R1/prospective_trial/controlled_dry_run/outputs/01_qualification_report.json",
+      "sha256": "55922e858a7cb19a622f8d272da849f48641f4957fea29ec41e86b3f52f54f68"
+    },
+    "trial_config": {
+      "path": "/private/tmp/P04_Integrated_Offline_Evaluation_Submission_R1/prospective_trial/controlled_dry_run/inputs/trial_config.fake_frozen.json",
+      "sha256": "18ab0a75f48de3f09f56a5255ec679efd70dd874a42856855a2406621453a665"
+    }
+  },
+  "authentication": {
+    "algorithm": "HMAC-SHA256",
+    "key_id": "825fd5c2110468fc",
+    "purpose": "O4_TRIAL_FREEZE_MANIFEST_V1",
+    "signature": "085386a97dc54c027c446b2b505945cffb12bd4b2320a90fdd8845b0c7c6a7a6"
+  },
+  "campaign_registry_content_sha256": "bab1985b7d99a2a651b8c3a6764d92b7a36ce9eb258ec27facccc88ca58ece64",
+  "claim_boundary": "This manifest authenticates frozen inputs. FAKE_DRIVER_TEST verifies software only; only confirmatory_live with live hardware can support a prospective field claim.",
+  "evidence_status": "FAKE_DRIVER_TEST",
+  "execution_mode": "controlled_fixture",
+  "field_trial_completed": false,
+  "freeze_timestamp_utc": "2026-04-01T00:00:00+00:00",
+  "manifest_sha256": "3e4882a9e4cd13335a1e78a88b45228caabdb7013e92056684259e7c49939ab8",
+  "protocol_id": "O4-PROSPECTIVE-CLOSED-LOOP-V1",
+  "schema_version": "1.0.0"
+}

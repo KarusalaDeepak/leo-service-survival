@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/o4/trial-freeze-manifest.schema.json",
+  "title": "Objective 4 authenticated trial freeze manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "execution_mode",
+    "evidence_status",
+    "protocol_id",
+    "freeze_timestamp_utc",
+    "artifacts",
+    "campaign_registry_content_sha256",
+    "field_trial_completed",
+    "claim_boundary",
+    "manifest_sha256",
+    "authentication"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "execution_mode": {"enum": ["confirmatory_live", "controlled_fixture"]},
+    "evidence_status": {"enum": ["LOCKED_GATE_EVIDENCE", "FAKE_DRIVER_TEST"]},
+    "protocol_id": {"type": "string", "minLength": 1},
+    "freeze_timestamp_utc": {"type": "string", "format": "date-time"},
+    "artifacts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "testbed_qualification",
+        "route_config",
+        "campaign_registry_lock",
+        "ledger_schema",
+        "model",
+        "trial_config",
+        "analysis_plan",
+        "opportunity_derivation"
+      ],
+      "properties": {
+        "testbed_qualification": {"$ref": "#/$defs/artifact"},
+        "route_config": {"$ref": "#/$defs/artifact"},
+        "campaign_registry_lock": {"$ref": "#/$defs/artifact"},
+        "ledger_schema": {"$ref": "#/$defs/artifact"},
+        "model": {"$ref": "#/$defs/artifact"},
+        "trial_config": {"$ref": "#/$defs/artifact"},
+        "analysis_plan": {"$ref": "#/$defs/artifact"},
+        "opportunity_derivation": {"$ref": "#/$defs/artifact"}
+      }
+    },
+    "campaign_registry_content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "field_trial_completed": {"const": false},
+    "claim_boundary": {"type": "string", "minLength": 1},
+    "manifest_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "authentication": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["algorithm", "purpose", "key_id", "signature"],
+      "properties": {
+        "algorithm": {"const": "HMAC-SHA256"},
+        "purpose": {"const": "O4_TRIAL_FREEZE_MANIFEST_V1"},
+        "key_id": {"type": "string", "pattern": "^[0-9a-f]{16}$"},
+        "signature": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    }
+  },
+  "$defs": {
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    }
+  }
+}
+

@@ -1,0 +1,95 @@
+field,record_type,type,unit,required,definition,missingness_rule
+schema_version,both,string,version,yes,Ledger contract version,never missing
+record_type,both,string,category,yes,Event phase: action or outcome,never missing
+recorded_wall_ns,both,integer,Unix ns,yes,UTC-correlated time at durable record creation,never missing
+recorded_monotonic_ns,both,integer,monotonic ns,yes,Host monotonic time at durable record creation,never missing within one logger process
+study_id,both,string,identifier,yes,Prospective study identifier,never missing
+trial_id,both,string,identifier,yes,Registered trial identifier,never missing
+protocol_version,both,string,identifier,yes,Frozen protocol version,never missing
+campaign_id,both,string,identifier,yes,Campaign identifier from the acquisition register,never missing
+acquisition_family_id,both,string,identifier,yes,Independent acquisition-family identifier,never missing
+session_id,both,string,identifier,yes,Continuous execution session identifier,never missing
+task_id,both,string,identifier,yes,Application or EO task identifier,never missing
+decision_id,both,string,identifier,yes,Identifier joining action and outcome,never missing
+model_sha256,both,string,SHA-256,yes,Frozen model bundle content hash,never missing
+config_sha256,both,string,SHA-256,yes,Frozen controller configuration content hash,never missing
+testbed_config_sha256,action,string,SHA-256,yes,Exact signed testbed configuration hash,never missing for an action
+route_config_sha256,action,string,SHA-256,yes,Exact signed route-driver configuration hash,never missing for an action
+ledger_schema_sha256,action,string,SHA-256,yes,Exact frozen ledger schema hash,never missing for an action
+qualification_artifact_sha256,action,string,SHA-256,yes,Authenticated LIVE_QUALIFIED artifact content hash,never missing for an action
+qualification_file_sha256,action,string,SHA-256,yes,Exact frozen qualification file hash used by the campaign lock,never missing for an action
+campaign_lock_sha256,action,string,SHA-256,yes,Immutable role-separated campaign lock file hash,never missing for an action
+trial_freeze_manifest_sha256,action,string,SHA-256,yes,Authenticated pre-gate freeze manifest content hash,never missing for a live action
+campaign_role,action,string,category,yes,Locked acquisition role authorized for this phase,never missing for an action
+evidence_tier,both,string,category,yes,Field or hardware evidence tier,never missing
+block_id,action,string,identifier,yes,Prespecified randomization or allocation block identifier,must match exactly one signed assignment
+release_phase,action,string,category,yes,Execution phase governed by the signed release chain,shadow rejection verification canary or final test
+gate_report_sha256,action,string,SHA-256,yes,Content hash of the signed frozen gate report authorizing or rejecting the action,never manually asserted
+assignment_plan_sha256,action,string,SHA-256,yes,Content hash of the signed canary or final-test assignment plan,zero hash only for rejection verification
+policy_arm,action,string,category,yes,Intention-to-treat arm from the signed assignment plan,preserved even when runtime safety fallback changes the installed path
+gate_state,action,string,category,yes,Frozen offline campaign-level gate state,never missing
+gate_reason,action,string,text,yes,Machine-readable gate explanation,use empty string only when authorized
+guard_state,action,string,category,yes,Immediate input-domain guard result,never missing
+monitor_state,action,string,category,yes,Delayed outcome-monitor state,never missing; not_mature is explicit
+canary_state,action,string,category,yes,Shadow baseline candidate or stopped execution state,never missing
+available_path_ids,action,string_array,identifier list,yes,Paths actually available at the decision time,never missing; empty list is explicit
+proposed_path_id,action,string,identifier,yes,Candidate policy proposal before gate enforcement,never missing
+baseline_path_id,action,string,identifier,yes,Predefined reactive fallback path,never missing
+intended_path_id,action,string,identifier,yes,Path authorized for installation after safeguards,never missing
+pre_fib_path_id,action,string,identifier,yes,Path resolved from the route table before installation,explicit unavailable token if inspection fails and then fallback
+install_requested,action,boolean,flag,yes,Whether a route or tunnel change was requested,never missing
+install_acknowledged,action,boolean,flag,yes,Whether the control plane acknowledged installation,never missing
+install_ack_evidence_sha256,action,string,SHA-256,yes,Hash of raw control-plane acknowledgement evidence,never missing
+post_fib_path_id,action,string,identifier,yes,Path resolved immediately after installation,explicit unavailable token on audit failure
+installed_path_id,action,string,identifier,yes,Path treated as installed only after route verification,explicit none token if not installed
+install_verified,action,boolean,flag,yes,Whether post-install route state equals intended path,never missing
+first_packet_observed,action,boolean,flag,yes,Whether a post-install packet was observed on the intended path,never missing
+first_packet_path_id,action,string,identifier,yes,Path carrying the first verified packet,explicit none token if not observed
+first_packet_evidence_sha256,action,string,SHA-256,yes,Hash of independent first-packet observer evidence,never missing
+final_fib_path_id,action,string,identifier,yes,Path resolved after any fallback or rollback completes,explicit unavailable token makes the action a failure
+fallback_triggered,action,boolean,flag,yes,Whether the reactive baseline was retained or selected,never missing
+fallback_reason,action,string,text,yes,Reason for fail-closed baseline use,use empty string only when no fallback
+rollback_triggered,action,boolean,flag,yes,Whether an installed candidate was reverted,never missing
+rollback_reason,action,string,text,yes,Prespecified rollback trigger,use empty string only when no rollback
+rollback_acknowledged,action,boolean,flag,yes,Whether the baseline rollback command was acknowledged,false when rollback was not required
+rollback_install_verified,action,boolean,flag,yes,Whether independent route state resolved to baseline after rollback,false when rollback was not required
+rollback_first_packet_observed,action,boolean,flag,yes,Whether an independent observer saw the first packet on baseline,false when rollback was not required
+rollback_first_packet_path_id,action,string,identifier,yes,Independently observed rollback packet path,explicit none token when rollback was not required
+rollback_ack_evidence_sha256,action,string,SHA-256,yes,Hash of raw rollback acknowledgement evidence,never missing
+rollback_first_packet_evidence_sha256,action,string,SHA-256,yes,Hash of raw rollback first-packet evidence,never missing
+rollback_verified,action,boolean,flag,yes,Whether the final route state equals the reactive baseline after rollback,true when no rollback was required
+telemetry_age_ms,action,number,ms,yes,Age of the newest feature at decision cutoff,never missing; invalid clock forces fallback
+collect_ms,action,number,ms,yes,Telemetry collection duration in the loop decomposition,never missing
+feature_ms,action,number,ms,yes,Feature construction duration,never missing
+decision_ms,action,number,ms,yes,Prediction gate and selection duration,never missing
+disseminate_ms,action,number,ms,yes,Decision dissemination duration,never missing
+install_ms,action,number,ms,yes,Route request to acknowledgement duration,never missing
+switch_ms,action,number,ms,yes,Acknowledgement to first verified packet duration,never missing
+total_loop_ms,action,number,ms,yes,Sum of collect feature decision dissemination install and switch durations,never missing
+rollback_install_ms,action,number,ms,yes,Rollback request-to-acknowledgement duration kept separate from the primary loop,zero when rollback was not required
+rollback_switch_ms,action,number,ms,yes,Rollback acknowledgement-to-first-baseline-packet duration,zero when rollback was not required
+rollback_total_ms,action,number,ms,yes,Sum of rollback install and rollback switch durations,never missing
+action_total_ms,action,number,ms,yes,Primary loop duration plus any rollback duration,never missing
+raw_telemetry_sha256,action,string,SHA-256,yes,Content hash of the raw telemetry bundle used for the decision,never missing
+required_bytes,outcome,integer,bytes,yes,Declared complete product size before randomization,never missing
+delivered_bytes,outcome,integer,bytes,yes,Bytes received by the destination before endpoint closure,never missing; zero on no delivery
+deadline_wall_ns,outcome,integer,Unix ns,yes,Prespecified task deadline,never missing
+completion_wall_ns,outcome,integer,Unix ns,yes,Observed completion or endpoint-closure time,never missing
+observation_valid,outcome,boolean,flag,yes,Whether the observation or application work product passed validity checks,never missing
+application_complete,outcome,boolean,flag,yes,Whether the declared application operation completed,never missing
+met_deadline,outcome,boolean,flag,yes,Whether complete valid delivery occurred by the deadline,never missing
+no_action,outcome,boolean,flag,yes,Whether no usable action was executed,never missing and counts as failure
+controller_failure,outcome,boolean,flag,yes,Whether controller instrumentation or execution failed,never missing and counts as failure
+late_install,outcome,boolean,flag,yes,Whether installation completed after the decision validity window,never missing and counts as failure
+conservative_on_time_completion,outcome,boolean,flag,yes,Primary endpoint requiring valid observation complete bytes application completion deadline and no execution failure,never missing
+failure_stage,outcome,string,category,yes,Earliest stage preventing conservative completion,none only for completed tasks
+missingness_reason,outcome,string,text,yes,Explicit reason for any unavailable noncritical observation,use empty string when complete
+outcome_evidence_sha256,outcome,string,SHA-256,yes,Hash of the exact raw application acknowledgement file used to construct the outcome,recomputed before append and retained for later binding audit
+outcome_evidence_status,outcome,string,category,yes,Live authenticated acknowledgement or explicitly non-field fake-driver evidence,FAKE_DRIVER_TEST cannot support a field claim
+outcome_evidence_origin,outcome,string,category,yes,Whether the application observer executed live or was a controlled fake driver,must agree with the action evidence tier
+application_acknowledgement_id,outcome,string,identifier,yes,Observer-issued immutable acknowledgement identifier,never missing
+application_acknowledgement_source,outcome,string,identifier,yes,Application or EO endpoint that emitted the acknowledgement,never missing
+application_acknowledgement_wall_ns,outcome,integer,Unix ns,yes,Observer time at acknowledgement emission,must not precede completion
+application_acknowledgement_sha256,outcome,string,SHA-256,yes,Canonical signed acknowledgement content hash or fake-driver body hash,recomputed from the supplied evidence
+application_acknowledgement_authenticated,outcome,boolean,flag,yes,Whether a purpose-bound HMAC was verified,true is mandatory for every non-fake action
+application_acknowledgement_key_id,outcome,string,identifier,yes,Truncated signing-key identifier for a live acknowledgement,empty only for FAKE_DRIVER_TEST

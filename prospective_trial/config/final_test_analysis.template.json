@@ -1,0 +1,18 @@
+{
+  "schema_version": "1.0.0",
+  "status": "TEMPLATE_NOT_FROZEN",
+  "estimand": "intention_to_treat_risk_difference_candidate_minus_baseline",
+  "endpoint": "conservative_on_time_task_completion",
+  "candidate_arm": "gated_candidate",
+  "baseline_arm": "reactive_baseline",
+  "cluster_field": "block_id",
+  "minimum_independent_clusters_per_arm": null,
+  "bootstrap_replicates": 10000,
+  "confidence_level": 0.95,
+  "bootstrap_seed": 20261103,
+  "minimum_practical_gain": 0.02,
+  "missing_outcome_rule": "count_as_failure",
+  "config_sha256": "REPLACE_AFTER_PROTOCOL_FREEZE",
+  "model_sha256": "REPLACE_AFTER_MODEL_FREEZE",
+  "claim_boundary": "Template only. Replace minimum_independent_clusters_per_arm with the approved power-analysis result (the software floor is 10), then freeze the gain threshold, seed, resampling unit, hashes, and sample-size plan before any final-test outcome is opened."
+}

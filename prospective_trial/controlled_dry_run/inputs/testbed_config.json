@@ -1,0 +1,93 @@
+{
+  "claim_boundary": "FAKE_DRIVER_TEST exercises software paths only. Gate metrics are derived from hash-locked fake opportunity tables, not field captures. This is not live hardware, an independent field campaign, a prospective installed action, an EO outcome, or evidence of candidate benefit. Field execution remains NOT_RUN.",
+  "components": {
+    "cellular_5g_terminal": {
+      "asset_or_service_id": "FAKE-CELLULAR_5G_TERMINAL",
+      "evidence_sha256": "bcfb0fc743931e1620bf6add9a4ca1b31e2316ac6e2f54e9922f4687b19023fe",
+      "interface": "fake-cellular0",
+      "service_active": true,
+      "status": "FAKE_DRIVER_TEST",
+      "telemetry_export_available": true
+    },
+    "clock_sync": {
+      "asset_or_service_id": "FAKE-CLOCK_SYNC",
+      "evidence_sha256": "2f2d3446459d9b84c24fff233b65221566b2b279b7ce8537c142221931ad4b1f",
+      "maximum_error_ms": 0.0,
+      "method": "FAKE_DETERMINISTIC",
+      "status": "FAKE_DRIVER_TEST"
+    },
+    "dual_access_gateway": {
+      "asset_or_service_id": "FAKE-DUAL_ACCESS_GATEWAY",
+      "cellular_interface": "fake-cellular0",
+      "emergency_baseline_restore": true,
+      "evidence_sha256": "5b720a4cad0d5be42b1865f7e3b4a9086ffd1d604ffd5e544a894dbc08279e98",
+      "independent_fib_observer": true,
+      "leo_interface": "fake-leo0",
+      "status": "FAKE_DRIVER_TEST"
+    },
+    "leo_terminal": {
+      "asset_or_service_id": "FAKE-LEO_TERMINAL",
+      "evidence_sha256": "cf675741b7ffbf1a6fa1474ca3587bba8fb3ed0689b95d5bf6e6f549a1436896",
+      "interface": "fake-leo0",
+      "service_active": true,
+      "status": "FAKE_DRIVER_TEST",
+      "telemetry_export_available": true
+    },
+    "remote_anchor": {
+      "application_acknowledgement": true,
+      "asset_or_service_id": "FAKE-REMOTE_ANCHOR",
+      "controlled_endpoint": true,
+      "evidence_sha256": "0d3623d1e0c8bd47408b142421c69c8ca89ff263ba125a1925cfafbd52227243",
+      "status": "FAKE_DRIVER_TEST"
+    },
+    "session_preserving_path": {
+      "asset_or_service_id": "FAKE-SESSION_PRESERVING_PATH",
+      "evidence_sha256": "2d9f40be271059f95cc3c68c96fd48ff35ed38582b0eea2ac5446d63b1887f68",
+      "mechanism": "FAKE_DETERMINISTIC",
+      "preserves_session_identity": true,
+      "status": "FAKE_DRIVER_TEST"
+    }
+  },
+  "evidence_source": "FAKE_DRIVER_TEST",
+  "field_trial_completed": false,
+  "maximum_clock_error_ms": 1.0,
+  "permissions": {
+    "ethics_or_exemption": {
+      "status": "FAKE_DRIVER_TEST"
+    },
+    "institutional": {
+      "status": "FAKE_DRIVER_TEST"
+    },
+    "network_change": {
+      "status": "FAKE_DRIVER_TEST"
+    },
+    "operator": {
+      "status": "FAKE_DRIVER_TEST"
+    }
+  },
+  "qualification_status": "FAKE_DRIVER_TEST",
+  "read_only_probes": {
+    "cellular_link": [
+      "/usr/bin/true"
+    ],
+    "clock_error": [
+      "/usr/bin/true"
+    ],
+    "dual_interface": [
+      "/usr/bin/true"
+    ],
+    "leo_link": [
+      "/usr/bin/true"
+    ],
+    "permission_bundle": [
+      "/usr/bin/true"
+    ],
+    "remote_anchor": [
+      "/usr/bin/true"
+    ],
+    "session_continuity": [
+      "/usr/bin/true"
+    ]
+  },
+  "schema_version": "1.0.0"
+}

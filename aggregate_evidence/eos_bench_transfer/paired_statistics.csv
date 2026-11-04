@@ -1,0 +1,7 @@
+comparison,reference,comparator,scenario_units,mean_completion_delta,ci_low,ci_high,wilcoxon_p,wins,ties,losses,holm_p
+full_racs_candidate6 vs full_congestion,full_racs_candidate6,full_congestion,24,0.0,0.0,0.0,1.0,0,24,0,1.0
+full_racs_candidate6 vs full_earliest,full_racs_candidate6,full_earliest,24,0.0,0.0,0.0,1.0,0,24,0,1.0
+full_racs_candidate6 vs full_margin,full_racs_candidate6,full_margin,24,0.0,0.0,0.0,1.0,0,24,0,1.0
+full_racs_candidate6 vs full_racs_equal,full_racs_candidate6,full_racs_equal,24,0.0,0.0,0.0,1.0,0,24,0,1.0
+full_racs_candidate6 vs full_random,full_racs_candidate6,full_random,24,0.0,0.0,0.0,1.0,0,24,0,1.0
+full_racs_candidate6 vs single_margin,full_racs_candidate6,single_margin,24,0.0,0.0,0.0,1.0,0,24,0,1.0

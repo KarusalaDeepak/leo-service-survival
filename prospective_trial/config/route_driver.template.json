@@ -1,0 +1,106 @@
+{
+  "status": "TEMPLATE_NOT_DEPLOYABLE",
+  "evidence_source": "LIVE_REQUIRED",
+  "destination": "REPLACE_WITH_ANCHORED_SERVER_IP_OR_PREFIX",
+  "baseline_path_id": "reactive_baseline",
+  "candidate_path_ids": ["cellular", "leo"],
+  "maximum_total_loop_ms": 100.0,
+  "first_packet_timeout_ms": 500.0,
+  "snapshot_command": [
+    "/opt/o4/bin/resolve-installed-path",
+    "--destination",
+    "{destination}"
+  ],
+  "install_commands": {
+    "reactive_baseline": [
+      "/opt/o4/bin/install-path",
+      "--path",
+      "reactive_baseline",
+      "--destination",
+      "{destination}"
+    ],
+    "cellular": [
+      "/opt/o4/bin/install-path",
+      "--path",
+      "cellular",
+      "--destination",
+      "{destination}"
+    ],
+    "leo": [
+      "/opt/o4/bin/install-path",
+      "--path",
+      "leo",
+      "--destination",
+      "{destination}"
+    ]
+  },
+  "first_packet_commands": {
+    "reactive_baseline": [
+      "/opt/o4/bin/observe-first-packet",
+      "--path",
+      "reactive_baseline",
+      "--destination",
+      "{destination}"
+    ],
+    "cellular": [
+      "/opt/o4/bin/observe-first-packet",
+      "--path",
+      "cellular",
+      "--destination",
+      "{destination}"
+    ],
+    "leo": [
+      "/opt/o4/bin/observe-first-packet",
+      "--path",
+      "leo",
+      "--destination",
+      "{destination}"
+    ]
+  },
+  "isolated_rollback_drill": {
+    "isolation_attested": false,
+    "namespace_id": "REPLACE_WITH_ISOLATED_NETWORK_NAMESPACE",
+    "inject_fault_command": [
+      "/opt/o4/bin/inject-isolated-route-fault",
+      "--namespace",
+      "{namespace_id}",
+      "--destination",
+      "{destination}"
+    ],
+    "restore_baseline_command": [
+      "/opt/o4/bin/restore-isolated-baseline",
+      "--namespace",
+      "{namespace_id}",
+      "--path",
+      "{baseline_path_id}",
+      "--destination",
+      "{destination}"
+    ],
+    "verify_baseline_command": [
+      "/opt/o4/bin/verify-isolated-baseline",
+      "--namespace",
+      "{namespace_id}",
+      "--path",
+      "{baseline_path_id}",
+      "--destination",
+      "{destination}"
+    ],
+    "observe_first_packet_command": [
+      "/opt/o4/bin/observe-isolated-first-packet",
+      "--namespace",
+      "{namespace_id}",
+      "--path",
+      "{baseline_path_id}",
+      "--destination",
+      "{destination}"
+    ]
+  },
+  "contract": {
+    "snapshot_stdout_first_line": "Must be the resolved path_id for the destination",
+    "install_exit_zero": "Only after the route or tunnel control plane acknowledges the request",
+    "first_packet_exit_zero": "Only after a packet is observed on the requested path",
+    "first_packet_stdout_first_line": "Must be the independently observed path_id, not the requested path_id echoed by the controller",
+    "commands_use_shell": false,
+    "live_mutation_default": false
+  }
+}

@@ -1,0 +1,328 @@
+{
+  "claim_boundary": "FAKE_DRIVER_TEST exercises software paths only. Gate metrics are derived from hash-locked fake opportunity tables, not field captures. This is not live hardware, an independent field campaign, a prospective installed action, an EO outcome, or evidence of candidate benefit. Field execution remains NOT_RUN.",
+  "evidence_status": "FAKE_DRIVER_TEST",
+  "field_trial_status": "NOT_RUN",
+  "files": [
+    {
+      "bytes": 505,
+      "path": "README.md",
+      "sha256": "b45d73e88df91563a67aefd493c439e42c04062ff867f501b05fae804df280d0"
+    },
+    {
+      "bytes": 1490,
+      "path": "STATUS.json",
+      "sha256": "7f99e27b19aa844d0f97256dc74d718dfd4222b1c127353db51efd9d7e7492f9"
+    },
+    {
+      "bytes": 5924,
+      "path": "inputs/authorized_fixture/campaign_register.csv",
+      "sha256": "563de7eb8447f629e1042dfa7f361aba5b540af06b371c99b48d96a1285aa8fc"
+    },
+    {
+      "bytes": 11301,
+      "path": "inputs/authorized_fixture/campaign_registry_lock.json",
+      "sha256": "739e39321084159838d1c7db8f3be0e80d256443e3da10b358f46b22566d96b0"
+    },
+    {
+      "bytes": 2917,
+      "path": "inputs/authorized_fixture/gate_evidence.raw_derived.json",
+      "sha256": "e77f95b2c664c64741ff480657e3fee459d799e9c2da849db479163580ee916a"
+    },
+    {
+      "bytes": 2061,
+      "path": "inputs/authorized_fixture/opportunities/FAKE-GATE-01.csv",
+      "sha256": "508ac2e6b2268166fb543d8b04e293504d72f559b0169a60d3369d1f00f46131"
+    },
+    {
+      "bytes": 2061,
+      "path": "inputs/authorized_fixture/opportunities/FAKE-GATE-02.csv",
+      "sha256": "44add13e2e26f6b2380df300f44bde4ff2ff42b021f6209e0876cb0355ad0f2a"
+    },
+    {
+      "bytes": 2061,
+      "path": "inputs/authorized_fixture/opportunities/FAKE-GATE-03.csv",
+      "sha256": "3f5f45f3dabf1d01842d735c44cadd01acfe43998e3b6296eb7b85ea7993593a"
+    },
+    {
+      "bytes": 2061,
+      "path": "inputs/authorized_fixture/opportunities/FAKE-GATE-04.csv",
+      "sha256": "6171ce258c88ad3ee4c46f03f2bc77cbda17d0c727ef872694eabcce84d2724a"
+    },
+    {
+      "bytes": 2061,
+      "path": "inputs/authorized_fixture/opportunities/FAKE-GATE-05.csv",
+      "sha256": "00e4330dc1c414109e2d3a43e25bbab49aa4396213d4750de9f782ebb77801d0"
+    },
+    {
+      "bytes": 2284,
+      "path": "inputs/authorized_fixture/opportunity_manifest.json",
+      "sha256": "839d0872d8115b86faf141f0f3a17dfdf0c4a1d20dee59eaf0e284e9777d381b"
+    },
+    {
+      "bytes": 3012,
+      "path": "inputs/authorized_fixture/trial_freeze_manifest.json",
+      "sha256": "4a8f7340fe13f0319a6dee5ea1135a582f7c1dd4032ad7ad035fe571065069f9"
+    },
+    {
+      "bytes": 23,
+      "path": "inputs/fake_model_artifact.bin",
+      "sha256": "c3d550f15e5e763a4efaf0f8b94882478042bd6caa3a9df2813f0bb2695ebb29"
+    },
+    {
+      "bytes": 1067,
+      "path": "inputs/final_test_analysis.fake_frozen.json",
+      "sha256": "0bbf5553aa29414fde156412d4981a59299309411ceedae06d856e3e8edc7d45"
+    },
+    {
+      "bytes": 586,
+      "path": "inputs/opportunity_derivation.fake_frozen.json",
+      "sha256": "280cdd3d37496aecd0832ce7fc6baa02d2efc7b0135b385c9f2612a88577a350"
+    },
+    {
+      "bytes": 5924,
+      "path": "inputs/rejected_fixture/campaign_register.csv",
+      "sha256": "825c9ae61d4ffa3cefbb25618e18f84eec7e3dd42672c8673dda6e54f675c99b"
+    },
+    {
+      "bytes": 11301,
+      "path": "inputs/rejected_fixture/campaign_registry_lock.json",
+      "sha256": "88dd322c4fc8bc3aa594b3e41665584568217768cc9c142759620e6384c66570"
+    },
+    {
+      "bytes": 2917,
+      "path": "inputs/rejected_fixture/gate_evidence.raw_derived.json",
+      "sha256": "c5e3df3e785fd5231bf227b6bcdff25d58d21bfb0a3046ad2678f71cb1288742"
+    },
+    {
+      "bytes": 2061,
+      "path": "inputs/rejected_fixture/opportunities/FAKE-GATE-01.csv",
+      "sha256": "479b35f01ea37e0168e7c02e510188fc248557cdc98545af0268a004361136ed"
+    },
+    {
+      "bytes": 2061,
+      "path": "inputs/rejected_fixture/opportunities/FAKE-GATE-02.csv",
+      "sha256": "7bb39026551c9a7bde1b4dcb9f214bfff2243c0440c337d417d8d4bd12f61e72"
+    },
+    {
+      "bytes": 2061,
+      "path": "inputs/rejected_fixture/opportunities/FAKE-GATE-03.csv",
+      "sha256": "63b881dbac5e197ddc2461aed3d06ad9c9d1a9c1951f331c699442927846960c"
+    },
+    {
+      "bytes": 2061,
+      "path": "inputs/rejected_fixture/opportunities/FAKE-GATE-04.csv",
+      "sha256": "19b46f0d99e223c9fdda5af6596960b3ae3f68e2d4a5863ca2bedec31d24567a"
+    },
+    {
+      "bytes": 2061,
+      "path": "inputs/rejected_fixture/opportunities/FAKE-GATE-05.csv",
+      "sha256": "f5b4ff249b70088781332f29c95d3348d586dbb53669dcc6540c7978c4c5a3df"
+    },
+    {
+      "bytes": 2274,
+      "path": "inputs/rejected_fixture/opportunity_manifest.json",
+      "sha256": "f782ce06b809cf2c8b65dce03c18f6bc5e3e70f9a32f7dda0439cca5c165012d"
+    },
+    {
+      "bytes": 3010,
+      "path": "inputs/rejected_fixture/trial_freeze_manifest.json",
+      "sha256": "69e2809fbf567d27f53f0fae24dc7d546e82c8024d885f1728ae66dddebc2c8c"
+    },
+    {
+      "bytes": 1698,
+      "path": "inputs/route_config.json",
+      "sha256": "ddb787efbc06188485b2d734bc8bfc0a62c2d64f76f28ce9137718059530fa61"
+    },
+    {
+      "bytes": 7888,
+      "path": "inputs/telemetry_input.jsonl",
+      "sha256": "8218ff984af3405d10115363d60ea90703b4b8ade909800bc7ba298dd58ae48c"
+    },
+    {
+      "bytes": 3117,
+      "path": "inputs/testbed_config.json",
+      "sha256": "ee763d13d3e91b7edee9f7d0fc4c24bb6a565836cf3f64cf52be6d3c2b371b1d"
+    },
+    {
+      "bytes": 5954,
+      "path": "inputs/trial_config.fake_frozen.json",
+      "sha256": "18ab0a75f48de3f09f56a5255ec679efd70dd874a42856855a2406621453a665"
+    },
+    {
+      "bytes": 7782,
+      "path": "outputs/01_qualification_report.json",
+      "sha256": "55922e858a7cb19a622f8d272da849f48641f4957fea29ec41e86b3f52f54f68"
+    },
+    {
+      "bytes": 11301,
+      "path": "outputs/02_campaign_registry_lock.json",
+      "sha256": "739e39321084159838d1c7db8f3be0e80d256443e3da10b358f46b22566d96b0"
+    },
+    {
+      "bytes": 9219,
+      "path": "outputs/03_synchronized_telemetry.jsonl",
+      "sha256": "6f1ffa1f3f7ab57d96d536c76a4efd8b5296eead0f90b1614b011bffc182c827"
+    },
+    {
+      "bytes": 2379,
+      "path": "outputs/03_telemetry_audit.json",
+      "sha256": "1f45929866459615200eb8b8e98318332d3e5f1605d47c1229d46bfe882893bb"
+    },
+    {
+      "bytes": 3546,
+      "path": "outputs/authorized_branch/04_gate_report.json",
+      "sha256": "a4751a46d48cf764b50d9a6b876263ac9b73adf0ae7d270f75287066641ceceb"
+    },
+    {
+      "bytes": 2357,
+      "path": "outputs/authorized_branch/06_canary_checkpoint.json",
+      "sha256": "7b3af7034e3c891f5f73449dd90a2bc025a770d9d6e143c62839f0b0a94ab55b"
+    },
+    {
+      "bytes": 24723,
+      "path": "outputs/authorized_branch/06_canary_events.json",
+      "sha256": "123ac98e2b648ea0a76493d5ee1bdb9d2b4c0e1edf8ba90499b661cd3d347e14"
+    },
+    {
+      "bytes": 3598,
+      "path": "outputs/authorized_branch/06_canary_plan.json",
+      "sha256": "4b38e8e51a60e1bfab10ce5fccab70d930686d02d19ea3042da566556df52fd2"
+    },
+    {
+      "bytes": 3888,
+      "path": "outputs/authorized_branch/06_final_test_plan.json",
+      "sha256": "e9cbd0ca9f1a8cbe8f3efb6f8846d81bfafca1f511c500139bc927157e08b633"
+    },
+    {
+      "bytes": 2021,
+      "path": "outputs/authorized_branch/06_final_test_unlock.json",
+      "sha256": "38f36397adc5d5d7deefba8e48f18940661d1d65d57ab6e3bfb1d0774b3b1245"
+    },
+    {
+      "bytes": 102670,
+      "path": "outputs/authorized_branch/07_action_outcome_ledger.jsonl",
+      "sha256": "9d27fee1eb48bb7288af458da69a25a89c68390361b6eadb1b4942bda41caa9b"
+    },
+    {
+      "bytes": 3572,
+      "path": "outputs/authorized_branch/07_end_to_end_audit.json",
+      "sha256": "5dcb86bb0ff17c8e08ffd26ff6d0f4e0c44bef1c6ebf0786b5961b7201ca8773"
+    },
+    {
+      "bytes": 2519,
+      "path": "outputs/authorized_branch/07_prespecified_analysis.json",
+      "sha256": "c4000d2374fcd6072355503c1fcfd1133b8c24182fb829f15c1cae70ff5ec6f8"
+    },
+    {
+      "bytes": 1465,
+      "path": "outputs/authorized_branch/outcome_evidence/FAKE-FINAL-00.json",
+      "sha256": "572221465c03d7355ff81fc625a1356d149be9d775a083b47fe447a6a25b48da"
+    },
+    {
+      "bytes": 1463,
+      "path": "outputs/authorized_branch/outcome_evidence/FAKE-FINAL-01.json",
+      "sha256": "5c18812f1b324d8a4cc1455d514cf942e2df88ca325cf320699fdd4bf688bec2"
+    },
+    {
+      "bytes": 1465,
+      "path": "outputs/authorized_branch/outcome_evidence/FAKE-FINAL-02.json",
+      "sha256": "3426fe38b4917727b36770824e291a361421fc985f92baf6bb3cf1e098843de2"
+    },
+    {
+      "bytes": 1463,
+      "path": "outputs/authorized_branch/outcome_evidence/FAKE-FINAL-03.json",
+      "sha256": "2174ef901e251948443dfcca6cef0e9078274b65c47fc90c890dceadf95b60b6"
+    },
+    {
+      "bytes": 1461,
+      "path": "outputs/authorized_branch/outcome_evidence/FAKE-FINAL-04.json",
+      "sha256": "23581e4d75b8af1b89cbe4cfc00f4d367b97b696088bda381dbcfb57a071f80d"
+    },
+    {
+      "bytes": 1463,
+      "path": "outputs/authorized_branch/outcome_evidence/FAKE-FINAL-05.json",
+      "sha256": "cd5f35a8108e6db0d3669c8f04ca86eccd12cdc55dc61a7d5732412b927ac30b"
+    },
+    {
+      "bytes": 1463,
+      "path": "outputs/authorized_branch/outcome_evidence/FAKE-FINAL-06.json",
+      "sha256": "a377f139f313d5e5dce7043362fed9197b891ad3d3f9b055e4160a0414aa25b9"
+    },
+    {
+      "bytes": 1461,
+      "path": "outputs/authorized_branch/outcome_evidence/FAKE-FINAL-07.json",
+      "sha256": "bb9c9402f5af4efc1bca8a56c2812c7d9294c9b6c00536810721656630d05bf5"
+    },
+    {
+      "bytes": 1463,
+      "path": "outputs/authorized_branch/outcome_evidence/FAKE-FINAL-08.json",
+      "sha256": "e90de2fc266312f4ad4293088ac70054e7c4da9a1f48a5e03cce3db85d9ebcab"
+    },
+    {
+      "bytes": 1461,
+      "path": "outputs/authorized_branch/outcome_evidence/FAKE-FINAL-09.json",
+      "sha256": "1119c52434e997b5f14a8dc5c43072f6fe2e0eac0d00169d4306bca8f0ad4a63"
+    },
+    {
+      "bytes": 1465,
+      "path": "outputs/authorized_branch/outcome_evidence/FAKE-FINAL-10.json",
+      "sha256": "a97ead4fc289cdcccf57e6e4e02309555217e82410ea380649829959d8ce2ce3"
+    },
+    {
+      "bytes": 1463,
+      "path": "outputs/authorized_branch/outcome_evidence/FAKE-FINAL-11.json",
+      "sha256": "8b0e18a763b24850a01b0087e287ea947690f8f06d45017eddbcae7b95f78864"
+    },
+    {
+      "bytes": 1465,
+      "path": "outputs/authorized_branch/outcome_evidence/FAKE-FINAL-12.json",
+      "sha256": "bfc0e441a7f3a3e4a7e7ccfc615b0e58089941e22910464c657e1fdcc69d3e7c"
+    },
+    {
+      "bytes": 1463,
+      "path": "outputs/authorized_branch/outcome_evidence/FAKE-FINAL-13.json",
+      "sha256": "40b2950d4a851ee1c9b533838a8be4bcbfc130eae23c8d223e3d6f86597524d3"
+    },
+    {
+      "bytes": 1461,
+      "path": "outputs/authorized_branch/outcome_evidence/FAKE-FINAL-14.json",
+      "sha256": "1755b7d4966c992cba7141b015afabcf3b172ea642cb305e09f55d872e57339e"
+    },
+    {
+      "bytes": 1463,
+      "path": "outputs/authorized_branch/outcome_evidence/FAKE-FINAL-15.json",
+      "sha256": "9e02d1a1c0b5974535f1ef040785c2f4b944f20f128edb563125b586c093850e"
+    },
+    {
+      "bytes": 1463,
+      "path": "outputs/authorized_branch/outcome_evidence/FAKE-FINAL-16.json",
+      "sha256": "8e63b38b417af27fa6840b9897b9760128d8413180277e9c6ef50fb9946150cc"
+    },
+    {
+      "bytes": 1461,
+      "path": "outputs/authorized_branch/outcome_evidence/FAKE-FINAL-17.json",
+      "sha256": "eaa12852526d0618a96e7990e7f902fe6707bd7618255e63a0dc15e09a265715"
+    },
+    {
+      "bytes": 1465,
+      "path": "outputs/authorized_branch/outcome_evidence/FAKE-FINAL-18.json",
+      "sha256": "b0333a9f9a060e0f4bb0f4e13cbbce544b9c4c0fc00b107644be301611fd45fa"
+    },
+    {
+      "bytes": 1463,
+      "path": "outputs/authorized_branch/outcome_evidence/FAKE-FINAL-19.json",
+      "sha256": "5ecf033b640c78240909338c4d8e89db02abd160206c0211316923328b7a8957"
+    },
+    {
+      "bytes": 3568,
+      "path": "outputs/rejected_branch/04_gate_report.json",
+      "sha256": "77edd4ae996f41f7b99b93d4ff8a5bc53a65b28988662f6dd96b4489abaac159"
+    },
+    {
+      "bytes": 1489,
+      "path": "outputs/rejected_branch/05_baseline_and_rollback_report.json",
+      "sha256": "1456b74dac8b6cc6070570fe5d57583fa4e82fd02bfce67304f3e63101993605"
+    }
+  ],
+  "schema_version": "1.0.0"
+}

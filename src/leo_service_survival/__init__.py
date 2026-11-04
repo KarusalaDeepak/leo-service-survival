@@ -35,6 +35,34 @@ from .integration import (
     summarize_full_chain_completion,
     validate_full_chain_bundle,
 )
+from .prospective_trial import (
+    ClosedLoopController,
+    CommandRouteDriver,
+    DecisionContext,
+    append_hash_chained_record,
+    audit_decision_lifecycles,
+    audit_hash_chain,
+    build_reproducibility_manifest,
+    load_ledger_schema,
+    validate_campaign_register,
+    validate_ledger_record,
+    validate_trial_configuration,
+    verify_reproducibility_manifest,
+)
+from .outcome_evidence import (
+    VerifiedOutcomeEvidence,
+    derive_failure_stage,
+    load_verified_outcome_evidence,
+    verify_outcome_evidence_binding,
+)
+from .application_acknowledgement import (
+    ApplicationAcknowledgementContract,
+    ApplicationOutcomeObservation,
+    build_live_application_acknowledgement,
+    emit_live_application_acknowledgement,
+    load_application_acknowledgement_contract,
+    load_bound_live_action,
+)
 
 __all__ = [
     "EpisodeDataset",
@@ -64,4 +92,26 @@ __all__ = [
     "build_full_chain_ledger",
     "summarize_full_chain_completion",
     "validate_full_chain_bundle",
+    "ClosedLoopController",
+    "CommandRouteDriver",
+    "DecisionContext",
+    "append_hash_chained_record",
+    "audit_decision_lifecycles",
+    "audit_hash_chain",
+    "build_reproducibility_manifest",
+    "load_ledger_schema",
+    "validate_campaign_register",
+    "validate_ledger_record",
+    "validate_trial_configuration",
+    "verify_reproducibility_manifest",
+    "VerifiedOutcomeEvidence",
+    "derive_failure_stage",
+    "load_verified_outcome_evidence",
+    "verify_outcome_evidence_binding",
+    "ApplicationAcknowledgementContract",
+    "ApplicationOutcomeObservation",
+    "build_live_application_acknowledgement",
+    "emit_live_application_acknowledgement",
+    "load_application_acknowledgement_contract",
+    "load_bound_live_action",
 ]
