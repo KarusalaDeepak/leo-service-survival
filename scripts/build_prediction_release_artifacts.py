@@ -40,6 +40,8 @@ from leo_service_survival.metrics import evaluate_survival_predictions  # noqa: 
 from leo_service_survival.models import (  # noqa: E402
     CalibratedSurvivalModel,
     build_model_suite,
+    select_baseline_model_configurations,
+    select_focal_model_configuration,
 )
 from leo_service_survival.release_artifacts import (  # noqa: E402
     EXPECTED_PIPELINES,
@@ -50,7 +52,7 @@ from leo_service_survival.release_artifacts import (  # noqa: E402
 
 # Reuse the primary runner's administrative-horizon convention rather than
 # maintaining a second subtly different endpoint implementation.
-from run_all import truncate  # noqa: E402
+from run_all import development_tripartition, truncate  # noqa: E402
 
 
 def _sha256(path: Path) -> str:
@@ -92,8 +94,19 @@ def _fit_and_predict(
     test: pd.DataFrame,
     features: tuple[str, ...],
     horizons: tuple[int, ...],
+    *,
+    focal_hyperparameters: dict[str, float | int],
+    focal_calibration_c: float,
+    baseline_hyperparameters: dict[str, object],
 ) -> tuple[dict[str, np.ndarray], pd.DataFrame, list[dict[str, str]]]:
-    suite = build_model_suite(features, max_horizon=max(horizons), random_state=17)
+    suite = build_model_suite(
+        features,
+        max_horizon=max(horizons),
+        random_state=17,
+        focal_hyperparameters=focal_hyperparameters,
+        calibration_c=focal_calibration_c,
+        baseline_hyperparameters=baseline_hyperparameters,
+    )
     predictions: dict[str, np.ndarray] = {}
     calibration_audits: list[pd.DataFrame] = []
     failures: list[dict[str, str]] = []
@@ -223,12 +236,43 @@ def main() -> None:
     )
     horizons = tuple(range(1, 13))
 
+    # Reproduce the development-only configuration selection used by the
+    # primary manuscript runner.  The held-out test partition is never used
+    # to choose a model setting.  Keeping this logic here prevents the
+    # reviewer derivative from silently reverting to constructor defaults.
+    inner_fit, inner_calibration, inner_validation = development_tripartition(
+        train,
+        group_column="calendar_block",
+    )
+    focal_hyperparameters, focal_calibration_c, focal_selection = (
+        select_focal_model_configuration(
+            inner_fit,
+            inner_calibration,
+            inner_validation,
+            tuple(dataset.feature_columns),
+            max_horizon=max(horizons),
+            random_state=17,
+        )
+    )
+    baseline_hyperparameters, baseline_selection = (
+        select_baseline_model_configurations(
+            inner_fit,
+            inner_validation,
+            tuple(dataset.feature_columns),
+            max_horizon=max(horizons),
+            random_state=17,
+        )
+    )
+
     predictions, calibration_table, failures = _fit_and_predict(
         train,
         calibration,
         test,
         tuple(dataset.feature_columns),
         horizons,
+        focal_hyperparameters=focal_hyperparameters,
+        focal_calibration_c=focal_calibration_c,
+        baseline_hyperparameters=baseline_hyperparameters,
     )
     if failures:
         pd.DataFrame(failures).to_csv(targets["failures"], index=False)
@@ -349,6 +393,18 @@ def main() -> None:
             "rtol": 1e-10,
             "atol": 1e-12,
             "status": "passed",
+        },
+        "development_only_configuration_selection": {
+            "partition_rule": (
+                "chronological 60/20/20 tripartition of retained training "
+                "calendar blocks; final calibration and held-out test rows excluded"
+            ),
+            "test_outcomes_used": False,
+            "focal_hyperparameters": focal_hyperparameters,
+            "focal_calibration_c": focal_calibration_c,
+            "baseline_hyperparameters": baseline_hyperparameters,
+            "focal_candidate_rows": int(len(focal_selection)),
+            "baseline_candidate_rows": int(len(baseline_selection)),
         },
         "terminal_inference_block_rule": block_audit,
         "environment": {

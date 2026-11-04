@@ -118,7 +118,10 @@ The focused builder fails closed unless all twelve pipelines produce all twelve
 horizons and the recomputed aggregate metrics match the canonical table. See
 [the artifact specification](docs/ARTIFACT_SPECIFICATION.md) for row keys,
 score formulas, calibration diagnostics, failure semantics, tolerances, and
-the derivative-data license boundary.
+the derivative-data license boundary. It repeats the primary runner's
+chronological development-only configuration selection before refitting, so
+the released predictions and the manuscript aggregate table describe the same
+twelve declared pipelines.
 
 ## Data and evidence boundaries
 
@@ -135,15 +138,15 @@ adapters](docs/public_trace_adapters.md) before obtaining or using any input.
 
 ## Reproducibility snapshot
 
-The aggregate tables in `results/` correspond to the manuscript revision
-frozen on 30 October 2026. They preserve negative and unresolved findings,
+The aggregate tables in `results/` correspond to the final reproducibility run
+completed on 4 November 2026. They preserve negative and unresolved findings,
 including limited competing-risk support and the absence of a resolved
 calibration-attributable scheduler benefit.
 
 ## Citation
 
 Use [CITATION.cff](CITATION.cff). This reviewer archive is frozen as version
-`1.2.1`. The source repository is initially maintained as a private GitHub
+`1.2.2`. The source repository is initially maintained as a private GitHub
 backup; a public URL will be advertised only after source-code licensing and
 coauthor review are complete.
 

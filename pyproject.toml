@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "leo-service-survival"
-version = "1.2.1"
+version = "1.2.2"
 description = "Censoring-aware evaluation of usable-service duration predictions for LEO network decisions"
 readme = "README.md"
 requires-python = ">=3.11"

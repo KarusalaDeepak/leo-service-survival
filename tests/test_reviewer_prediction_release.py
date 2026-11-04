@@ -166,6 +166,43 @@ def test_release_manifest_hashes_are_portable_and_complete() -> None:
     assert manifest["derivative_data_license"]["spdx"] == "CC-BY-SA-4.0"
     assert "/Users/" not in json.dumps(manifest)
 
+    selection = manifest["development_only_configuration_selection"]
+    assert selection["test_outcomes_used"] is False
+    assert selection["focal_hyperparameters"] == {
+        "learning_rate": 0.03,
+        "max_iter": 240,
+        "max_leaf_nodes": 7,
+        "min_samples_leaf": 30,
+        "l2_regularization": 1.0,
+    }
+    assert selection["focal_calibration_c"] == 0.03
+    assert selection["baseline_hyperparameters"] == {
+        "weibull_aft_l2": 0.01,
+        "cox_ph_l2": 0.02,
+        "additive_alpha": 1.0,
+        "linear_hazard_c": 0.1,
+        "boosted_hazard": {
+            "learning_rate": 0.03,
+            "max_iter": 240,
+            "max_leaf_nodes": 7,
+            "min_samples_leaf": 30,
+            "l2_regularization": 1.0,
+        },
+        "random_forest": {
+            "n_estimators": 120,
+            "max_depth": 12,
+            "min_samples_leaf": 40,
+        },
+        "xgboost": {
+            "n_estimators": 240,
+            "learning_rate": 0.03,
+            "max_depth": 5,
+            "min_child_weight": 20.0,
+        },
+    }
+    assert selection["focal_candidate_rows"] == 12
+    assert selection["baseline_candidate_rows"] == 21
+
     for item in manifest["files"]:
         path = RELEASE / item["path"]
         assert path.is_file()
@@ -175,4 +212,27 @@ def test_release_manifest_hashes_are_portable_and_complete() -> None:
         path = ROOT / item["path"]
         assert path.is_file()
         assert _sha256(path) == item["sha256"]
+
+
+def test_execution_status_describes_the_selected_manuscript_pipelines() -> None:
+    declared = pd.read_csv(
+        ROOT / "results/manuscript/comparator_configurations.csv"
+    ).set_index("method")
+    status = pd.read_csv(
+        RELEASE / "wetlinks_pipeline_execution_status.csv"
+    ).set_index("pipeline")
+    assert set(declared.index) == set(EXPECTED_PIPELINES)
+    assert status.loc["weibull_aft", "hyperparameters"].startswith("L2=1e-2;")
+    assert "max_depth=12" in status.loc[
+        "random_forest_discrete_hazard", "hyperparameters"
+    ]
+    assert "eta=.03" in status.loc[
+        "xgboost_discrete_hazard", "hyperparameters"
+    ]
+    assert "per-horizon logistic C=.03" in status.loc[
+        "calibrated_competing_risk", "hyperparameters"
+    ]
+    assert "held-out test excluded" in status.loc[
+        "calibrated_competing_risk", "tuning_data"
+    ]
 

@@ -34,6 +34,16 @@ The twelve frozen pipeline names are:
 11. `competing_risk_uncalibrated`
 12. `calibrated_competing_risk`
 
+Trainable comparator and focal-model settings are selected only inside the
+retained training partition.  The builder applies the same chronological
+development tripartition and the same candidate grids as `scripts/run_all.py`:
+an earlier fit part, a disjoint focal-calibration part, and a later validation
+part.  The final manuscript calibration partition and the held-out test
+partition are excluded from configuration selection.  The selected settings
+are recorded in `wetlinks_prediction_release_manifest.json`, and the expanded
+pipeline descriptions are frozen in
+`results/manuscript/comparator_configurations.csv`.
+
 The required horizon grid is every integer from 1 through 12, where one bin is
 five minutes.
 

@@ -2,10 +2,10 @@
   "schema_version": "1.0",
   "builder": "scripts/build_prediction_release_artifacts.py",
   "producer_function": "main",
-  "generated_at_utc": "2026-11-04T04:18:16.616127+00:00",
+  "generated_at_utc": "2026-11-04T07:13:15.412282+00:00",
   "git_state": {
-    "base_commit": "ad61d5a5d908768e4bb1aca789e4eb14dfc4d9e4",
-    "tracked_worktree_clean": true,
+    "base_commit": "0d4932ef4fb2a01d1c3d2712b24879e0635c1d21",
+    "tracked_worktree_clean": false,
     "interpretation": "code-file hashes below are authoritative when the run includes uncommitted release-builder changes"
   },
   "command_profile": "python scripts/build_prediction_release_artifacts.py --wetlinks-dir <lawfully-obtained-WetLinks/Preprocessed_Data> --output-dir <fresh-output-directory>",
@@ -61,6 +61,44 @@
     "rtol": 1e-10,
     "atol": 1e-12,
     "status": "passed"
+  },
+  "development_only_configuration_selection": {
+    "partition_rule": "chronological 60/20/20 tripartition of retained training calendar blocks; final calibration and held-out test rows excluded",
+    "test_outcomes_used": false,
+    "focal_hyperparameters": {
+      "learning_rate": 0.03,
+      "max_iter": 240,
+      "max_leaf_nodes": 7,
+      "min_samples_leaf": 30,
+      "l2_regularization": 1.0
+    },
+    "focal_calibration_c": 0.03,
+    "baseline_hyperparameters": {
+      "weibull_aft_l2": 0.01,
+      "cox_ph_l2": 0.02,
+      "additive_alpha": 1.0,
+      "linear_hazard_c": 0.1,
+      "boosted_hazard": {
+        "learning_rate": 0.03,
+        "max_iter": 240,
+        "max_leaf_nodes": 7,
+        "min_samples_leaf": 30,
+        "l2_regularization": 1.0
+      },
+      "random_forest": {
+        "n_estimators": 120,
+        "max_depth": 12,
+        "min_samples_leaf": 40
+      },
+      "xgboost": {
+        "n_estimators": 240,
+        "learning_rate": 0.03,
+        "max_depth": 5,
+        "min_child_weight": 20.0
+      }
+    },
+    "focal_candidate_rows": 12,
+    "baseline_candidate_rows": 21
   },
   "terminal_inference_block_rule": {
     "source_column": "calendar_block",
@@ -121,7 +159,7 @@
   "code_files": [
     {
       "path": "scripts/build_prediction_release_artifacts.py",
-      "sha256": "49ecbb4e55636d12dbab3954864eb12a8ba1c05ed5a5bfbd11b5f842055c4ef4"
+      "sha256": "bed3eab8c6367c7ed639fed9ddca3ad04288160782af0c1cfa33b67cd38a1834"
     },
     {
       "path": "scripts/run_all.py",
@@ -151,23 +189,23 @@
   "files": [
     {
       "path": "wetlinks_all_pipeline_horizon_predictions.csv.gz",
-      "bytes": 4303950,
-      "sha256": "31675fbafa87758e12cf50706144f09d3d61006df8c57d004b30b9f5abc0e2c8"
+      "bytes": 4177673,
+      "sha256": "bb020f25d6aeef161e5290e5a496e1a652c96fb6a970ac0f610171b1006a4fd0"
     },
     {
       "path": "wetlinks_all_pipeline_horizon_scores.csv",
-      "bytes": 60317,
-      "sha256": "985c5db0bab07333a16a824e52ed6e2b6f2f19b93f2aa6b0ff13ab6066601cc6"
+      "bytes": 60347,
+      "sha256": "2f7c9139bc267cd19e9d0f791b0cbb1513b2a0942a3b29eb7a42213d033a92b1"
     },
     {
       "path": "wetlinks_pipeline_execution_status.csv",
-      "bytes": 8485,
-      "sha256": "b5ec11f0b3237a129522e8193548acc4344c8442f3e082a6edfe10f0f6b65b9f"
+      "bytes": 9681,
+      "sha256": "5d0370dff607ccf4995e4f073e9a67d4e70874309fe180c6dd5de061925494dc"
     },
     {
       "path": "wetlinks_pipeline_calibration_fit_audit.csv",
-      "bytes": 7862,
-      "sha256": "de90c752ce2392b4016f6942067e3c504dad9bcfd11c86d6818d5de3210c23f8"
+      "bytes": 7874,
+      "sha256": "0c2b27228188de7784ae804015d7bdaf59ded433613bc4d491f286f9c519bded"
     },
     {
       "path": "wetlinks_preimputation_feature_coverage.csv",

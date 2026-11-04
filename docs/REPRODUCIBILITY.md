@@ -93,7 +93,10 @@ PYTHONPATH="$PWD/src" python scripts/build_prediction_release_artifacts.py \
 The builder refuses partial grids, non-finite probabilities, duplicate row
 identities, incomplete calibration audits, and aggregate metrics that differ
 from `results/manuscript/wetlinks_model_metrics.csv` beyond the declared
-software tolerance. It exports per-row IPCW weights and Brier/log-loss
+software tolerance. Before the final refit, it repeats the primary runner's
+chronological development-only selection for the focal hazard/calibration
+settings and the trainable comparator settings; final calibration and held-out
+test rows remain excluded from that selection. It exports per-row IPCW weights and Brier/log-loss
 contributions, all-pipeline horizon diagnostics, both calibrated-pipeline fit
 audits, execution status, pre-imputation feature coverage, row-order digest,
 input/code/output hashes, and no model objects.
