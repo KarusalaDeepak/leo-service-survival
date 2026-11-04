@@ -14,7 +14,9 @@ from leo_service_survival.gating import (
     GateCriteria,
     GateEvidence,
     evaluate_gate_campaigns,
+    campaign_precision_power_plan,
 )
+from leo_service_survival.parameters import EXTERNAL_VALIDATION_GATE_REQUIREMENTS
 
 
 def _gate_fixture() -> tuple[EvidenceGate, pd.DataFrame]:
@@ -35,10 +37,14 @@ def _gate_fixture() -> tuple[EvidenceGate, pd.DataFrame]:
 def _passing_evidence(**overrides: object) -> GateEvidence:
     values: dict[str, object] = {
         "schema_passed": True,
-        "independent_campaigns": 3,
+        "independent_campaigns": 5,
+        "independent_families": 3,
+        "paired_opportunity_groups": 5,
         "calibration_gap_upper": 0.03,
         "candidate_minus_baseline_endpoint_effect_lower": -0.01,
         "control_loop_p95_ms": 35.0,
+        "endpoint_effect_ci_half_width": 0.03,
+        "validation_tier": "confirmatory_release",
         "endpoint_name": "task_completion_rate",
         "evidence_basis": GATE_LOGIC_FIXTURE,
     }
@@ -65,6 +71,18 @@ def test_required_numeric_evidence_fails_closed(
     decision = gate.evaluate(stable, _passing_evidence(**{field: missing}))
     assert not decision.release_candidate
     assert reason in decision.reasons
+
+
+@pytest.mark.parametrize("invalid", [None, np.nan, np.inf, -np.inf, "missing", True])
+def test_nonfinite_control_loop_requirement_fails_closed(invalid: object) -> None:
+    gate, stable = _gate_fixture()
+    gate = EvidenceGate(
+        gate.detector,
+        GateCriteria(maximum_control_loop_p95_ms=invalid),
+    )
+    decision = gate.evaluate(stable, _passing_evidence())
+    assert not decision.release_candidate
+    assert "gate_criteria_invalid" in decision.reasons
 
 
 @pytest.mark.parametrize("campaigns", [None, np.nan, np.inf, 2.5, "3", True])
@@ -126,9 +144,13 @@ def test_legacy_safety_names_are_constructor_aliases_only() -> None:
     evidence = GateEvidence(
         schema_passed=True,
         independent_campaigns=3,
+        independent_families=3,
+        paired_opportunity_groups=5,
         calibration_gap_upper=0.03,
         safety_effect_lower=-0.01,
         control_loop_p95_ms=35.0,
+        endpoint_effect_ci_half_width=0.03,
+        validation_tier="confirmatory_release",
     )
     assert criteria.minimum_safety_effect_lower == -0.015
     assert evidence.safety_effect_lower == -0.01
@@ -138,6 +160,80 @@ def test_legacy_safety_names_are_constructor_aliases_only() -> None:
     assert evidence.candidate_minus_baseline_endpoint_effect_lower == -0.01
     assert "minimum_safety_effect_lower" not in asdict(criteria)
     assert "safety_effect_lower" not in asdict(evidence)
+
+
+def test_campaign_family_and_precision_checks_fail_closed() -> None:
+    gate, stable = _gate_fixture()
+    too_few_campaigns = gate.evaluate(
+        stable, _passing_evidence(independent_campaigns=4)
+    )
+    too_few_families = gate.evaluate(
+        stable, _passing_evidence(independent_families=2)
+    )
+    too_few_paired = gate.evaluate(
+        stable, _passing_evidence(paired_opportunity_groups=4)
+    )
+    imprecise = gate.evaluate(
+        stable, _passing_evidence(endpoint_effect_ci_half_width=0.08)
+    )
+    assert "insufficient_independent_campaigns" in too_few_campaigns.reasons
+    assert "insufficient_independent_families" in too_few_families.reasons
+    assert "insufficient_paired_opportunity_groups" in too_few_paired.reasons
+    assert "endpoint_effect_precision_failed" in imprecise.reasons
+    assert not too_few_campaigns.release_candidate
+    assert not too_few_families.release_candidate
+    assert not too_few_paired.release_candidate
+    assert not imprecise.release_candidate
+
+
+def test_campaign_count_is_a_floor_not_a_power_claim() -> None:
+    plan = campaign_precision_power_plan()
+    assert plan["planned_campaigns"].ge(5).all()
+    assert (plan["planned_campaigns"] >= plan["campaigns_for_precision"]).all()
+    assert (plan["planned_campaigns"] >= plan["campaigns_for_power"]).all()
+    assert plan["interpretation"].str.contains("planning approximation").all()
+
+
+def test_external_validation_tier_is_not_deployment_authorization() -> None:
+    rng = np.random.default_rng(992)
+    development = pd.DataFrame(
+        {"latency": rng.normal(40.0, 2.0, 1000), "loss": rng.beta(1.0, 40.0, 1000)}
+    )
+    detector = FrozenMahalanobisDetector(("latency", "loss"), quantile=0.99).fit(
+        development
+    )
+    profile = EXTERNAL_VALIDATION_GATE_REQUIREMENTS
+    gate = EvidenceGate(
+        detector,
+        GateCriteria(
+            minimum_independent_campaigns=profile.minimum_independent_campaigns,
+            minimum_independent_families=profile.minimum_independent_families,
+            minimum_paired_opportunity_groups=profile.minimum_paired_opportunity_groups,
+            maximum_endpoint_effect_ci_half_width=profile.maximum_endpoint_effect_ci_half_width,
+            validation_tier=profile.validation_tier,
+        ),
+    )
+    decision = gate.evaluate(
+        development.iloc[:100],
+        GateEvidence(
+            schema_passed=True,
+            independent_campaigns=2,
+            independent_families=2,
+            paired_opportunity_groups=2,
+            calibration_gap_upper=0.03,
+            candidate_minus_baseline_endpoint_effect_lower=-0.01,
+            control_loop_p95_ms=35.0,
+            endpoint_effect_ci_half_width=0.08,
+            endpoint_name="task_completion_rate",
+            evidence_basis=CAMPAIGN_DERIVED_STATISTICAL_BOUNDS,
+            confidence_level=0.95,
+            multiple_testing_adjustment="Holm familywise correction",
+            validation_tier="external_validation",
+        ),
+    )
+    assert decision.release_candidate
+    assert decision.statistical_evidence_generated
+    assert not decision.statistical_authorization_supported
 
 
 def test_campaign_output_labels_logic_test_and_does_not_claim_bound_generation() -> None:

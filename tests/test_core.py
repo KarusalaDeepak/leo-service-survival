@@ -27,6 +27,7 @@ from leo_service_survival.models import (
     ExponentialModel,
     KaplanMeierModel,
     build_model_suite,
+    select_focal_model_configuration,
 )
 from leo_service_survival.gating import (
     CalibrationEProcess,
@@ -77,6 +78,42 @@ def test_kaplan_meier_is_monotone():
     survival = model.predict_survival(frame.iloc[:3], range(1, 7))
     assert survival.shape == (3, 6)
     assert np.all(np.diff(survival, axis=1) <= 1e-12)
+
+
+def test_focal_hyperparameters_are_selected_without_test_rows():
+    frame = sample_frame(180)
+    fit, calibration, validation = frame.iloc[:100], frame.iloc[100:140], frame.iloc[140:]
+    candidates = (
+        {
+            "learning_rate": 0.05,
+            "max_iter": 30,
+            "max_leaf_nodes": 7,
+            "min_samples_leaf": 10,
+            "l2_regularization": 0.5,
+        },
+        {
+            "learning_rate": 0.08,
+            "max_iter": 30,
+            "max_leaf_nodes": 15,
+            "min_samples_leaf": 10,
+            "l2_regularization": 1.0,
+        },
+    )
+    selected, calibration_c, audit = select_focal_model_configuration(
+        fit,
+        calibration,
+        validation,
+        ("x1", "x2"),
+        max_horizon=6,
+        candidate_configs=candidates,
+        calibration_c_grid=(0.1, 1.0),
+    )
+    assert selected in candidates
+    assert calibration_c in {0.1, 1.0}
+    assert audit["selected"].sum() == 1
+    assert audit["fit_rows"].eq(len(fit)).all()
+    assert audit["calibration_rows"].eq(len(calibration)).all()
+    assert audit["validation_rows"].eq(len(validation)).all()
 
 
 def _endpoint_fixture(causes, observed=None):
@@ -800,10 +837,14 @@ def test_frozen_evidence_gate_releases_in_domain_and_fails_closed_on_shift():
     )
     evidence = GateEvidence(
         schema_passed=True,
-        independent_campaigns=3,
+        independent_campaigns=5,
+        independent_families=3,
+        paired_opportunity_groups=5,
         calibration_gap_upper=0.03,
         safety_effect_lower=-0.01,
         control_loop_p95_ms=30.0,
+        endpoint_effect_ci_half_width=0.03,
+        validation_tier="confirmatory_release",
     )
     stable = development.iloc[:100].copy()
     released = gate.evaluate(stable, evidence)
@@ -831,7 +872,17 @@ def test_gate_campaign_validation_uses_campaign_units_and_reports_delay():
         development
     )
     gate = EvidenceGate(detector, GateCriteria(maximum_ood_fraction=0.20))
-    evidence = GateEvidence(True, 3, 0.03, -0.01, 20.0)
+    evidence = GateEvidence(
+        True,
+        5,
+        0.03,
+        -0.01,
+        20.0,
+        independent_families=3,
+        paired_opportunity_groups=5,
+        endpoint_effect_ci_half_width=0.03,
+        validation_tier="confirmatory_release",
+    )
     streams = {
         "stable-a": development.iloc[:200].reset_index(drop=True),
         "stable-b": development.iloc[200:400].reset_index(drop=True),

@@ -160,6 +160,11 @@ code and aggregate outputs but not the scenario or row-level candidate/task
 tables. The results remain controlled synthetic evidence, not field or operator
 validation.
 
+The runner also writes `candidate_scores.csv`, `task_results.csv`, and
+`action_set_audit.csv` for private diagnosis. These row-level files are
+explicitly denied from the public result manifest and ignored by Git. Retain
+them locally and publish only their aggregate companions.
+
 ## Interpretation boundary
 
 Reproducing a table or passing a test does not turn a trace replay or synthetic

@@ -16,7 +16,16 @@ from typing import Mapping
 import numpy as np
 import pandas as pd
 from sklearn.covariance import LedoitWolf
-from scipy.stats import beta
+from scipy.stats import beta, norm
+
+from .parameters import PRIMARY_GATE_REQUIREMENTS
+
+
+VALIDATION_TIERS = {
+    "proof_of_method",
+    "external_validation",
+    "confirmatory_release",
+}
 
 
 GATE_LOGIC_FIXTURE = "gate_logic_fixture"
@@ -52,26 +61,34 @@ class GateCriteria:
     """
 
     minimum_independent_campaigns: int
+    minimum_independent_families: int
+    minimum_paired_opportunity_groups: int
     minimum_feature_coverage: float
     maximum_ood_fraction: float
     maximum_calibration_gap_upper: float
     minimum_candidate_minus_baseline_endpoint_effect_lower: float
     maximum_control_loop_p95_ms: float
+    maximum_endpoint_effect_ci_half_width: float
+    validation_tier: str
 
     def __init__(
         self,
-        minimum_independent_campaigns: int = 2,
-        minimum_feature_coverage: float = 0.95,
-        maximum_ood_fraction: float = 0.10,
-        maximum_calibration_gap_upper: float = 0.05,
+        minimum_independent_campaigns: int = PRIMARY_GATE_REQUIREMENTS.minimum_independent_campaigns,
+        minimum_independent_families: int = PRIMARY_GATE_REQUIREMENTS.minimum_independent_families,
+        minimum_paired_opportunity_groups: int = PRIMARY_GATE_REQUIREMENTS.minimum_paired_opportunity_groups,
+        minimum_feature_coverage: float = PRIMARY_GATE_REQUIREMENTS.minimum_feature_coverage,
+        maximum_ood_fraction: float = PRIMARY_GATE_REQUIREMENTS.maximum_ood_fraction,
+        maximum_calibration_gap_upper: float = PRIMARY_GATE_REQUIREMENTS.maximum_calibration_gap_upper,
         minimum_candidate_minus_baseline_endpoint_effect_lower: float | None = None,
-        maximum_control_loop_p95_ms: float = 100.0,
+        maximum_control_loop_p95_ms: float = PRIMARY_GATE_REQUIREMENTS.maximum_control_loop_p95_ms,
+        maximum_endpoint_effect_ci_half_width: float = PRIMARY_GATE_REQUIREMENTS.maximum_endpoint_effect_ci_half_width,
+        validation_tier: str = PRIMARY_GATE_REQUIREMENTS.validation_tier,
         *,
         minimum_safety_effect_lower: float | None = None,
     ) -> None:
         if minimum_candidate_minus_baseline_endpoint_effect_lower is None:
             endpoint_threshold = (
-                -0.02
+                PRIMARY_GATE_REQUIREMENTS.minimum_candidate_minus_baseline_effect_lower
                 if minimum_safety_effect_lower is None
                 else minimum_safety_effect_lower
             )
@@ -90,6 +107,14 @@ class GateCriteria:
         object.__setattr__(
             self, "minimum_independent_campaigns", minimum_independent_campaigns
         )
+        object.__setattr__(
+            self, "minimum_independent_families", minimum_independent_families
+        )
+        object.__setattr__(
+            self,
+            "minimum_paired_opportunity_groups",
+            minimum_paired_opportunity_groups,
+        )
         object.__setattr__(self, "minimum_feature_coverage", minimum_feature_coverage)
         object.__setattr__(self, "maximum_ood_fraction", maximum_ood_fraction)
         object.__setattr__(
@@ -103,6 +128,12 @@ class GateCriteria:
         object.__setattr__(
             self, "maximum_control_loop_p95_ms", maximum_control_loop_p95_ms
         )
+        object.__setattr__(
+            self,
+            "maximum_endpoint_effect_ci_half_width",
+            maximum_endpoint_effect_ci_half_width,
+        )
+        object.__setattr__(self, "validation_tier", str(validation_tier))
 
     @property
     def minimum_safety_effect_lower(self) -> float:
@@ -123,13 +154,17 @@ class GateEvidence:
 
     schema_passed: object
     independent_campaigns: object
+    independent_families: object
+    paired_opportunity_groups: object
     calibration_gap_upper: object
     candidate_minus_baseline_endpoint_effect_lower: object
     control_loop_p95_ms: object
+    endpoint_effect_ci_half_width: object
     endpoint_name: str
     evidence_basis: str
     confidence_level: object
     multiple_testing_adjustment: str | None
+    validation_tier: str
 
     def __init__(
         self,
@@ -138,12 +173,16 @@ class GateEvidence:
         calibration_gap_upper: object = None,
         candidate_minus_baseline_endpoint_effect_lower: object = None,
         control_loop_p95_ms: object = None,
+        independent_families: object = None,
+        paired_opportunity_groups: object = None,
+        endpoint_effect_ci_half_width: object = None,
         *,
         safety_effect_lower: object = None,
         endpoint_name: str = "task_completion_rate",
         evidence_basis: str = GATE_LOGIC_FIXTURE,
         confidence_level: object = None,
         multiple_testing_adjustment: str | None = None,
+        validation_tier: str = "proof_of_method",
     ) -> None:
         if candidate_minus_baseline_endpoint_effect_lower is None:
             endpoint_effect = safety_effect_lower
@@ -159,6 +198,10 @@ class GateEvidence:
 
         object.__setattr__(self, "schema_passed", schema_passed)
         object.__setattr__(self, "independent_campaigns", independent_campaigns)
+        object.__setattr__(self, "independent_families", independent_families)
+        object.__setattr__(
+            self, "paired_opportunity_groups", paired_opportunity_groups
+        )
         object.__setattr__(self, "calibration_gap_upper", calibration_gap_upper)
         object.__setattr__(
             self,
@@ -166,12 +209,16 @@ class GateEvidence:
             endpoint_effect,
         )
         object.__setattr__(self, "control_loop_p95_ms", control_loop_p95_ms)
+        object.__setattr__(
+            self, "endpoint_effect_ci_half_width", endpoint_effect_ci_half_width
+        )
         object.__setattr__(self, "endpoint_name", str(endpoint_name))
         object.__setattr__(self, "evidence_basis", str(evidence_basis))
         object.__setattr__(self, "confidence_level", confidence_level)
         object.__setattr__(
             self, "multiple_testing_adjustment", multiple_testing_adjustment
         )
+        object.__setattr__(self, "validation_tier", str(validation_tier))
 
     @property
     def safety_effect_lower(self) -> object:
@@ -191,6 +238,7 @@ class GateDecision:
     endpoint_name: str = "unavailable"
     statistical_evidence_generated: bool = False
     statistical_authorization_supported: bool = False
+    validation_tier: str = "unavailable"
 
 
 class FrozenMahalanobisDetector:
@@ -359,6 +407,46 @@ class EvidenceGate:
         elif campaigns < minimum_campaigns:
             reasons.append("insufficient_independent_campaigns")
 
+        families_valid, families = _finite_numeric(evidence.independent_families)
+        families_valid = bool(
+            families_valid and families >= 0.0 and families.is_integer()
+        )
+        minimum_families_valid, minimum_families = _finite_numeric(
+            self.criteria.minimum_independent_families
+        )
+        minimum_families_valid = bool(
+            minimum_families_valid
+            and minimum_families >= 0.0
+            and minimum_families.is_integer()
+        )
+        if not families_valid:
+            reasons.append("independent_family_count_unavailable")
+        elif not minimum_families_valid:
+            reasons.append("gate_criteria_invalid")
+        elif families < minimum_families:
+            reasons.append("insufficient_independent_families")
+
+        paired_valid, paired_groups = _finite_numeric(
+            evidence.paired_opportunity_groups
+        )
+        paired_valid = bool(
+            paired_valid and paired_groups >= 0.0 and paired_groups.is_integer()
+        )
+        minimum_paired_valid, minimum_paired = _finite_numeric(
+            self.criteria.minimum_paired_opportunity_groups
+        )
+        minimum_paired_valid = bool(
+            minimum_paired_valid
+            and minimum_paired >= 0.0
+            and minimum_paired.is_integer()
+        )
+        if not paired_valid:
+            reasons.append("paired_opportunity_group_count_unavailable")
+        elif not minimum_paired_valid:
+            reasons.append("gate_criteria_invalid")
+        elif paired_groups < minimum_paired:
+            reasons.append("insufficient_paired_opportunity_groups")
+
         coverage_threshold_valid, coverage_threshold = _finite_numeric(
             self.criteria.minimum_feature_coverage
         )
@@ -402,19 +490,35 @@ class EvidenceGate:
             reasons.append("candidate_minus_baseline_endpoint_noninferiority_failed")
 
         timing_valid, timing_p95_ms = _finite_numeric(evidence.control_loop_p95_ms)
-        timing_threshold = self.criteria.maximum_control_loop_p95_ms
+        timing_threshold_valid, timing_threshold = _finite_numeric(
+            self.criteria.maximum_control_loop_p95_ms
+        )
         timing_threshold_valid = bool(
-            isinstance(timing_threshold, Real)
-            and not isinstance(timing_threshold, (bool, np.bool_))
-            and not np.isnan(float(timing_threshold))
-            and float(timing_threshold) >= 0.0
+            timing_threshold_valid and timing_threshold >= 0.0
         )
         if not timing_valid or timing_p95_ms < 0.0:
             reasons.append("control_loop_timing_evidence_unavailable")
         elif not timing_threshold_valid:
             reasons.append("gate_criteria_invalid")
-        elif timing_p95_ms > float(timing_threshold):
+        elif timing_p95_ms > timing_threshold:
             reasons.append("control_loop_deadline_failed")
+
+        precision_valid, precision = _finite_numeric(
+            evidence.endpoint_effect_ci_half_width
+        )
+        precision_threshold_valid, precision_threshold = _finite_numeric(
+            self.criteria.maximum_endpoint_effect_ci_half_width
+        )
+        if not precision_valid or precision < 0.0 or precision > 1.0:
+            reasons.append("endpoint_effect_precision_unavailable")
+        elif (
+            not precision_threshold_valid
+            or precision_threshold < 0.0
+            or precision_threshold > 1.0
+        ):
+            reasons.append("gate_criteria_invalid")
+        elif precision > precision_threshold:
+            reasons.append("endpoint_effect_precision_failed")
 
         endpoint_name = str(evidence.endpoint_name).strip()
         if not endpoint_name or endpoint_name.lower() in {"none", "unavailable"}:
@@ -426,6 +530,11 @@ class EvidenceGate:
         statistical_evidence_generated = bool(
             evidence_basis == CAMPAIGN_DERIVED_STATISTICAL_BOUNDS
         )
+        validation_tier = str(evidence.validation_tier).strip()
+        if validation_tier not in VALIDATION_TIERS:
+            reasons.append("validation_tier_unrecognized")
+        if str(self.criteria.validation_tier).strip() != validation_tier:
+            reasons.append("validation_tier_mismatch")
         if statistical_evidence_generated:
             confidence_valid, confidence_level = _finite_numeric(
                 evidence.confidence_level
@@ -462,9 +571,67 @@ class EvidenceGate:
             endpoint_name=endpoint_name,
             statistical_evidence_generated=statistical_evidence_generated,
             statistical_authorization_supported=bool(
-                release_candidate and statistical_evidence_generated
+                release_candidate
+                and statistical_evidence_generated
+                and validation_tier == "confirmatory_release"
             ),
+            validation_tier=validation_tier,
         )
+
+
+def campaign_precision_power_plan(
+    *,
+    between_campaign_sd: tuple[float, ...] = (0.02, 0.05, 0.10),
+    target_half_width: tuple[float, ...] = (0.02, 0.05),
+    confidence_level: float = PRIMARY_GATE_REQUIREMENTS.confidence_level,
+    power: float = 0.80,
+    detectable_effect: float = 0.05,
+) -> pd.DataFrame:
+    """Plan campaign counts under explicit precision and power assumptions.
+
+    This normal-approximation table is a design aid, not proof that a campaign
+    count is adequate.  The gate uses five campaigns only as an eligibility
+    floor (enough for a complete leave-one-campaign-out cycle).  The larger of
+    the precision- and power-derived counts governs a future study.
+    """
+
+    if not 0.0 < confidence_level < 1.0 or not 0.0 < power < 1.0:
+        raise ValueError("confidence_level and power must lie in (0, 1)")
+    if detectable_effect <= 0.0:
+        raise ValueError("detectable_effect must be positive")
+    z_conf = float(norm.ppf(0.5 + confidence_level / 2.0))
+    z_power = float(norm.ppf(power))
+    rows: list[dict[str, float | int | str]] = []
+    for sd in between_campaign_sd:
+        if sd <= 0.0:
+            raise ValueError("between_campaign_sd values must be positive")
+        power_count = int(np.ceil(((z_conf + z_power) * sd / detectable_effect) ** 2))
+        for half_width in target_half_width:
+            if half_width <= 0.0:
+                raise ValueError("target_half_width values must be positive")
+            precision_count = int(np.ceil((z_conf * sd / half_width) ** 2))
+            required = max(
+                PRIMARY_GATE_REQUIREMENTS.minimum_independent_campaigns,
+                precision_count,
+                power_count,
+            )
+            rows.append(
+                {
+                    "between_campaign_sd": float(sd),
+                    "target_ci_half_width": float(half_width),
+                    "confidence_level": float(confidence_level),
+                    "target_power": float(power),
+                    "detectable_effect": float(detectable_effect),
+                    "campaigns_for_precision": precision_count,
+                    "campaigns_for_power": power_count,
+                    "eligibility_floor": PRIMARY_GATE_REQUIREMENTS.minimum_independent_campaigns,
+                    "planned_campaigns": required,
+                    "interpretation": (
+                        "planning approximation; confirm with the final clustered design"
+                    ),
+                }
+            )
+    return pd.DataFrame(rows)
 
 
 def _clopper_pearson_interval(

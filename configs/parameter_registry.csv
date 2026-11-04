@@ -1,0 +1,26 @@
+parameter,primary_value_or_rule,unit,category,rationale_or_selection_rule,required_sensitivity
+endpoint.bin_minutes,5,min,application_requirement,Declared monitoring cadence rather than a physical constant,"1, 5, 10"
+endpoint.latency_limit_ms,80,ms,application_requirement,Interactive-service RTT budget rather than a universal LEO failure limit,"70, 80, 90"
+endpoint.loss_limit_pct,1,percent,application_requirement,Declared packet-loss budget for the investigated service profile,"0.5, 1, 2"
+endpoint.sustained_bad_bins,2,bins,application_requirement,Persistence guard against a single noisy aggregate,"1, 2, 3"
+endpoint.maximum_gap_bins,2,bins,measurement_rule,Longer gaps cannot establish continuous observation,"1, 2, 3"
+endpoint.analysis_horizon_bins,12,bins,application_requirement,Five-to-sixty-minute task horizon on the declared grid,"6, 9, 12"
+model.focal_hazard,bounded_grid,configuration,development_selected,Lowest development IPCW Brier score and frozen before test,See parameters.py
+model.calibration_C,bounded_grid,inverse_L2,development_selected,Selected only inside development data,See parameters.py
+model.baseline_hyperparameters,family_specific_grids,configuration,development_selected,Equal development-only selection rule for every trainable baseline,See parameters.py
+calibration.minimum_evaluable,25,episodes,estimation_guard,Minimum support for a two-parameter calibration map,"25, 50, 100"
+probability.clip,1e-6,probability,numerical_safeguard,Avoids infinite log odds,"1e-8, 1e-6, 1e-4"
+gate.evidence_tiers,"1 proof; 2 external; 5 confirmatory",campaign_groups,study_design_profiles,Count is an eligibility tier and not a statistical constant,Power and precision may require more
+gate.minimum_independent_families,3,families,confirmatory_eligibility_floor,Limits dependence on one instrument or study family,"1 proof; 2 external; 3 confirmatory"
+gate.minimum_paired_opportunity_groups,5,groups,confirmatory_eligibility_floor,Only paired candidate-baseline opportunity groups contribute to the effect bound,"1 proof; 2 external; 5 confirmatory"
+gate.minimum_feature_coverage,0.95,fraction,application_requirement,At most five percent missing required feature cells,"0.90, 0.95, 1.00"
+gate.maximum_ood_fraction,0.10,fraction,application_requirement,Batch fallback budget outside the frozen domain,"0.05, 0.10, 0.20"
+gate.maximum_calibration_gap_upper,0.05,probability,application_requirement,Maximum upper bound on absolute probability error,"0.025, 0.05, 0.10"
+gate.minimum_candidate_minus_baseline_effect_lower,-0.02,completion_fraction,noninferiority_requirement,More than two percentage points degradation is unacceptable,"-0.01, -0.02, -0.05"
+gate.maximum_endpoint_effect_ci_half_width,0.05,completion_fraction,precision_requirement,Campaign count alone cannot pass without an adequately narrow effect interval,"0.02, 0.05, 0.10"
+gate.maximum_control_loop_p95_ms,100,ms,system_requirement,Declared sub-100-ms control-loop budget,"50, 100, 200"
+scheduler.congestion_weight,bounded_grid,unitless,development_selected,Calibration-scenario completion objective with smaller-weight tie break,See parameters.py
+scheduler.end_slot_penalty,0,unitless,removed,Unsupported additive coefficient removed; earliest end is a tie break,Not applicable
+synthetic.predictor_coefficients,learned,standardized_log_odds,development_selected,Fitted on disjoint synthetic development outcomes,Export coefficients and selection table
+synthetic.congestion_weight,bounded_grid,unitless,development_selected,Selected on seeds disjoint from evaluation,See parameters.py
+synthetic.condition_levels,"favorable, neutral, adverse",factor_levels,controlled_factor,Mechanism grid rather than measured operator prevalence,Report each level separately

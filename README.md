@@ -23,7 +23,8 @@ ranking, reliable long-horizon calibration, or a better decision policy.
   calibration, diagnostics, decision studies, evidence gates, and adapters
 - `scripts/` — experiment and validation entry points
 - `tests/` — unit and scientific-consistency tests
-- `configs/` — frozen manuscript-evaluation configuration
+- `configs/` — frozen manuscript-evaluation configuration, campaign-evidence
+  declarations, and the numerical-parameter registry
 - `results/manuscript/` — compact aggregate tables from the measured and
   controlled evaluations
 - `results/review_audit/` — focused aggregate checks added during the final
@@ -33,16 +34,24 @@ ranking, reliable long-horizon calibration, or a better decision policy.
 - `results/eos_mechanism/` — redistribution-safe aggregate synthetic
   mechanism results
 - `results/gate_logic/` — aggregate fail-closed gate stress summaries
+- `results/gate_parameter_governance_v1/` — aggregate gate stress and
+  prospective campaign-precision checks; these controlled fixtures are not
+  operational field evidence
+- `results/eos_mechanism_ablation_v3/` — aggregate EOS mechanism study with
+  development-only predictor, calibration, and congestion-penalty selection
 - `results/reviewer_prediction_release/` — the complete 12-pipeline by
   12-horizon WetLinks held-out prediction/score derivative, distributed under
   a separate CC BY-SA 4.0 data notice
-- `docs/` — source provenance, evidence boundaries, and adapter details
+- `docs/` — source provenance, evidence boundaries, parameter governance, and
+  adapter details
 
 Raw third-party datasets, row-level outputs with unresolved redistribution
 terms, unpublished manuscript files, superseded runs, and vendored simulator
 repositories are intentionally excluded. The one included row-level derivative
 is the attributed WetLinks prediction/score audit above; it contains no
 upstream measurement table and does not grant permission for any other source.
+Private EOS v3 candidate, task, and action-set diagnostic rows are likewise
+excluded; their aggregate summaries remain in the public result tree.
 
 This is therefore an **auditable code and aggregate-results package**, not a
 self-contained one-command reproduction archive.
@@ -133,9 +142,10 @@ calibration-attributable scheduler benefit.
 
 ## Citation
 
-Use [CITATION.cff](CITATION.cff). This reviewer archive is frozen locally as
-version `1.1.0`; a public repository URL will be added only after the repository
-has been created and the matching tag has been pushed successfully.
+Use [CITATION.cff](CITATION.cff). This reviewer archive is frozen as version
+`1.2.0`. The source repository is initially maintained as a private GitHub
+backup; a public URL will be advertised only after source-code licensing and
+coauthor review are complete.
 
 ## License and third-party material
 

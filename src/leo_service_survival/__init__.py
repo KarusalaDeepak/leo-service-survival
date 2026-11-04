@@ -16,6 +16,14 @@ from .gating import (
     GateEvidence,
     evaluate_calibration_monitor_campaigns,
     evaluate_gate_campaigns,
+    campaign_precision_power_plan,
+)
+from .parameters import (
+    CONFIRMATORY_GATE_REQUIREMENTS,
+    EXTERNAL_VALIDATION_GATE_REQUIREMENTS,
+    PRIMARY_ENDPOINT,
+    PROOF_OF_METHOD_GATE_REQUIREMENTS,
+    parameter_registry,
 )
 from .integration import (
     COMPLETION_CRITERIA,
@@ -42,6 +50,12 @@ __all__ = [
     "GateEvidence",
     "evaluate_calibration_monitor_campaigns",
     "evaluate_gate_campaigns",
+    "campaign_precision_power_plan",
+    "PRIMARY_ENDPOINT",
+    "PROOF_OF_METHOD_GATE_REQUIREMENTS",
+    "EXTERNAL_VALIDATION_GATE_REQUIREMENTS",
+    "CONFIRMATORY_GATE_REQUIREMENTS",
+    "parameter_registry",
     "COMPLETION_CRITERIA",
     "EVIDENCE_TIERS",
     "FIELD_EVIDENCE_TIERS",

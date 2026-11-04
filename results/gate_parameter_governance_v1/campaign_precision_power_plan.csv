@@ -1,0 +1,7 @@
+between_campaign_sd,target_ci_half_width,confidence_level,target_power,detectable_effect,campaigns_for_precision,campaigns_for_power,eligibility_floor,planned_campaigns,interpretation
+0.02,0.02,0.95,0.8,0.05,4,2,5,5,planning approximation; confirm with the final clustered design
+0.02,0.05,0.95,0.8,0.05,1,2,5,5,planning approximation; confirm with the final clustered design
+0.05,0.02,0.95,0.8,0.05,25,8,5,25,planning approximation; confirm with the final clustered design
+0.05,0.05,0.95,0.8,0.05,4,8,5,8,planning approximation; confirm with the final clustered design
+0.1,0.02,0.95,0.8,0.05,97,32,5,97,planning approximation; confirm with the final clustered design
+0.1,0.05,0.95,0.8,0.05,16,32,5,32,planning approximation; confirm with the final clustered design

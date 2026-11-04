@@ -6,13 +6,6 @@ Primary empirical source: D. Laniewski, E. Lanfer, B. Meijerink, R. van Rijswijk
 
 The two supplied analysis tables contain longitudinal end-to-end RTT, loss, throughput, and local weather observations at Enschede and Osnabrück. They are nearby temperate-European locations. They do not provide serving-satellite, beam, gateway, handover, physical attenuation, or root-cause labels. The source project identifies CC BY-SA 4.0 terms.
 
-The reviewer artifact under `results/reviewer_prediction_release/` is an
-attributed WetLinks derivative released under the same CC BY-SA 4.0 terms. It
-contains episode identifiers, endpoint/censor status, model predictions, and
-score contributions, but not the upstream analysis tables. Its README states
-the aggregation, episode-construction, partitioning, prediction, and scoring
-modifications. This bounded permission does not apply to any other source.
-
 ## Palo Alto Starlink ping record
 
 Exploratory external transport-stress source: L. Borgianni, “11-Day Starlink Ping Measurements Dataset (Palo Alto, US, May 2024),” Zenodo, version 1, DOI: 10.5281/zenodo.14987305. The record is a supplement to L. Borgianni, D. Adami, S. Giordano, and C. Chafe, “Global Net Equity: The Role of LEO Satellites Towards 6G Connectivity Landscape,” IEEE MeditCom 2025, DOI: 10.1109/MeditCom64437.2025.11104460.
@@ -191,6 +184,29 @@ integrity and the frozen window are recorded in
 canonical analysis artifact is the restricted aggregate
 `results/public_trace_validation_v3/nexasphere_athens_private_summary.csv`,
 with its restriction also recorded in the v3 manifest and claims ledger.
+
+## FjordLink maritime Starlink and 5G campaign
+
+FjordLink is a four-month Kiel Fjord campaign containing Starlink terminal
+statistics, 5G-router measurements, TWAMP latency/jitter, iPerf3 throughput,
+and weather context. The source is released under CC BY 4.0. The frozen source
+commit, license hashes, and primary client archive hash are recorded in
+`data/external/fjordlink/LOCAL_ACQUISITION_RECORD.md`.
+
+The local adapter parses operator-specific TWAMP sessions directly from the
+released ZIP archive and retains logger timestamps on their source clock; the
+release does not declare a timezone, so they are not silently relabeled as
+UTC. It then performs an explicit interval-overlap audit between Starlink and
+terrestrial sessions. Only sessions satisfying the frozen minimum source-clock
+overlap may be called synchronized multi-access evidence. A combined-dataset
+description, nearby dates, different sessions, or common collection hardware
+are not sufficient. Rejected sessions remain useful `field_observational` QoS
+and distribution-shift evidence.
+
+FjordLink has no EO policy actions or completion acknowledgements. It cannot
+be described as an operational path-selection trial or EO workload validation,
+and separate rows, sessions, or days cannot be inflated into independent
+campaigns.
 
 ## EOS-Bench and SPOT5 scheduling benchmarks
 

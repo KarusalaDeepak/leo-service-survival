@@ -1,0 +1,58 @@
+{
+  "artifact_sha256": {
+    "campaign_precision_power_plan.csv": "0959f6fe69645f466055ca8fad58a7b226ced9ced7349722af9509135f7b38b2",
+    "gate_delayed_detail.csv": "d0f9a27bbdf391798abf8df828d1936d10e735568b6634cce2d7f8692673c822",
+    "gate_delayed_summary.csv": "125ddbfed9cdc4ae4c18c97920d99c10441056d73f67281375eb255cb6f2efa0",
+    "gate_immediate_detail.csv": "f982164aeb8790475ff59a856c50382d66155730f66547edd209736e8ce0f2ad",
+    "gate_immediate_summary.csv": "ec6465e92dd3c9f3e58a7974e600902576f8befe9bf367d8abc59fb47fb6c3b6"
+  },
+  "batch_size": 100,
+  "campaign_floor_rationale": "Five campaign groups in the optional confirmatory profile yield five held-out assessments in one leave-one-campaign-out cycle; three independent acquisition families limit single-instrument dependence. Neither count establishes statistical sufficiency: the confidence-interval precision check and prospective power plan may require more campaigns.",
+  "campaigns_per_class": 30,
+  "claim_boundary": "Injected-shift gate-logic operating-characteristic test only; it does not generate statistical evidence bounds and is not an independent field validation or policy authorization.",
+  "detector_features": [
+    "latency_ms",
+    "loss_fraction",
+    "throughput_mbps",
+    "elevation_deg"
+  ],
+  "detector_quantile": 0.99,
+  "detector_threshold": 4.125032319178611,
+  "evidence_tier": "synthetic_simulation",
+  "gate_criteria": {
+    "maximum_calibration_gap_upper": 0.05,
+    "maximum_control_loop_p95_ms": 100.0,
+    "maximum_endpoint_effect_ci_half_width": 0.05,
+    "maximum_ood_fraction": 0.1,
+    "minimum_candidate_minus_baseline_endpoint_effect_lower": -0.02,
+    "minimum_feature_coverage": 0.95,
+    "minimum_independent_campaigns": 5,
+    "minimum_independent_families": 3,
+    "minimum_paired_opportunity_groups": 5,
+    "validation_tier": "confirmatory_release"
+  },
+  "gate_evidence": {
+    "calibration_gap_upper": 0.03,
+    "candidate_minus_baseline_endpoint_effect_lower": -0.01,
+    "confidence_level": null,
+    "control_loop_p95_ms": 35.0,
+    "endpoint_effect_ci_half_width": 0.03,
+    "endpoint_name": "task_completion_rate",
+    "evidence_basis": "gate_logic_fixture",
+    "independent_campaigns": 5,
+    "independent_families": 3,
+    "multiple_testing_adjustment": "not_applicable_supplied_fixture",
+    "paired_opportunity_groups": 5,
+    "schema_passed": true,
+    "validation_tier": "confirmatory_release"
+  },
+  "rows_per_campaign": 500,
+  "seed": 20261027,
+  "statistical_evidence_generation": {
+    "calibration_bound": "supplied_fixture_value",
+    "candidate_minus_baseline_endpoint_effect_bound": "supplied_fixture_value",
+    "control_loop_p95": "supplied_fixture_value",
+    "performed": false
+  },
+  "validation_level": "gate_logic_test"
+}

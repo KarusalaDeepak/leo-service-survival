@@ -14,6 +14,7 @@ from leo_service_survival.eos_mechanism_ablation import (
     ARM_CALIBRATED,
     ARM_EDF_SNR,
     condition_network_profiles,
+    fit_development_completion_model,
     fit_monotone_logit_calibrator,
     run_eos_mechanism_ablation,
     write_eos_mechanism_ablation_artifacts,
@@ -101,7 +102,6 @@ def test_conditions_encode_requested_snr_reliability_relations():
         proxy[condition] = {
             profile.path_profile_id: (1 - profile.outage_probability)
             * (1 - profile.handover_probability)
-            * np.exp(-profile.jitter_ms / 250.0)
             for profile in profiles
         }
     assert proxy["favorable"]["high_snr_path"] > proxy["favorable"]["lower_snr_path"]
@@ -126,6 +126,36 @@ def test_monotone_calibrator_is_bounded_and_non_decreasing():
     assert calibrator.slope >= 0.0
 
 
+def test_synthetic_completion_coefficients_are_development_fitted():
+    rng = np.random.default_rng(44)
+    rows = 500
+    frame = pd.DataFrame(
+        {
+            "forecast_capacity_ratio": rng.uniform(1.0, 3.0, rows),
+            "forecast_jitter_ms": rng.uniform(2.0, 30.0, rows),
+            "profile_outage_probability": rng.uniform(0.02, 0.25, rows),
+            "forecast_handover_probability": rng.uniform(0.02, 0.30, rows),
+        }
+    )
+    latent = (
+        1.4 * np.log(frame["forecast_capacity_ratio"])
+        - 0.8 * np.log1p(frame["forecast_jitter_ms"])
+        - 2.0 * frame["profile_outage_probability"]
+        - 1.5 * frame["forecast_handover_probability"]
+    )
+    frame["technical_completion"] = (
+        rng.random(rows) < 1.0 / (1.0 + np.exp(-latent))
+    ).astype(int)
+    model, selection = fit_development_completion_model(
+        frame, c_grid=(0.1, 1.0)
+    )
+    probability = model.predict(frame)
+    assert np.isfinite(probability).all()
+    assert ((probability > 0.0) & (probability < 1.0)).all()
+    assert selection["selected"].sum() == 1
+    assert len(model.coefficients) == 4
+
+
 def test_matched_ablation_runs_all_arms_and_records_model_boundary(tmp_path):
     scenario_path = tmp_path / "fixture.json"
     _write_fixture(scenario_path)
@@ -139,6 +169,7 @@ def test_matched_ablation_runs_all_arms_and_records_model_boundary(tmp_path):
     )
     config = EOSMechanismAblationConfig(
         full_chain=full_chain,
+        predictor_rows_per_profile=120,
         calibration_rows_per_profile=120,
         calibration_validation_rows_per_profile=120,
         bootstrap_resamples=20,
@@ -167,6 +198,20 @@ def test_matched_ablation_runs_all_arms_and_records_model_boundary(tmp_path):
         "remove_input_screening",
         "remove_congestion_penalty",
     }
+    assert artifacts.tables["predictor_regularization_selection"][
+        "selected"
+    ].groupby(artifacts.tables["predictor_regularization_selection"]["condition"]).sum().eq(1).all()
+    assert artifacts.tables["calibration_regularization_selection"][
+        "selected"
+    ].groupby(artifacts.tables["calibration_regularization_selection"]["condition"]).sum().eq(1).all()
+    assert artifacts.tables["congestion_penalty_selection"][
+        "selected"
+    ].groupby(artifacts.tables["congestion_penalty_selection"]["condition"]).sum().eq(1).all()
+    assert np.isfinite(
+        artifacts.tables["predictor_coefficients"][
+            "standardized_log_odds_coefficient"
+        ]
+    ).all()
 
     audit = artifacts.tables["action_set_audit"]
     assert audit["policy_arms_using_same_action_set"].eq(len(POLICY_ARMS)).all()

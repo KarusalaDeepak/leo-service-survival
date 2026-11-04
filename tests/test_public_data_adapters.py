@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import gzip
 import json
+from zipfile import ZipFile
 
 import numpy as np
 import pandas as pd
@@ -14,6 +15,11 @@ from leo_service_survival.lens_adapter import (
     load_lens_irtt,
     load_lens_ping,
 )
+from leo_service_survival.fjordlink_adapter import (
+    FjordLinkConfig,
+    audit_fjordlink_concurrency,
+    load_fjordlink_twamp,
+)
 from leo_service_survival.nuwins_adapter import (
     MainlandAlignmentConfig,
     align_nuwins_mainland_pair,
@@ -22,6 +28,82 @@ from leo_service_survival.nuwins_adapter import (
 from leo_service_survival.nexasphere_adapter import load_nexasphere_athens
 from leo_service_survival.sat_in_view_adapter import load_sat_in_view_matches
 from scripts.run_public_trace_validation import run_cross_campaign_proxy_benchmark
+
+
+def _twamp_fixture(start: str, rtts: list[float]) -> str:
+    base = pd.Timestamp(start)
+    lines: list[str] = []
+    for index, rtt in enumerate(rtts):
+        sent = base + pd.Timedelta(seconds=index)
+        reply = sent + pd.Timedelta(milliseconds=rtt)
+        lines.append(
+            f"{sent.strftime('%Y-%m-%d %H:%M:%S,%f')[:-3]} - twampy - "
+            f"DEBUG: Sent to 192.0.2.1 [sseq={index}]\n"
+        )
+        lines.append(
+            f"{reply.strftime('%Y-%m-%d %H:%M:%S,%f')[:-3]} - twampy - "
+            "DEBUG: Reply from 192.0.2.1 "
+            f"[rseq={index} sseq={index} rtt={rtt:.2f}ms "
+            f"outbound={rtt / 2:.2f}ms inbound={rtt / 2:.2f}ms]\n"
+        )
+    return "".join(lines)
+
+
+def test_fjordlink_requires_measured_clock_overlap_and_preserves_clock_basis(tmp_path):
+    archive = tmp_path / "fjordlink.zip"
+    with ZipFile(archive, "w") as bundle:
+        bundle.writestr(
+            "out-client-wyk/starlink_2025-01-01_12-00-00/twamp.log",
+            _twamp_fixture("2025-01-01 12:00:00", [40.0, 42.0, 44.0]),
+        )
+        bundle.writestr(
+            "out-client-wyk/CAU-0C_2025-01-01_12-00-01/twamp.log",
+            _twamp_fixture("2025-01-01 12:00:01", [30.0, 31.0, 32.0]),
+        )
+        bundle.writestr(
+            "out-client-wyk/CAU-4329_2025-01-02_12-00-00/twamp.log",
+            _twamp_fixture("2025-01-02 12:00:00", [35.0, 36.0]),
+        )
+
+    sessions, replies = load_fjordlink_twamp(
+        archive,
+        config=FjordLinkConfig(
+            max_sessions=10,
+            max_replies_per_session=10,
+            minimum_overlap_s=1.0,
+        ),
+    )
+    assert set(sessions["operator_id"]) == {"starlink", "telekom", "vodafone"}
+    assert len(replies) == 8
+    assert sessions["timestamp_basis"].eq("logger_clock_timezone_unspecified").all()
+    assert replies["source_clock_time"].dt.tz is None
+    assert sessions["packet_count_consistent"].all()
+    assert sessions["source_id"].str.contains("sha256:").all()
+
+    audit = audit_fjordlink_concurrency(sessions, minimum_overlap_s=1.0)
+    assert len(audit) == 1
+    assert bool(audit.loc[0, "pairing_eligible"])
+    assert audit.loc[0, "terrestrial_operator_id"] == "telekom"
+    assert audit.loc[0, "clock_overlap_s"] >= 1.0
+
+
+def test_fjordlink_separate_sessions_fail_closed(tmp_path):
+    archive = tmp_path / "fjordlink.zip"
+    with ZipFile(archive, "w") as bundle:
+        bundle.writestr(
+            "out-client-wyk/starlink_2025-01-01_12-00-00/twamp.log",
+            _twamp_fixture("2025-01-01 12:00:00", [40.0, 42.0]),
+        )
+        bundle.writestr(
+            "out-client-wyk/CAU-0C_2025-01-02_12-00-00/twamp.log",
+            _twamp_fixture("2025-01-02 12:00:00", [30.0, 31.0]),
+        )
+
+    sessions, _ = load_fjordlink_twamp(archive)
+    audit = audit_fjordlink_concurrency(sessions, minimum_overlap_s=1.0)
+    assert not bool(audit.loc[0, "pairing_eligible"])
+    assert audit.loc[0, "exclusion_reason"] == "no_synchronized_clock_overlap"
+    assert audit.loc[0, "nearest_interval_gap_s"] > 80_000
 
 
 def test_nuwins_pre_aligned_panel_is_long_separate_and_provenanced(tmp_path):

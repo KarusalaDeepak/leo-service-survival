@@ -39,3 +39,8 @@ simulation/
 *.tar
 *.tar.gz
 *.zst
+
+# Private row-level EOS diagnostics; publish only the aggregate companions.
+results/eos_mechanism_ablation_v3/action_set_audit.csv
+results/eos_mechanism_ablation_v3/candidate_scores.csv
+results/eos_mechanism_ablation_v3/task_results.csv

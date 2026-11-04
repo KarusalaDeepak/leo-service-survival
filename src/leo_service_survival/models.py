@@ -3,7 +3,8 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Iterable
+import json
+from typing import Any, Iterable, Mapping
 
 import numpy as np
 import pandas as pd
@@ -13,7 +14,12 @@ from sklearn.ensemble import HistGradientBoostingClassifier, RandomForestClassif
 from sklearn.linear_model import LogisticRegression, Ridge
 from xgboost import XGBClassifier
 
-from .metrics import ipcw_survival_targets
+from .metrics import censoring_weighted_brier_score, ipcw_survival_targets
+from .parameters import (
+    BASELINE_SEARCH_GRIDS,
+    CALIBRATION_C_GRID,
+    FOCAL_HAZARD_SEARCH_GRID,
+)
 
 
 class FeatureEncoder:
@@ -254,12 +260,25 @@ class DiscreteHazardModel(SurvivalModel):
         nonlinear: bool = True,
         competing: bool = False,
         random_state: int = 17,
+        hyperparameters: Mapping[str, float | int] | None = None,
+        linear_c: float = 0.5,
     ):
         self.encoder = FeatureEncoder(feature_columns)
         self.max_horizon = int(max_horizon)
         self.nonlinear = bool(nonlinear)
         self.competing = bool(competing)
         self.random_state = int(random_state)
+        self.linear_c = float(linear_c)
+        if self.linear_c <= 0.0:
+            raise ValueError("linear_c must be positive")
+        default_parameters = dict(FOCAL_HAZARD_SEARCH_GRID[1])
+        supplied = default_parameters if hyperparameters is None else dict(hyperparameters)
+        if set(supplied) != set(default_parameters):
+            raise ValueError(
+                "hazard hyperparameters must contain exactly "
+                f"{sorted(default_parameters)}"
+            )
+        self.hyperparameters = supplied
         if competing:
             self.name = "competing_risk_boosted"
         elif nonlinear:
@@ -278,17 +297,17 @@ class DiscreteHazardModel(SurvivalModel):
         # separate calibration split corrects only ordinary sampling drift.
         if self.nonlinear:
             self.model_ = HistGradientBoostingClassifier(
-                learning_rate=0.06,
-                max_iter=180,
-                max_leaf_nodes=15,
-                min_samples_leaf=30,
-                l2_regularization=0.5,
+                learning_rate=float(self.hyperparameters["learning_rate"]),
+                max_iter=int(self.hyperparameters["max_iter"]),
+                max_leaf_nodes=int(self.hyperparameters["max_leaf_nodes"]),
+                min_samples_leaf=int(self.hyperparameters["min_samples_leaf"]),
+                l2_regularization=float(self.hyperparameters["l2_regularization"]),
                 random_state=self.random_state,
             )
         else:
             self.model_ = LogisticRegression(
                 max_iter=500,
-                C=0.5,
+                C=self.linear_c,
                 multi_class="auto",
                 random_state=self.random_state,
             )
@@ -382,10 +401,22 @@ class RandomForestDiscreteHazardModel(SurvivalModel):
 
     name = "random_forest_discrete_hazard"
 
-    def __init__(self, feature_columns: Iterable[str], *, max_horizon: int = 12, random_state: int = 17):
+    def __init__(
+        self,
+        feature_columns: Iterable[str],
+        *,
+        max_horizon: int = 12,
+        random_state: int = 17,
+        hyperparameters: Mapping[str, int] | None = None,
+    ):
         self.encoder = FeatureEncoder(feature_columns)
         self.max_horizon = int(max_horizon)
         self.random_state = int(random_state)
+        self.hyperparameters = dict(
+            BASELINE_SEARCH_GRIDS["random_forest"][1]
+            if hyperparameters is None
+            else hyperparameters
+        )
 
     def fit(self, frame: pd.DataFrame) -> "RandomForestDiscreteHazardModel":
         self.encoder.fit(frame)
@@ -393,9 +424,9 @@ class RandomForestDiscreteHazardModel(SurvivalModel):
             frame, self.encoder, self.max_horizon, competing=False
         )
         self.model_ = RandomForestClassifier(
-            n_estimators=120,
-            max_depth=10,
-            min_samples_leaf=20,
+            n_estimators=int(self.hyperparameters["n_estimators"]),
+            max_depth=int(self.hyperparameters["max_depth"]),
+            min_samples_leaf=int(self.hyperparameters["min_samples_leaf"]),
             max_features="sqrt",
             n_jobs=-1,
             random_state=self.random_state,
@@ -439,10 +470,16 @@ class XGBoostDiscreteHazardModel(SurvivalModel):
         *,
         max_horizon: int = 12,
         random_state: int = 17,
+        hyperparameters: Mapping[str, float | int] | None = None,
     ):
         self.encoder = FeatureEncoder(feature_columns)
         self.max_horizon = int(max_horizon)
         self.random_state = int(random_state)
+        self.hyperparameters = dict(
+            BASELINE_SEARCH_GRIDS["xgboost"][1]
+            if hyperparameters is None
+            else hyperparameters
+        )
 
     def fit(self, frame: pd.DataFrame) -> "XGBoostDiscreteHazardModel":
         self.encoder.fit(frame)
@@ -455,10 +492,10 @@ class XGBoostDiscreteHazardModel(SurvivalModel):
         self.model_ = XGBClassifier(
             objective="binary:logistic",
             eval_metric="logloss",
-            n_estimators=240,
-            learning_rate=0.04,
-            max_depth=4,
-            min_child_weight=12.0,
+            n_estimators=int(self.hyperparameters["n_estimators"]),
+            learning_rate=float(self.hyperparameters["learning_rate"]),
+            max_depth=int(self.hyperparameters["max_depth"]),
+            min_child_weight=float(self.hyperparameters["min_child_weight"]),
             subsample=0.85,
             colsample_bytree=0.85,
             reg_lambda=2.0,
@@ -620,19 +657,25 @@ def build_model_suite(
     *,
     max_horizon: int,
     random_state: int = 17,
+    focal_hyperparameters: Mapping[str, float | int] | None = None,
+    calibration_c: float = 0.1,
+    baseline_hyperparameters: Mapping[str, Any] | None = None,
 ) -> ModelSuite:
     features = tuple(feature_columns)
+    baseline = dict(baseline_hyperparameters or {})
     competing = DiscreteHazardModel(
         features,
         max_horizon=max_horizon,
         nonlinear=True,
         competing=True,
         random_state=random_state,
+        hyperparameters=focal_hyperparameters,
     )
     proposed = CalibratedSurvivalModel(
         competing,
         range(1, max_horizon + 1),
         name="calibrated_competing_risk",
+        calibration_c=calibration_c,
     )
     calibrated_single = CalibratedSurvivalModel(
         DiscreteHazardModel(
@@ -648,11 +691,16 @@ def build_model_suite(
     models: dict[str, SurvivalModel] = {
         "constant_exponential": ExponentialModel(),
         "kaplan_meier": KaplanMeierModel(),
-        "weibull_aft": WeibullAFTModel(features),
-        "cox_ph": CoxPHModel(features),
+        "weibull_aft": WeibullAFTModel(
+            features, l2=float(baseline.get("weibull_aft_l2", 1e-3))
+        ),
+        "cox_ph": CoxPHModel(
+            features, l2=float(baseline.get("cox_ph_l2", 5e-3))
+        ),
         "additive_discrete_hazard": AdditiveDiscreteHazardModel(
             features,
             max_horizon=max_horizon,
+            alpha=float(baseline.get("additive_alpha", 5.0)),
         ),
         "linear_discrete_hazard": DiscreteHazardModel(
             features,
@@ -660,6 +708,7 @@ def build_model_suite(
             nonlinear=False,
             competing=False,
             random_state=random_state,
+            linear_c=float(baseline.get("linear_hazard_c", 0.5)),
         ),
         "boosted_discrete_hazard": DiscreteHazardModel(
             features,
@@ -667,19 +716,225 @@ def build_model_suite(
             nonlinear=True,
             competing=False,
             random_state=random_state,
+            hyperparameters=baseline.get("boosted_hazard"),
         ),
         "random_forest_discrete_hazard": RandomForestDiscreteHazardModel(
             features,
             max_horizon=max_horizon,
             random_state=random_state,
+            hyperparameters=baseline.get("random_forest"),
         ),
         "xgboost_discrete_hazard": XGBoostDiscreteHazardModel(
             features,
             max_horizon=max_horizon,
             random_state=random_state,
+            hyperparameters=baseline.get("xgboost"),
         ),
         "calibrated_single_risk": calibrated_single,
         "competing_risk_uncalibrated": competing,
         "calibrated_competing_risk": proposed,
     }
     return ModelSuite(models=models, proposed_name="calibrated_competing_risk")
+
+
+def select_focal_model_configuration(
+    fit_frame: pd.DataFrame,
+    calibration_frame: pd.DataFrame,
+    validation_frame: pd.DataFrame,
+    feature_columns: Iterable[str],
+    *,
+    max_horizon: int,
+    random_state: int = 17,
+    candidate_configs: tuple[Mapping[str, float | int], ...] = FOCAL_HAZARD_SEARCH_GRID,
+    calibration_c_grid: tuple[float, ...] = CALIBRATION_C_GRID,
+) -> tuple[dict[str, float | int], float, pd.DataFrame]:
+    """Select focal model settings using development partitions only.
+
+    The caller must keep all three frames earlier than the locked test period.
+    Every configuration receives the same fit, calibration and validation rows.
+    The smallest mean IPCW Brier score wins; ties prefer fewer leaves, stronger
+    regularization and the smaller calibration ``C``.
+    """
+
+    horizons = tuple(range(1, int(max_horizon) + 1))
+    rows: list[dict[str, float | int | bool]] = []
+    for config_index, candidate in enumerate(candidate_configs):
+        for calibration_c in calibration_c_grid:
+            model = CalibratedSurvivalModel(
+                DiscreteHazardModel(
+                    feature_columns,
+                    max_horizon=max_horizon,
+                    nonlinear=True,
+                    competing=True,
+                    random_state=random_state,
+                    hyperparameters=candidate,
+                ),
+                horizons,
+                calibration_c=float(calibration_c),
+            )
+            model.fit(fit_frame)
+            model.calibrate(calibration_frame)
+            prediction = model.predict_survival(validation_frame, horizons)
+            scores = [
+                censoring_weighted_brier_score(
+                    validation_frame,
+                    prediction[:, index],
+                    horizon,
+                )
+                for index, horizon in enumerate(horizons)
+            ]
+            rows.append(
+                {
+                    "configuration_index": config_index,
+                    **dict(candidate),
+                    "calibration_c": float(calibration_c),
+                    "development_integrated_brier": float(np.mean(scores)),
+                    "fit_rows": int(len(fit_frame)),
+                    "calibration_rows": int(len(calibration_frame)),
+                    "validation_rows": int(len(validation_frame)),
+                }
+            )
+    selection = pd.DataFrame(rows).sort_values(
+        [
+            "development_integrated_brier",
+            "max_leaf_nodes",
+            "l2_regularization",
+            "calibration_c",
+        ],
+        ascending=[True, True, False, True],
+    )
+    winner = selection.iloc[0]
+    selected_index = int(winner["configuration_index"])
+    selected_c = float(winner["calibration_c"])
+    selection["selected"] = (
+        selection["configuration_index"].eq(selected_index)
+        & selection["calibration_c"].eq(selected_c)
+    )
+    return dict(candidate_configs[selected_index]), selected_c, selection.reset_index(drop=True)
+
+
+def select_baseline_model_configurations(
+    fit_frame: pd.DataFrame,
+    validation_frame: pd.DataFrame,
+    feature_columns: Iterable[str],
+    *,
+    max_horizon: int,
+    random_state: int = 17,
+) -> tuple[dict[str, Any], pd.DataFrame]:
+    """Apply equal development-only selection rules to trainable baselines."""
+
+    horizons = tuple(range(1, int(max_horizon) + 1))
+    features = tuple(feature_columns)
+
+    def score(model: SurvivalModel) -> float:
+        model.fit(fit_frame)
+        prediction = model.predict_survival(validation_frame, horizons)
+        return float(
+            np.mean(
+                [
+                    censoring_weighted_brier_score(
+                        validation_frame, prediction[:, index], horizon
+                    )
+                    for index, horizon in enumerate(horizons)
+                ]
+            )
+        )
+
+    candidate_builders: dict[str, list[tuple[Any, SurvivalModel]]] = {
+        "weibull_aft_l2": [
+            (value, WeibullAFTModel(features, l2=float(value)))
+            for value in BASELINE_SEARCH_GRIDS["weibull_aft_l2"]
+        ],
+        "cox_ph_l2": [
+            (value, CoxPHModel(features, l2=float(value)))
+            for value in BASELINE_SEARCH_GRIDS["cox_ph_l2"]
+        ],
+        "additive_alpha": [
+            (
+                value,
+                AdditiveDiscreteHazardModel(
+                    features, max_horizon=max_horizon, alpha=float(value)
+                ),
+            )
+            for value in BASELINE_SEARCH_GRIDS["additive_alpha"]
+        ],
+        "linear_hazard_c": [
+            (
+                value,
+                DiscreteHazardModel(
+                    features,
+                    max_horizon=max_horizon,
+                    nonlinear=False,
+                    competing=False,
+                    random_state=random_state,
+                    linear_c=float(value),
+                ),
+            )
+            for value in BASELINE_SEARCH_GRIDS["linear_hazard_c"]
+        ],
+        "boosted_hazard": [
+            (
+                dict(value),
+                DiscreteHazardModel(
+                    features,
+                    max_horizon=max_horizon,
+                    nonlinear=True,
+                    competing=False,
+                    random_state=random_state,
+                    hyperparameters=value,
+                ),
+            )
+            for value in FOCAL_HAZARD_SEARCH_GRID
+        ],
+        "random_forest": [
+            (
+                dict(value),
+                RandomForestDiscreteHazardModel(
+                    features,
+                    max_horizon=max_horizon,
+                    random_state=random_state,
+                    hyperparameters=value,
+                ),
+            )
+            for value in BASELINE_SEARCH_GRIDS["random_forest"]
+        ],
+        "xgboost": [
+            (
+                dict(value),
+                XGBoostDiscreteHazardModel(
+                    features,
+                    max_horizon=max_horizon,
+                    random_state=random_state,
+                    hyperparameters=value,
+                ),
+            )
+            for value in BASELINE_SEARCH_GRIDS["xgboost"]
+        ],
+    }
+    selected: dict[str, Any] = {}
+    rows: list[dict[str, Any]] = []
+    for family, candidates in candidate_builders.items():
+        family_rows: list[dict[str, Any]] = []
+        for index, (configuration, model) in enumerate(candidates):
+            family_rows.append(
+                {
+                    "family": family,
+                    "configuration_index": index,
+                    "configuration_json": json.dumps(
+                        configuration, sort_keys=True
+                    ),
+                    "development_integrated_brier": score(model),
+                    "fit_rows": int(len(fit_frame)),
+                    "validation_rows": int(len(validation_frame)),
+                }
+            )
+        family_table = pd.DataFrame(family_rows).sort_values(
+            ["development_integrated_brier", "configuration_index"]
+        )
+        winner_index = int(family_table.iloc[0]["configuration_index"])
+        selected[family] = candidates[winner_index][0]
+        family_table["selected"] = family_table["configuration_index"].eq(
+            winner_index
+        )
+        rows.extend(family_table.to_dict(orient="records"))
+    return selected, pd.DataFrame(rows)

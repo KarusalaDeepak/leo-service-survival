@@ -457,18 +457,26 @@ def _fit_simulation_domain_gate(
     detector = FrozenMahalanobisDetector(GATE_FEATURES, quantile=0.99).fit(reference)
     criteria = GateCriteria(
         minimum_independent_campaigns=0,
+        minimum_independent_families=0,
+        minimum_paired_opportunity_groups=0,
         minimum_feature_coverage=1.0,
         maximum_ood_fraction=0.0,
         maximum_calibration_gap_upper=1.0,
         minimum_safety_effect_lower=-1.0,
         maximum_control_loop_p95_ms=float("inf"),
+        maximum_endpoint_effect_ci_half_width=1.0,
+        validation_tier="proof_of_method",
     )
     evidence = GateEvidence(
         schema_passed=True,
         independent_campaigns=0,
+        independent_families=0,
+        paired_opportunity_groups=0,
         calibration_gap_upper=0.0,
         safety_effect_lower=0.0,
         control_loop_p95_ms=config.integrated_decision_ms + config.install_latency_ms,
+        endpoint_effect_ci_half_width=0.0,
+        validation_tier="proof_of_method",
     )
     gate = EvidenceGate(detector, criteria)
     gate_hash = _hash_json(
@@ -646,9 +654,11 @@ def _build_common_actions(
                         "window_end_ns": int(contact["window_end_ns"]),
                         "observation_end_ns": observation_end_ns,
                         "planned_downlink_duration_s": downlink_duration_s,
+                        "required_bytes": required_bytes,
                         "storage_available_bytes": storage_available,
                         "nominal_storage_bytes": nominal_storage,
                         "downlink_capacity_bytes": capacity_bytes,
+                        "forecast_capacity_ratio": capacity_ratio,
                         "predicted_congestion": float(np.clip(required_bytes / max(capacity_bytes, 1), 0.0, 10.0)),
                         "stabilization_time_s": float(
                             max(satellite.get("stabilization_time_s", 0.0), config.slew_guard_s)

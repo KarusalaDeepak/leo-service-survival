@@ -7,6 +7,11 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = ROOT / "results/result_to_script_manifest.csv"
+PUBLIC_MANIFEST_EXCLUSIONS = {
+    "results/eos_mechanism_ablation_v3/action_set_audit.csv",
+    "results/eos_mechanism_ablation_v3/candidate_scores.csv",
+    "results/eos_mechanism_ablation_v3/task_results.csv",
+}
 FORBIDDEN_MODEL_EXTENSIONS = {
     ".pkl",
     ".pickle",
@@ -26,6 +31,7 @@ def _released_files() -> set[str]:
         and path != MANIFEST
         and path.name != ".DS_Store"
         and "__pycache__" not in path.parts
+        and path.relative_to(ROOT).as_posix() not in PUBLIC_MANIFEST_EXCLUSIONS
     }
 
 
@@ -50,6 +56,13 @@ def test_result_manifest_has_exactly_one_portable_mapping_per_artifact() -> None
     assert all(len(row["sha256"]) == 64 for row in rows)
     for row in rows:
         assert _sha256(ROOT / row["artifact_path"]) == row["sha256"]
+
+
+def test_row_level_eos_diagnostics_are_excluded_from_public_manifest() -> None:
+    with MANIFEST.open(encoding="utf-8", newline="") as handle:
+        released = {row["artifact_path"] for row in csv.DictReader(handle)}
+
+    assert released.isdisjoint(PUBLIC_MANIFEST_EXCLUSIONS)
 
 
 def test_public_tree_contains_no_executable_model_objects() -> None:

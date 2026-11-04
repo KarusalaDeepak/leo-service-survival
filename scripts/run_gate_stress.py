@@ -24,6 +24,7 @@ from leo_service_survival.gating import (
     FrozenMahalanobisDetector,
     GateCriteria,
     GateEvidence,
+    campaign_precision_power_plan,
     evaluate_calibration_monitor_campaigns,
     evaluate_gate_campaigns,
 )
@@ -84,19 +85,27 @@ def main() -> None:
     development = _stable_frame(rng, 5000)
     detector = FrozenMahalanobisDetector(features, quantile=0.99).fit(development)
     criteria = GateCriteria(
-        minimum_independent_campaigns=2,
-        minimum_feature_coverage=0.90,
+        minimum_independent_campaigns=5,
+        minimum_independent_families=3,
+        minimum_paired_opportunity_groups=5,
+        minimum_feature_coverage=0.95,
         maximum_ood_fraction=0.10,
         maximum_calibration_gap_upper=0.05,
         minimum_candidate_minus_baseline_endpoint_effect_lower=-0.02,
         maximum_control_loop_p95_ms=100.0,
+        maximum_endpoint_effect_ci_half_width=0.05,
+        validation_tier="confirmatory_release",
     )
     evidence = GateEvidence(
         schema_passed=True,
-        independent_campaigns=3,
+        independent_campaigns=5,
+        independent_families=3,
+        paired_opportunity_groups=5,
         calibration_gap_upper=0.03,
         candidate_minus_baseline_endpoint_effect_lower=-0.01,
         control_loop_p95_ms=35.0,
+        endpoint_effect_ci_half_width=0.03,
+        validation_tier="confirmatory_release",
         endpoint_name="task_completion_rate",
         evidence_basis=GATE_LOGIC_FIXTURE,
         multiple_testing_adjustment="not_applicable_supplied_fixture",
@@ -142,6 +151,7 @@ def main() -> None:
         "gate_immediate_summary.csv": immediate_summary,
         "gate_delayed_detail.csv": delayed_detail,
         "gate_delayed_summary.csv": delayed_summary,
+        "campaign_precision_power_plan.csv": campaign_precision_power_plan(),
     }
     artifact_hashes: dict[str, str] = {}
     for name, frame in artifacts.items():
@@ -164,6 +174,13 @@ def main() -> None:
             "Injected-shift gate-logic operating-characteristic test only; it "
             "does not generate statistical evidence bounds and is not an "
             "independent field validation or policy authorization."
+        ),
+        "campaign_floor_rationale": (
+            "Five campaign groups is an eligibility floor that permits one complete "
+            "leave-one-campaign-out cycle; three independent acquisition families "
+            "limit single-instrument dependence. Neither count establishes statistical "
+            "sufficiency: the confidence-interval precision check and prospective "
+            "power plan may require more campaigns."
         ),
         "seed": args.seed,
         "campaigns_per_class": args.campaigns_per_class,

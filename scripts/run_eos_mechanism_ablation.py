@@ -25,7 +25,7 @@ DEFAULT_SCENARIO = (
     / "output_re_s3"
     / "Sats3_M100_T7d_cities_08.json"
 )
-DEFAULT_OUTPUT = PROJECT_ROOT / "results" / "eos_mechanism_ablation_v2"
+DEFAULT_OUTPUT = PROJECT_ROOT / "results" / "eos_mechanism_ablation_v3"
 
 
 def _parse_seeds(value: str) -> tuple[int, ...]:
@@ -54,6 +54,7 @@ def main() -> None:
         help="comma-separated deterministic stochastic-replication seeds",
     )
     parser.add_argument("--calibration-rows-per-profile", type=int, default=3_000)
+    parser.add_argument("--predictor-rows-per-profile", type=int, default=3_000)
     parser.add_argument("--calibration-validation-rows-per-profile", type=int, default=1_500)
     parser.add_argument("--bootstrap-resamples", type=int, default=2_000)
     args = parser.parse_args()
@@ -61,6 +62,7 @@ def main() -> None:
     full_chain = EOSFullChainConfig(seeds=args.seeds)
     config = EOSMechanismAblationConfig(
         full_chain=full_chain,
+        predictor_rows_per_profile=args.predictor_rows_per_profile,
         calibration_rows_per_profile=args.calibration_rows_per_profile,
         calibration_validation_rows_per_profile=args.calibration_validation_rows_per_profile,
         bootstrap_resamples=args.bootstrap_resamples,

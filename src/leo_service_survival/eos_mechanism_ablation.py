@@ -10,9 +10,11 @@ rate, jitter, handover risk and profile outage risk.  The fitted WetLinks model
 expects a different 16-variable, five-minute transport/weather feature vector
 (``WETLINKS_FEATURES``).  There is no validated mapping between those schemas,
 units or prediction horizons.  Applying that fitted model here would therefore
-be scientifically misleading.  Instead, this module evaluates plainly named
-synthetic scores and a Platt calibrator trained on disjoint synthetic reference
-draws.  All exported evidence remains ``synthetic_simulation``.
+be scientifically misleading.  Instead, this module fits a plain logistic
+technical-completion model on synthetic development draws, selects its
+regularization without evaluation outcomes, and calibrates it on a second
+disjoint synthetic partition.  All exported evidence remains
+``synthetic_simulation``.
 
 All policy arms use the same EDF task order, the same feasible action set, the
 same resource-conflict checks and hash-keyed potential outcomes.  Only candidate
@@ -33,8 +35,14 @@ import numpy as np
 import pandas as pd
 from scipy.optimize import minimize
 from scipy.special import expit
+from sklearn.linear_model import LogisticRegression
 
 from .data import WETLINKS_FEATURES
+from .parameters import (
+    SYNTHETIC_CALIBRATION_L2_GRID,
+    SYNTHETIC_CONGESTION_WEIGHT_GRID,
+    SYNTHETIC_PREDICTOR_C_GRID,
+)
 from .eos_full_chain import (
     EVIDENCE_TIER,
     EOSFullChainConfig,
@@ -45,7 +53,6 @@ from .eos_full_chain import (
     _fit_simulation_domain_gate,
     _hash_json,
     _interval_is_free,
-    _prediction_probability,
     _realize_outcome,
     _reserve_interval,
     _rng_for,
@@ -54,7 +61,7 @@ from .eos_full_chain import (
 )
 
 
-PROTOCOL_VERSION = "eos-mechanism-ablation-v2"
+PROTOCOL_VERSION = "eos-mechanism-ablation-v3"
 
 ARM_EDF_SNR = "edf_current_snr"
 ARM_EDF_RELIABILITY = "edf_simple_reliability_heuristic"
@@ -80,24 +87,36 @@ class EOSMechanismAblationConfig:
     """Frozen settings for the targeted mechanism experiment."""
 
     full_chain: EOSFullChainConfig = field(default_factory=EOSFullChainConfig)
+    predictor_rows_per_profile: int = 3_000
+    predictor_seed: int = 2026102799
     calibration_rows_per_profile: int = 3_000
     calibration_validation_rows_per_profile: int = 1_500
     calibration_seed: int = 2026102801
     calibration_validation_seed: int = 2026102802
-    calibration_l2: float = 0.01
-    congestion_penalty_weight: float = 0.10
+    predictor_c_grid: tuple[float, ...] = SYNTHETIC_PREDICTOR_C_GRID
+    calibration_l2_grid: tuple[float, ...] = SYNTHETIC_CALIBRATION_L2_GRID
+    congestion_penalty_grid: tuple[float, ...] = SYNTHETIC_CONGESTION_WEIGHT_GRID
+    congestion_tuning_seeds: tuple[int, ...] = (2026102711, 2026102712, 2026102713)
     bootstrap_resamples: int = 2_000
     bootstrap_seed: int = 2026102803
 
     def __post_init__(self) -> None:
+        if self.predictor_rows_per_profile < 100:
+            raise ValueError("predictor_rows_per_profile must be at least 100")
         if self.calibration_rows_per_profile < 100:
             raise ValueError("calibration_rows_per_profile must be at least 100")
         if self.calibration_validation_rows_per_profile < 100:
             raise ValueError("calibration_validation_rows_per_profile must be at least 100")
-        if self.calibration_l2 < 0:
-            raise ValueError("calibration_l2 cannot be negative")
-        if self.congestion_penalty_weight < 0:
-            raise ValueError("congestion_penalty_weight cannot be negative")
+        if not self.predictor_c_grid or any(value <= 0 for value in self.predictor_c_grid):
+            raise ValueError("predictor_c_grid must contain positive values")
+        if not self.calibration_l2_grid or any(value < 0 for value in self.calibration_l2_grid):
+            raise ValueError("calibration_l2_grid cannot contain negative values")
+        if not self.congestion_penalty_grid or any(value < 0 for value in self.congestion_penalty_grid):
+            raise ValueError("congestion_penalty_grid cannot contain negative values")
+        if not self.congestion_tuning_seeds or (
+            set(self.congestion_tuning_seeds) & set(self.full_chain.seeds)
+        ):
+            raise ValueError("congestion tuning seeds must be non-empty and disjoint from evaluation seeds")
         if self.bootstrap_resamples < 1:
             raise ValueError("bootstrap_resamples must be positive")
 
@@ -121,6 +140,140 @@ class MonotoneLogitCalibrator:
     @property
     def sha256(self) -> str:
         return _hash_json(asdict(self))
+
+
+SYNTHETIC_PREDICTOR_FEATURES: tuple[str, ...] = (
+    "log_forecast_capacity_ratio",
+    "log1p_forecast_jitter_ms",
+    "profile_outage_probability",
+    "forecast_handover_probability",
+)
+
+
+@dataclass(frozen=True)
+class DevelopmentFittedCompletionModel:
+    """Logistic synthetic endpoint model fitted only on development draws."""
+
+    feature_names: tuple[str, ...]
+    means: tuple[float, ...]
+    scales: tuple[float, ...]
+    coefficients: tuple[float, ...]
+    intercept: float
+    regularization_c: float
+    training_rows: int
+    tuning_brier: float
+
+    def predict(self, frame: pd.DataFrame) -> np.ndarray:
+        design = _synthetic_predictor_design(frame)
+        standardized = (
+            design - np.asarray(self.means, dtype=float)
+        ) / np.asarray(self.scales, dtype=float)
+        linear = self.intercept + standardized @ np.asarray(
+            self.coefficients, dtype=float
+        )
+        return expit(linear)
+
+    @property
+    def sha256(self) -> str:
+        return _hash_json(asdict(self))
+
+
+def _synthetic_predictor_design(frame: pd.DataFrame) -> np.ndarray:
+    if "forecast_capacity_ratio" in frame:
+        capacity_ratio = pd.to_numeric(
+            frame["forecast_capacity_ratio"], errors="coerce"
+        ).to_numpy(float)
+    elif {"downlink_capacity_bytes", "required_bytes"}.issubset(frame.columns):
+        capacity_ratio = (
+            pd.to_numeric(frame["downlink_capacity_bytes"], errors="coerce").to_numpy(float)
+            / np.maximum(
+                pd.to_numeric(frame["required_bytes"], errors="coerce").to_numpy(float),
+                1.0,
+            )
+        )
+    else:
+        raise ValueError("synthetic predictor requires a forecast capacity ratio")
+    jitter = pd.to_numeric(frame["forecast_jitter_ms"], errors="coerce").to_numpy(float)
+    outage = pd.to_numeric(
+        frame["profile_outage_probability"], errors="coerce"
+    ).to_numpy(float)
+    handover = pd.to_numeric(
+        frame["forecast_handover_probability"], errors="coerce"
+    ).to_numpy(float)
+    design = np.column_stack(
+        [
+            np.log(np.clip(capacity_ratio, 1e-6, 1e6)),
+            np.log1p(np.clip(jitter, 0.0, None)),
+            np.clip(outage, 0.0, 1.0),
+            np.clip(handover, 0.0, 1.0),
+        ]
+    )
+    if not np.isfinite(design).all():
+        raise ValueError("synthetic predictor inputs must be finite")
+    return design
+
+
+def fit_development_completion_model(
+    reference: pd.DataFrame,
+    *,
+    c_grid: tuple[float, ...] = SYNTHETIC_PREDICTOR_C_GRID,
+) -> tuple[DevelopmentFittedCompletionModel, pd.DataFrame]:
+    """Select regularization on an internal development fold and refit."""
+
+    design = _synthetic_predictor_design(reference)
+    target = reference["technical_completion"].to_numpy(int)
+    if len(reference) < 100 or np.unique(target).size < 2:
+        raise ValueError("synthetic predictor development data need at least 100 rows and both classes")
+    indices = np.arange(len(reference))
+    tuning_mask = indices % 5 == 0
+    fit_mask = ~tuning_mask
+    means = design[fit_mask].mean(axis=0)
+    scales = design[fit_mask].std(axis=0)
+    scales = np.where(scales > 1e-12, scales, 1.0)
+    fit_design = (design[fit_mask] - means) / scales
+    tuning_design = (design[tuning_mask] - means) / scales
+    rows: list[dict[str, float | bool | int]] = []
+    for value in sorted(set(float(item) for item in c_grid)):
+        estimator = LogisticRegression(
+            C=value,
+            max_iter=2_000,
+            solver="lbfgs",
+            random_state=17,
+        ).fit(fit_design, target[fit_mask])
+        probability = estimator.predict_proba(tuning_design)[:, 1]
+        rows.append(
+            {
+                "regularization_c": value,
+                "development_fit_rows": int(fit_mask.sum()),
+                "development_tuning_rows": int(tuning_mask.sum()),
+                "tuning_brier": float(np.mean((probability - target[tuning_mask]) ** 2)),
+            }
+        )
+    selection = pd.DataFrame(rows).sort_values(
+        ["tuning_brier", "regularization_c"], ascending=[True, True]
+    )
+    selected_c = float(selection.iloc[0]["regularization_c"])
+    selection["selected"] = selection["regularization_c"].eq(selected_c)
+    full_means = design.mean(axis=0)
+    full_scales = design.std(axis=0)
+    full_scales = np.where(full_scales > 1e-12, full_scales, 1.0)
+    final = LogisticRegression(
+        C=selected_c,
+        max_iter=2_000,
+        solver="lbfgs",
+        random_state=17,
+    ).fit((design - full_means) / full_scales, target)
+    model = DevelopmentFittedCompletionModel(
+        feature_names=SYNTHETIC_PREDICTOR_FEATURES,
+        means=tuple(float(value) for value in full_means),
+        scales=tuple(float(value) for value in full_scales),
+        coefficients=tuple(float(value) for value in final.coef_[0]),
+        intercept=float(final.intercept_[0]),
+        regularization_c=selected_c,
+        training_rows=int(len(reference)),
+        tuning_brier=float(selection.iloc[0]["tuning_brier"]),
+    )
+    return model, selection.reset_index(drop=True)
 
 
 @dataclass(frozen=True)
@@ -224,14 +377,6 @@ def _sample_synthetic_completion_reference(
             if not path_available or capacity_bytes < required_bytes:
                 continue
             capacity_ratio = capacity_bytes / max(required_bytes, 1)
-            raw_score = _prediction_probability(
-                path_available=True,
-                capacity_ratio=capacity_ratio,
-                jitter_ms=forecast_jitter,
-                outage_probability=profile.outage_probability,
-                handover_probability=handover_forecast,
-            )
-
             install_ok = bool(rng.random() >= full_chain.install_failure_probability)
             acquired = bool(install_ok and rng.random() >= full_chain.acquisition_failure_probability)
             product_valid = bool(
@@ -254,7 +399,7 @@ def _sample_synthetic_completion_reference(
                     "partition": partition,
                     "path_profile_id": profile.path_profile_id,
                     "required_bytes": required_bytes,
-                    "raw_synthetic_score": raw_score,
+                    "forecast_capacity_ratio": capacity_ratio,
                     "technical_completion": outcome,
                     "forecast_rate_mbps": forecast_rate,
                     "forecast_jitter_ms": forecast_jitter,
@@ -319,6 +464,41 @@ def fit_monotone_logit_calibrator(
     )
 
 
+def select_monotone_calibration_l2(
+    reference: pd.DataFrame,
+    *,
+    l2_grid: tuple[float, ...] = SYNTHETIC_CALIBRATION_L2_GRID,
+) -> tuple[MonotoneLogitCalibrator, pd.DataFrame]:
+    """Select calibration regularization inside development data only."""
+
+    indices = np.arange(len(reference))
+    tuning_mask = indices % 5 == 0
+    fit = reference.loc[~tuning_mask].reset_index(drop=True)
+    tuning = reference.loc[tuning_mask].reset_index(drop=True)
+    target = tuning["technical_completion"].to_numpy(float)
+    rows: list[dict[str, float | int | bool]] = []
+    for value in sorted(set(float(item) for item in l2_grid)):
+        calibrator = fit_monotone_logit_calibrator(fit, l2=value)
+        probability = calibrator.predict(tuning["raw_synthetic_score"])
+        rows.append(
+            {
+                "calibration_l2": value,
+                "development_fit_rows": int(len(fit)),
+                "development_tuning_rows": int(len(tuning)),
+                "tuning_brier": float(np.mean((probability - target) ** 2)),
+            }
+        )
+    selection = pd.DataFrame(rows).sort_values(
+        ["tuning_brier", "calibration_l2"], ascending=[True, True]
+    )
+    selected = float(selection.iloc[0]["calibration_l2"])
+    selection["selected"] = selection["calibration_l2"].eq(selected)
+    return (
+        fit_monotone_logit_calibrator(reference, l2=selected),
+        selection.reset_index(drop=True),
+    )
+
+
 def _ece(target: np.ndarray, probability: np.ndarray, bins: int = 10) -> float:
     edges = np.linspace(0.0, 1.0, bins + 1)
     indices = np.clip(np.digitize(probability, edges[1:-1]), 0, bins - 1)
@@ -367,17 +547,20 @@ def _calibration_diagnostics(
 
 def _score_actions(
     actions: pd.DataFrame,
+    predictor: DevelopmentFittedCompletionModel,
     calibrator: MonotoneLogitCalibrator,
     *,
     congestion_penalty_weight: float,
 ) -> pd.DataFrame:
     scored = actions.copy()
+    # Coefficient-free comparison using only the two declared independent
+    # failure probabilities.  Jitter enters the fitted predictor instead of a
+    # hand-selected exponential scale.
     scored["simple_reliability_heuristic"] = (
         (1.0 - scored["profile_outage_probability"].astype(float))
         * (1.0 - scored["forecast_handover_probability"].astype(float))
-        * np.exp(-scored["forecast_jitter_ms"].astype(float) / 250.0)
     ).clip(0.0, 1.0)
-    scored["raw_synthetic_score"] = scored["predicted_completion_probability"].astype(float)
+    scored["raw_synthetic_score"] = predictor.predict(scored)
     scored["calibrated_synthetic_score"] = calibrator.predict(
         scored["raw_synthetic_score"].to_numpy(float)
     )
@@ -427,23 +610,23 @@ def arm_definitions() -> pd.DataFrame:
             "ranking_field": "uncalibrated_penalized_utility",
             "input_screening": True,
             "congestion_penalty": True,
-            "predictor_kind": "hand_designed_synthetic_score",
-            "description": "EDF; screened hand-designed synthetic score minus frozen congestion penalty.",
+            "predictor_kind": "development_fitted_synthetic_endpoint_model",
+            "description": "EDF; screened development-fitted synthetic endpoint probability minus a development-selected congestion penalty.",
         },
         {
             "policy_arm": ARM_CALIBRATED,
             "ranking_field": "calibrated_penalized_utility",
             "input_screening": True,
             "congestion_penalty": True,
-            "predictor_kind": "synthetically_calibrated_hand_designed_score",
-            "description": "EDF; screened synthetic Platt-calibrated score minus frozen congestion penalty.",
+            "predictor_kind": "calibrated_development_fitted_synthetic_endpoint_model",
+            "description": "EDF; screened calibrated development-fitted endpoint probability minus a development-selected congestion penalty.",
         },
         {
             "policy_arm": ARM_NO_SCREENING,
             "ranking_field": "calibrated_penalized_utility",
             "input_screening": False,
             "congestion_penalty": True,
-            "predictor_kind": "synthetically_calibrated_hand_designed_score",
+            "predictor_kind": "calibrated_development_fitted_synthetic_endpoint_model",
             "description": "As calibrated arm, but the synthetic Mahalanobis input screen is disabled.",
         },
         {
@@ -451,7 +634,7 @@ def arm_definitions() -> pd.DataFrame:
             "ranking_field": "calibrated_synthetic_score",
             "input_screening": True,
             "congestion_penalty": False,
-            "predictor_kind": "synthetically_calibrated_hand_designed_score",
+            "predictor_kind": "calibrated_development_fitted_synthetic_endpoint_model",
             "description": "As calibrated arm, but the explicit congestion penalty is removed.",
         },
     ]
@@ -501,7 +684,7 @@ def normalized_field_definitions() -> pd.DataFrame:
             "type": "boolean",
             "semantics": (
                 "True only if a non-baseline arm substitutes the EDF-current-SNR baseline after its "
-                "own candidate is unauthorized. It is always False in v2 because screened arms "
+                "own candidate is unauthorized. It is always False in v3 because screened arms "
                 "abstain rather than fall back."
             ),
         },
@@ -888,7 +1071,6 @@ def _condition_table() -> pd.DataFrame:
             reliability_proxy = (
                 (1.0 - profile.outage_probability)
                 * (1.0 - profile.handover_probability)
-                * math.exp(-profile.jitter_ms / 250.0)
             )
             rows.append(
                 {
@@ -916,9 +1098,14 @@ def run_eos_mechanism_ablation(
     config = config or EOSMechanismAblationConfig()
     scenario = parse_eos_bench_scenario(scenario_path)
     arm_table = arm_definitions()
+    predictor_reference_rows: list[pd.DataFrame] = []
+    predictor_selection_rows: list[pd.DataFrame] = []
+    predictor_coefficient_rows: list[dict[str, Any]] = []
     calibration_rows: list[pd.DataFrame] = []
+    calibration_selection_rows: list[pd.DataFrame] = []
     calibration_fit_rows: list[dict[str, Any]] = []
     calibration_diagnostic_rows: list[dict[str, Any]] = []
+    congestion_selection_rows: list[dict[str, Any]] = []
     candidate_tables: list[pd.DataFrame] = []
     result_tables: list[pd.DataFrame] = []
     action_audit_rows: list[dict[str, Any]] = []
@@ -926,6 +1113,42 @@ def run_eos_mechanism_ablation(
 
     for condition in CONDITIONS:
         profiles = condition_network_profiles(condition)
+        predictor_reference = _sample_synthetic_completion_reference(
+            scenario,
+            profiles,
+            condition=condition,
+            partition="predictor_development",
+            rows_per_profile=config.predictor_rows_per_profile,
+            seed=config.predictor_seed,
+            full_chain=config.full_chain,
+        )
+        predictor, predictor_selection = fit_development_completion_model(
+            predictor_reference,
+            c_grid=config.predictor_c_grid,
+        )
+        predictor_reference = predictor_reference.copy()
+        predictor_reference["raw_synthetic_score"] = predictor.predict(
+            predictor_reference
+        )
+        predictor_reference_rows.append(predictor_reference)
+        predictor_selection.insert(0, "condition", condition)
+        predictor_selection_rows.append(predictor_selection)
+        for feature, coefficient in zip(
+            predictor.feature_names, predictor.coefficients
+        ):
+            predictor_coefficient_rows.append(
+                {
+                    "condition": condition,
+                    "feature": feature,
+                    "standardized_log_odds_coefficient": coefficient,
+                    "regularization_c": predictor.regularization_c,
+                    "training_rows": predictor.training_rows,
+                    "internal_tuning_brier": predictor.tuning_brier,
+                    "predictor_sha256": predictor.sha256,
+                    "coefficient_source": "predictor_development_draws_only",
+                    "evidence_tier": EVIDENCE_TIER,
+                }
+            )
         development = _sample_synthetic_completion_reference(
             scenario,
             profiles,
@@ -944,7 +1167,14 @@ def run_eos_mechanism_ablation(
             seed=config.calibration_validation_seed,
             full_chain=config.full_chain,
         )
-        calibrator = fit_monotone_logit_calibrator(development, l2=config.calibration_l2)
+        development["raw_synthetic_score"] = predictor.predict(development)
+        validation["raw_synthetic_score"] = predictor.predict(validation)
+        calibrator, calibration_selection = select_monotone_calibration_l2(
+            development,
+            l2_grid=config.calibration_l2_grid,
+        )
+        calibration_selection.insert(0, "condition", condition)
+        calibration_selection_rows.append(calibration_selection)
         development = development.copy()
         validation = validation.copy()
         development["calibrated_synthetic_score"] = calibrator.predict(
@@ -970,9 +1200,73 @@ def run_eos_mechanism_ablation(
         calibration_diagnostic_rows.append(
             _calibration_diagnostics(validation, calibrator, condition=condition)
         )
-        condition_model_hashes[condition] = calibrator.sha256
+        condition_model_hashes[condition] = _hash_json(
+            {
+                "predictor": predictor.sha256,
+                "calibrator": calibrator.sha256,
+            }
+        )
 
         domain_gate, gate_evidence, _ = _fit_simulation_domain_gate(profiles, config.full_chain)
+        calibrated_arm = arm_table.loc[
+            arm_table["policy_arm"].eq(ARM_CALIBRATED)
+        ].iloc[0].to_dict()
+        tuning_by_weight: list[dict[str, Any]] = []
+        for congestion_weight in config.congestion_penalty_grid:
+            tuning_results: list[pd.DataFrame] = []
+            for tuning_seed in config.congestion_tuning_seeds:
+                tuning_tasks = _seed_task_table(scenario, tuning_seed, config.full_chain)
+                tuning_common = _build_common_actions(
+                    scenario,
+                    tuning_tasks,
+                    profiles,
+                    tuning_seed,
+                    config.full_chain,
+                    domain_gate,
+                    gate_evidence,
+                )
+                tuning_scored = _score_actions(
+                    tuning_common,
+                    predictor,
+                    calibrator,
+                    congestion_penalty_weight=float(congestion_weight),
+                )
+                tuning_results.append(
+                    _run_arm(
+                        tuning_tasks,
+                        tuning_scored,
+                        condition=condition,
+                        seed=tuning_seed,
+                        arm=calibrated_arm,
+                        full_chain=config.full_chain,
+                    )
+                )
+            combined_tuning = pd.concat(tuning_results, ignore_index=True)
+            tuning_by_weight.append(
+                {
+                    "condition": condition,
+                    "congestion_penalty_weight": float(congestion_weight),
+                    "tuning_seeds": len(config.congestion_tuning_seeds),
+                    "tuning_tasks": int(len(combined_tuning)),
+                    "tuning_completion_rate": float(
+                        combined_tuning["application_complete"].mean()
+                    ),
+                }
+            )
+        tuning_table = pd.DataFrame(tuning_by_weight).sort_values(
+            ["tuning_completion_rate", "congestion_penalty_weight"],
+            ascending=[False, True],
+        )
+        selected_congestion_weight = float(
+            tuning_table.iloc[0]["congestion_penalty_weight"]
+        )
+        tuning_table["selected"] = tuning_table[
+            "congestion_penalty_weight"
+        ].eq(selected_congestion_weight)
+        tuning_table["selection_source"] = "disjoint_synthetic_tuning_seeds"
+        tuning_table["evidence_tier"] = EVIDENCE_TIER
+        congestion_selection_rows.extend(tuning_table.to_dict(orient="records"))
+
         for seed in config.full_chain.seeds:
             tasks = _seed_task_table(scenario, seed, config.full_chain)
             common = _build_common_actions(
@@ -986,8 +1280,9 @@ def run_eos_mechanism_ablation(
             )
             scored = _score_actions(
                 common,
+                predictor,
                 calibrator,
-                congestion_penalty_weight=config.congestion_penalty_weight,
+                congestion_penalty_weight=selected_congestion_weight,
             )
             scored.insert(0, "condition", condition)
             candidate_tables.append(scored)
@@ -1025,11 +1320,23 @@ def run_eos_mechanism_ablation(
         task_results, config=config
     )
     candidates = pd.concat(candidate_tables, ignore_index=True)
+    predictor_reference = pd.concat(predictor_reference_rows, ignore_index=True)
     calibration_reference = pd.concat(calibration_rows, ignore_index=True)
     tables: dict[str, pd.DataFrame] = {
         "normalized_field_definitions": normalized_field_definitions(),
         "arm_definitions": arm_table,
         "condition_definitions": _condition_table(),
+        "predictor_reference": predictor_reference,
+        "predictor_regularization_selection": pd.concat(
+            predictor_selection_rows, ignore_index=True
+        ),
+        "predictor_coefficients": pd.DataFrame(predictor_coefficient_rows),
+        "calibration_regularization_selection": pd.concat(
+            calibration_selection_rows, ignore_index=True
+        ),
+        "congestion_penalty_selection": pd.DataFrame(
+            congestion_selection_rows
+        ),
         "calibration_fit": pd.DataFrame(calibration_fit_rows),
         "calibration_validation": pd.DataFrame(calibration_diagnostic_rows),
         "calibration_reference": calibration_reference,
@@ -1086,7 +1393,7 @@ def run_eos_mechanism_ablation(
         "config_sha256": _hash_json(asdict(config)),
         "conditions": list(CONDITIONS),
         "policy_arms": list(POLICY_ARMS),
-        "condition_calibrator_sha256": condition_model_hashes,
+        "condition_predictor_calibrator_sha256": condition_model_hashes,
         "rows": {name: int(len(frame)) for name, frame in tables.items()},
         "matched_design": (
             "Within each condition/seed/task, all six arms share the EOS geometry, synthetic "
@@ -1104,16 +1411,26 @@ def run_eos_mechanism_ablation(
         "wetlinks_required_features": list(WETLINKS_FEATURES),
         "wetlinks_feature_units": wetlinks_feature_units,
         "eos_score_inputs": [
-            "path_available",
             "forecast_capacity_ratio",
             "forecast_jitter_ms",
             "profile_outage_probability",
             "forecast_handover_probability",
         ],
+        "predictor_scope": (
+            "Logistic coefficients and regularization are estimated only from synthetic "
+            "predictor-development draws. The C value is selected on an internal disjoint "
+            "development fold and the final model is refitted before calibration. No hand-set "
+            "hazard or reliability coefficients enter the fitted score."
+        ),
         "calibration_scope": (
             "Monotone logistic calibration is fitted only on disjoint synthetic reference draws "
-            "for the technical-delivery endpoint. It is not empirical WetLinks calibration and "
+            "after its regularization is selected inside the calibration-development partition. "
+            "It is not empirical WetLinks calibration and "
             "does not calibrate a field service-survival probability."
+        ),
+        "congestion_selection_scope": (
+            "The congestion penalty is selected separately within each condition on synthetic "
+            "tuning seeds that are disjoint from every reported evaluation seed."
         ),
         "claim_boundary": (
             "Controlled synthetic mechanism ablation over one generated EOS-Bench scenario. "

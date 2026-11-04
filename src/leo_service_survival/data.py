@@ -15,6 +15,8 @@ from typing import Iterable
 import numpy as np
 import pandas as pd
 
+from .parameters import PRIMARY_ENDPOINT
+
 
 # Stable endpoint-resolution provenance.  ``censor_reason`` intentionally has
 # a value for events as well as censored records so every episode explains why
@@ -300,9 +302,9 @@ def _episodes_from_regular_series(
 def build_wetlinks_episodes(
     input_dir: str | Path,
     *,
-    bin_minutes: int = 5,
-    latency_limit_ms: float = 80.0,
-    loss_limit_pct: float = 1.0,
+    bin_minutes: int = PRIMARY_ENDPOINT.bin_minutes,
+    latency_limit_ms: float = PRIMARY_ENDPOINT.latency_limit_ms,
+    loss_limit_pct: float = PRIMARY_ENDPOINT.loss_limit_pct,
     sustained_bad_bins: int = 2,
 ) -> EpisodeDataset:
     """Build measured Starlink service episodes from WetLinks.
@@ -406,9 +408,9 @@ def build_wetlinks_episodes(
 def build_palo_alto_starlink_episodes(
     input_dir: str | Path,
     *,
-    bin_minutes: int = 5,
-    latency_limit_ms: float = 80.0,
-    loss_limit_pct: float = 1.0,
+    bin_minutes: int = PRIMARY_ENDPOINT.bin_minutes,
+    latency_limit_ms: float = PRIMARY_ENDPOINT.latency_limit_ms,
+    loss_limit_pct: float = PRIMARY_ENDPOINT.loss_limit_pct,
     sustained_bad_bins: int = 2,
 ) -> EpisodeDataset:
     """Build an external test set from the Palo Alto Starlink ping record.
@@ -522,9 +524,9 @@ def build_palo_alto_starlink_episodes(
 def build_nexasphere_athens_episodes(
     input_dir: str | Path,
     *,
-    bin_minutes: int = 5,
-    latency_limit_ms: float = 80.0,
-    loss_limit_pct: float = 1.0,
+    bin_minutes: int = PRIMARY_ENDPOINT.bin_minutes,
+    latency_limit_ms: float = PRIMARY_ENDPOINT.latency_limit_ms,
+    loss_limit_pct: float = PRIMARY_ENDPOINT.loss_limit_pct,
     sustained_bad_bins: int = 2,
 ) -> EpisodeDataset:
     """Build aggregate-only external episodes from NEXASPHERE Athens.
@@ -734,7 +736,7 @@ def build_commect_landmarks(
 def build_lens_episodes(
     prediction_path: str | Path,
     *,
-    latency_limit_ms: float = 80.0,
+    latency_limit_ms: float = PRIMARY_ENDPOINT.latency_limit_ms,
 ) -> EpisodeDataset:
     """Build a secondary multi-site episode table from released LENS-derived artifacts."""
 

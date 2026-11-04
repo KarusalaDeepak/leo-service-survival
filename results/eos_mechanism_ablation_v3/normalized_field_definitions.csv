@@ -1,0 +1,8 @@
+table,field,type,semantics,protocol_version
+candidate_scores,input_eligible,boolean,"True exactly when the candidate has full gate-feature coverage and zero out-of-domain fraction under the frozen synthetic Mahalanobis input screen. It does not imply geometry, storage, capacity, policy or field eligibility.",eos-mechanism-ablation-v3
+candidate_scores,evidence_type,string,Evidence provenance for the row; always synthetic_simulation in this experiment.,eos-mechanism-ablation-v3
+task_results,policy_authorized,boolean,True exactly when an action was selected and that action satisfies the arm's declared simulation eligibility rule. Unscreened arms accept any resource-feasible selected action; screened arms additionally require input_eligible=True. This is simulation-scope authorization and is never field-release authorization.,eos-mechanism-ablation-v3
+task_results,baseline_fallback,boolean,True only if a non-baseline arm substitutes the EDF-current-SNR baseline after its own candidate is unauthorized. It is always False in v2 because screened arms abstain rather than fall back.,eos-mechanism-ablation-v3
+task_results,action_selected,boolean,True exactly when the scheduler returns a non-null selected_path_id before installation and outcome realization.,eos-mechanism-ablation-v3
+task_results,action_installed,boolean,"True exactly when an action was selected and the synthetic installation step did not fail. It does not imply acquisition, byte delivery or task completion.",eos-mechanism-ablation-v3
+task_results,evidence_type,string,Evidence provenance for the row; always synthetic_simulation in this experiment.,eos-mechanism-ablation-v3

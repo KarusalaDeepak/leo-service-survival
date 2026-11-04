@@ -2,9 +2,9 @@
   "schema_version": "1.0",
   "builder": "scripts/build_prediction_release_artifacts.py",
   "producer_function": "main",
-  "generated_at_utc": "2026-11-01T12:39:29.382251+00:00",
+  "generated_at_utc": "2026-11-04T04:12:54.976320+00:00",
   "git_state": {
-    "base_commit": "9285bccd0e196e7055655e03fe85b23243612e73",
+    "base_commit": "1781c4154324cd53cf3c798325612d2f6f0d8d7d",
     "tracked_worktree_clean": false,
     "interpretation": "code-file hashes below are authoritative when the run includes uncommitted release-builder changes"
   },
@@ -125,11 +125,11 @@
     },
     {
       "path": "scripts/run_all.py",
-      "sha256": "549cdd3e520f0d69decec7188863ce25bc3eefa821fcbdbb0baca30eba334083"
+      "sha256": "8d52c094d4eae0219ac6fc6292e9a24e047a1d77298bc955fc6974dacf150614"
     },
     {
       "path": "src/leo_service_survival/data.py",
-      "sha256": "88c621a4b902f18a348d2f42142ffb3358a92c1f205bef63e23821e4071b7c51"
+      "sha256": "50da8b3b5fce2ee906480a63ab92cb5ad4836dc1d186e6d59582f679b3dcd2af"
     },
     {
       "path": "src/leo_service_survival/diagnostics.py",
@@ -141,7 +141,7 @@
     },
     {
       "path": "src/leo_service_survival/models.py",
-      "sha256": "ed699549eafcdd78ab5296953f825d0a2069a1d28efaa0649d87249ab29137b0"
+      "sha256": "40455b2942b017a60c8bf792cf4e69aaf47278b39087cdec70920f251ccfe949"
     },
     {
       "path": "src/leo_service_survival/release_artifacts.py",
@@ -151,13 +151,13 @@
   "files": [
     {
       "path": "wetlinks_all_pipeline_horizon_predictions.csv.gz",
-      "bytes": 4303972,
-      "sha256": "8ede24922f3851c1aeb5ac58eee5443c1607476c113db60057c2f0aa969edf9d"
+      "bytes": 4303947,
+      "sha256": "342be120e903c3094b027a4442167538859b5e4bd51a895dfb9907c3873854bb"
     },
     {
       "path": "wetlinks_all_pipeline_horizon_scores.csv",
-      "bytes": 60317,
-      "sha256": "4ccf4a9edff841585fedf0b59dbcd880dec2414511c9a33aeaf31ee37f44d241"
+      "bytes": 60313,
+      "sha256": "821938b123670a2a6e9e57a46ef95f68c0e85b3e65fa5d5af770f9a91cdf933b"
     },
     {
       "path": "wetlinks_pipeline_execution_status.csv",

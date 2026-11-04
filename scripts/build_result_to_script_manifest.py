@@ -12,6 +12,18 @@ ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / "results/result_to_script_manifest.csv"
 
 
+# These files are useful for private diagnosis and exact local reruns, but they
+# are row-level decision traces rather than publication-safe aggregate results.
+# Keep the denylist explicit and fail closed: the public manifest must never
+# make them look like cleared aggregate artifacts merely because they live
+# below an otherwise public result directory.
+PUBLIC_MANIFEST_EXCLUSIONS = {
+    "results/eos_mechanism_ablation_v3/action_set_audit.csv",
+    "results/eos_mechanism_ablation_v3/candidate_scores.csv",
+    "results/eos_mechanism_ablation_v3/task_results.csv",
+}
+
+
 RULES = (
     (
         "results/review_audit/ipcw_boundary_",
@@ -49,10 +61,24 @@ RULES = (
         "aggregate_public",
     ),
     (
+        "results/eos_mechanism_ablation_v3/",
+        "scripts/run_eos_mechanism_ablation.py",
+        "main",
+        "controlled synthetic EOS mechanism study with development-only parameter selection",
+        "aggregate_public",
+    ),
+    (
         "results/gate_logic/",
         "scripts/run_gate_stress.py",
         "main",
         "controlled synthetic gate stress",
+        "aggregate_public",
+    ),
+    (
+        "results/gate_parameter_governance_v1/",
+        "scripts/run_gate_stress.py",
+        "main",
+        "controlled synthetic gate stress and prospective campaign precision planning",
         "aggregate_public",
     ),
     (
@@ -128,6 +154,7 @@ def main() -> None:
         and path != OUTPUT
         and path.name != ".DS_Store"
         and "__pycache__" not in path.parts
+        and path.relative_to(ROOT).as_posix() not in PUBLIC_MANIFEST_EXCLUSIONS
     )
     rows = []
     for path in paths:
@@ -147,7 +174,9 @@ def main() -> None:
         )
     OUTPUT.parent.mkdir(parents=True, exist_ok=True)
     with OUTPUT.open("w", encoding="utf-8", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=list(rows[0]))
+        writer = csv.DictWriter(
+            handle, fieldnames=list(rows[0]), lineterminator="\n"
+        )
         writer.writeheader()
         writer.writerows(rows)
 

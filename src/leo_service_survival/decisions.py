@@ -9,6 +9,7 @@ import numpy as np
 import pandas as pd
 
 from .models import SurvivalModel
+from .parameters import PRIMARY_ENDPOINT
 
 
 def _select_reactive(group: pd.DataFrame, latency_limit_ms: float) -> int | None:
@@ -179,11 +180,22 @@ def make_trace_driven_scenario(
             completes = int(observed_duration > requirement) if known else 0
             latency = float(row.get("latency_mean_ms", np.nan))
             loss = float(row.get("packet_loss_pct", np.nan))
-            latency_headroom = (80.0 - latency) / 20.0 if np.isfinite(latency) else -1.0
-            loss_headroom = (1.0 - loss) / 1.0 if np.isfinite(loss) else -1.0
-            heuristic_reliability = float(
-                1.0 / (1.0 + np.exp(-np.clip(latency_headroom + 0.6 * loss_headroom, -20.0, 20.0)))
+            latency_headroom = (
+                (PRIMARY_ENDPOINT.latency_limit_ms - latency)
+                / PRIMARY_ENDPOINT.latency_limit_ms
+                if np.isfinite(latency)
+                else -1.0
             )
+            loss_headroom = (
+                (PRIMARY_ENDPOINT.loss_limit_pct - loss)
+                / PRIMARY_ENDPOINT.loss_limit_pct
+                if np.isfinite(loss)
+                else -1.0
+            )
+            # A deliberately coefficient-free baseline: rank by the worse of
+            # the two normalized current-QoS margins.  It uses no future label
+            # and no hand-chosen RTT-versus-loss weight.
+            heuristic_reliability = float(min(latency_headroom, loss_headroom))
             latest_start = max(release, deadline - requirement)
             start_slot = int(rng.integers(release, latest_start + 1))
             end_slot = start_slot + requirement
@@ -260,13 +272,9 @@ def _schedule_policy(
     elif policy == "highest_priority":
         tasks = tasks.sort_values(["priority", "deadline_slot"], ascending=[False, True])
     elif policy == "racs_like":
-        best = candidates.groupby("task_id")["heuristic_reliability"].max()
-        tasks["order_score"] = (
-            1.4 * tasks["priority"]
-            + 3.0 * tasks["task_id"].map(best).fillna(0.0)
-            - 0.15 * tasks["deadline_slot"]
-        )
-        tasks = tasks.sort_values("order_score", ascending=False)
+        # Preserve the common EDF task order.  The comparator differs only in
+        # its coefficient-free current-QoS candidate ranking below.
+        tasks = tasks.sort_values(["deadline_slot", "priority"], ascending=[True, False])
     elif policy == "survival_aware":
         # Use the same EDF task order as the strongest non-oracle baseline so
         # that the comparison isolates candidate-contact selection rather than
@@ -294,18 +302,21 @@ def _schedule_policy(
         if feasible.empty:
             continue
         if policy == "survival_aware":
-            score = (
+            feasible = feasible.assign(
+                _selection_score=(
                 feasible["predicted_survival"]
                 - float(survival_congestion_weight) * feasible["congestion"]
-                - 0.002 * feasible["end_slot"]
+                )
             )
-            selected = feasible.loc[score.idxmax()]
+            selected = feasible.sort_values(
+                ["_selection_score", "end_slot", "candidate_rank"],
+                ascending=[False, True, True],
+            ).iloc[0]
         elif policy == "racs_like":
-            score = (
-                1.5 * feasible["heuristic_reliability"]
-                - feasible["congestion"]
-            )
-            selected = feasible.loc[score.idxmax()]
+            selected = feasible.sort_values(
+                ["heuristic_reliability", "end_slot", "candidate_rank"],
+                ascending=[False, True, True],
+            ).iloc[0]
         else:
             selected = feasible.sort_values(["end_slot", "congestion"]).iloc[0]
         for slot in range(int(selected["start_slot"]), int(selected["end_slot"])):

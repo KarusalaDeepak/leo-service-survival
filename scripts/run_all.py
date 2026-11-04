@@ -69,6 +69,12 @@ from leo_service_survival.models import (  # noqa: E402
     DiscreteHazardModel,
     KaplanMeierModel,
     build_model_suite,
+    select_focal_model_configuration,
+    select_baseline_model_configurations,
+)
+from leo_service_survival.parameters import (  # noqa: E402
+    parameter_profile_manifest,
+    parameter_registry,
 )
 from leo_service_survival.reporting import (  # noqa: E402
     calibration_intercept_slope,
@@ -399,8 +405,23 @@ def write_wetlinks_endpoint_audits(
     return breakdown, serialized
 
 
-def fit_suite(train: pd.DataFrame, calibration: pd.DataFrame, features: tuple[str, ...], max_horizon: int):
-    suite = build_model_suite(features, max_horizon=max_horizon)
+def fit_suite(
+    train: pd.DataFrame,
+    calibration: pd.DataFrame,
+    features: tuple[str, ...],
+    max_horizon: int,
+    *,
+    focal_hyperparameters: dict[str, float | int] | None = None,
+    calibration_c: float = 0.1,
+    baseline_hyperparameters: dict[str, object] | None = None,
+):
+    suite = build_model_suite(
+        features,
+        max_horizon=max_horizon,
+        focal_hyperparameters=focal_hyperparameters,
+        calibration_c=calibration_c,
+        baseline_hyperparameters=baseline_hyperparameters,
+    )
     fit_seconds: dict[str, float] = {}
     fit_peak_python_mb: dict[str, float] = {}
     for name, model in suite.models.items():
@@ -418,6 +439,33 @@ def fit_suite(train: pd.DataFrame, calibration: pd.DataFrame, features: tuple[st
     return suite
 
 
+def development_tripartition(
+    frame: pd.DataFrame,
+    *,
+    group_column: str,
+) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+    """Chronological inner split used only for parameter selection."""
+
+    groups = sorted(frame[group_column].astype(str).unique())
+    if len(groups) < 5:
+        raise ValueError("at least five development groups are required for inner selection")
+    first = max(1, int(np.floor(0.6 * len(groups))))
+    second = max(first + 1, int(np.floor(0.8 * len(groups))))
+    second = min(second, len(groups) - 1)
+    fit_groups = set(groups[:first])
+    calibration_groups = set(groups[first:second])
+    validation_groups = set(groups[second:])
+    labels = frame[group_column].astype(str)
+    parts = (
+        frame.loc[labels.isin(fit_groups)].copy(),
+        frame.loc[labels.isin(calibration_groups)].copy(),
+        frame.loc[labels.isin(validation_groups)].copy(),
+    )
+    if any(part.empty for part in parts):
+        raise ValueError("inner development partition produced an empty split")
+    return parts
+
+
 def fit_proposed(
     train: pd.DataFrame,
     calibration: pd.DataFrame,
@@ -425,6 +473,8 @@ def fit_proposed(
     max_horizon: int,
     *,
     random_state: int = 17,
+    focal_hyperparameters: dict[str, float | int] | None = None,
+    calibration_c: float = 0.1,
 ) -> CalibratedSurvivalModel:
     model = CalibratedSurvivalModel(
         DiscreteHazardModel(
@@ -433,8 +483,10 @@ def fit_proposed(
             nonlinear=True,
             competing=True,
             random_state=random_state,
+            hyperparameters=focal_hyperparameters,
         ),
         range(1, max_horizon + 1),
+        calibration_c=calibration_c,
     )
     model.fit(train)
     model.calibrate(calibration)
@@ -771,6 +823,7 @@ def main() -> int:
             )
     output_dir.mkdir(parents=True, exist_ok=True)
     figure_dir.mkdir(parents=True, exist_ok=True)
+    parameter_registry().to_csv(output_dir / "parameter_registry.csv", index=False)
 
     wetlinks_dir = Path(args.wetlinks_dir).expanduser().resolve()
     palo_alto_dir = Path(args.palo_alto_dir).expanduser().resolve()
@@ -861,7 +914,42 @@ def main() -> int:
     (output_dir / "wetlinks_split_audit.json").write_text(
         json.dumps(wet_split_audit, indent=2), encoding="utf-8"
     )
-    suite = fit_suite(wet_train, wet_calibration, wetlinks.feature_columns, max_horizon)
+    inner_fit, inner_calibration, inner_validation = development_tripartition(
+        wet_train,
+        group_column="calendar_block",
+    )
+    focal_hyperparameters, focal_calibration_c, focal_selection = (
+        select_focal_model_configuration(
+            inner_fit,
+            inner_calibration,
+            inner_validation,
+            wetlinks.feature_columns,
+            max_horizon=max_horizon,
+        )
+    )
+    focal_selection.to_csv(
+        output_dir / "wetlinks_focal_hyperparameter_selection.csv", index=False
+    )
+    baseline_hyperparameters, baseline_selection = (
+        select_baseline_model_configurations(
+            inner_fit,
+            inner_validation,
+            wetlinks.feature_columns,
+            max_horizon=max_horizon,
+        )
+    )
+    baseline_selection.to_csv(
+        output_dir / "wetlinks_baseline_hyperparameter_selection.csv", index=False
+    )
+    suite = fit_suite(
+        wet_train,
+        wet_calibration,
+        wetlinks.feature_columns,
+        max_horizon,
+        focal_hyperparameters=focal_hyperparameters,
+        calibration_c=focal_calibration_c,
+        baseline_hyperparameters=baseline_hyperparameters,
+    )
     calibration_fit_audit(
         suite.models[suite.proposed_name],
         wet_calibration,
@@ -1380,7 +1468,14 @@ def main() -> int:
         if ablation_name == "full_calibrated_competing_risk":
             prediction = predictions[suite.proposed_name]
         else:
-            ablation_model = fit_proposed(wet_train, wet_calibration, features, max_horizon)
+            ablation_model = fit_proposed(
+                wet_train,
+                wet_calibration,
+                features,
+                max_horizon,
+                focal_hyperparameters=focal_hyperparameters,
+                calibration_c=focal_calibration_c,
+            )
             prediction = ablation_model.predict_survival(wet_test, horizons)
         ablation_rows.append(
             {
@@ -1418,6 +1513,8 @@ def main() -> int:
                             sensitivity_calibration,
                             sensitivity_data.feature_columns,
                             max_horizon,
+                            focal_hyperparameters=focal_hyperparameters,
+                            calibration_c=focal_calibration_c,
                         )
                         proposed_prediction = sensitivity_model.predict_survival(
                             sensitivity_test, horizons
@@ -1514,7 +1611,15 @@ def main() -> int:
         split = max(1, int(len(source) * 0.8))
         source_train, source_calibration = source.iloc[:split], source.iloc[split:]
         held_test = wet_frame[wet_frame["site"].eq(held_site)].copy()
-        site_suite = fit_suite(source_train, source_calibration, wetlinks.feature_columns, max_horizon)
+        site_suite = fit_suite(
+            source_train,
+            source_calibration,
+            wetlinks.feature_columns,
+            max_horizon,
+            focal_hyperparameters=focal_hyperparameters,
+            calibration_c=focal_calibration_c,
+            baseline_hyperparameters=baseline_hyperparameters,
+        )
         for name in ("kaplan_meier", "cox_ph", suite.proposed_name):
             prediction = site_suite.models[name].predict_survival(held_test, horizons)
             site_rows.append(
@@ -1799,6 +1904,18 @@ def main() -> int:
             "commect_path": str(commect_path),
             "lens_path": str(lens_path),
             "paper1_windows_path": str(paper1_windows_path),
+        },
+        "parameter_profiles": parameter_profile_manifest(),
+        "focal_parameter_selection": {
+            "source": "chronological inner tripartition of WetLinks training blocks only",
+            "selected_hazard_hyperparameters": focal_hyperparameters,
+            "selected_calibration_c": focal_calibration_c,
+            "selected_baseline_hyperparameters": baseline_hyperparameters,
+            "test_outcomes_used": False,
+            "artifacts": [
+                "wetlinks_focal_hyperparameter_selection.csv",
+                "wetlinks_baseline_hyperparameter_selection.csv",
+            ],
         },
         "random_seeds": {
             "models_and_bootstraps": 17,

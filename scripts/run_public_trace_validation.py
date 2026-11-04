@@ -33,6 +33,11 @@ from leo_service_survival.lens_adapter import (  # noqa: E402
     load_lens_irtt,
     load_lens_ping,
 )
+from leo_service_survival.fjordlink_adapter import (  # noqa: E402
+    FjordLinkConfig,
+    audit_fjordlink_concurrency,
+    load_fjordlink_twamp,
+)
 from leo_service_survival.nuwins_adapter import (  # noqa: E402
     load_nuwins_pre_aligned_panel,
 )
@@ -280,6 +285,104 @@ def summarize_nuwins(
         pd.DataFrame.from_records(coverage),
         pd.DataFrame.from_records(qos),
         benchmark_panels,
+    )
+
+
+def summarize_fjordlink(
+    root: Path,
+    *,
+    max_sessions: int,
+    max_replies_per_session: int,
+    minimum_overlap_s: float,
+) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+    """Summarise FjordLink without assuming its paths were concurrent."""
+
+    archive = root / "out-client-wyk.zip"
+    try:
+        sessions, replies = load_fjordlink_twamp(
+            archive,
+            config=FjordLinkConfig(
+                max_sessions=max_sessions,
+                max_replies_per_session=max_replies_per_session,
+                minimum_overlap_s=minimum_overlap_s,
+            ),
+        )
+        pairing = audit_fjordlink_concurrency(
+            sessions,
+            minimum_overlap_s=minimum_overlap_s,
+        )
+    except Exception as exc:
+        coverage = pd.DataFrame.from_records(
+            [
+                {
+                    "source_family": "FjordLink",
+                    "campaign_or_site": "kiel_fjord_2024_2025",
+                    "operator_id": pd.NA,
+                    "panel_kind": "rtt",
+                    "pair_id": pd.NA,
+                    "records_loaded": 0,
+                    "first_time_utc": pd.NaT,
+                    "last_time_utc": pd.NaT,
+                    "evidence_tier": EVIDENCE_TIER,
+                    "observation_design": "operator_specific_sessions_pairing_not_established",
+                    "ingestion_status": f"error:{type(exc).__name__}:{exc}",
+                    "source_file": str(archive),
+                }
+            ]
+        )
+        return coverage, pd.DataFrame(), pd.DataFrame(), pd.DataFrame()
+
+    coverage_rows: list[dict[str, object]] = []
+    qos_rows: list[dict[str, object]] = []
+    for operator, group in sessions.groupby("operator_id", dropna=False):
+        operator_replies = replies.loc[replies["operator_id"].eq(operator)]
+        consistent = group.loc[group["packet_count_consistent"]]
+        sent = int(consistent["sent_packets"].sum())
+        received = int(consistent["received_packets"].sum())
+        reply_fraction = received / sent if sent else np.nan
+        coverage_rows.append(
+            {
+                "source_family": "FjordLink",
+                "campaign_or_site": "kiel_fjord_2024_2025",
+                "operator_id": operator,
+                "panel_kind": "rtt",
+                "pair_id": pd.NA,
+                "records_loaded": len(operator_replies),
+                "first_time_utc": pd.NaT,
+                "last_time_utc": pd.NaT,
+                "first_source_clock_time": group["first_source_clock_time"].min(),
+                "last_source_clock_time": group["last_source_clock_time"].max(),
+                "timestamp_basis": "logger_clock_timezone_unspecified",
+                "session_count": len(group),
+                "evidence_tier": EVIDENCE_TIER,
+                "observation_design": "operator_specific_sessions_concurrency_audited_not_assumed",
+                "ingestion_status": "ok",
+                "source_file": str(archive),
+                "source_id": _source_ids(group),
+            }
+        )
+        qos_rows.append(
+            {
+                "source_family": "FjordLink",
+                "campaign_or_site": "kiel_fjord_2024_2025",
+                "operator_id": operator,
+                "panel_kind": "rtt",
+                "pair_id": pd.NA,
+                "metric": "rtt_ms",
+                "records": len(operator_replies),
+                "observed_fraction": reply_fraction,
+                "positive_throughput_fraction": np.nan,
+                **_quantiles(operator_replies["rtt_ms"]),
+                "evidence_tier": EVIDENCE_TIER,
+                "availability_definition": "twamp_reply_fraction_for_count_consistent_sessions",
+                "source_id": _source_ids(group),
+            }
+        )
+    return (
+        pd.DataFrame.from_records(coverage_rows),
+        pd.DataFrame.from_records(qos_rows),
+        sessions,
+        pairing,
     )
 
 
@@ -819,6 +922,9 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--lens-max-probe-records", type=int, default=100_000)
     parser.add_argument("--lens-max-probe-members", type=int, default=1)
     parser.add_argument("--lens-max-telemetry-records", type=int, default=20_000)
+    parser.add_argument("--fjordlink-max-sessions", type=int, default=200)
+    parser.add_argument("--fjordlink-max-replies-per-session", type=int, default=100_000)
+    parser.add_argument("--fjordlink-minimum-overlap-s", type=float, default=1.0)
     parser.add_argument("--sat-in-view-max-rows", type=int, default=100_000)
     parser.add_argument("--nexasphere-max-records-per-table", type=int, default=100_000)
     parser.add_argument("--payload-bytes", type=int, default=5_000_000)
@@ -837,10 +943,14 @@ def main() -> None:
         args.lens_max_probe_records,
         args.lens_max_probe_members,
         args.lens_max_telemetry_records,
+        args.fjordlink_max_sessions,
+        args.fjordlink_max_replies_per_session,
         args.sat_in_view_max_rows,
         args.nexasphere_max_records_per_table,
     ) <= 0:
         raise ValueError("all source bounds must be positive")
+    if args.fjordlink_minimum_overlap_s < 0:
+        raise ValueError("fjordlink minimum overlap must be nonnegative")
     data_root = Path(args.data_root).expanduser().resolve()
     output = Path(args.output_dir).expanduser().resolve()
     output.mkdir(parents=True, exist_ok=True)
@@ -848,6 +958,14 @@ def main() -> None:
     nuwins_coverage, nuwins_qos, panels = summarize_nuwins(
         data_root / "nuwins_sigmetrics26",
         max_rows_per_file=args.nuwins_max_rows_per_file,
+    )
+    fjordlink_coverage, fjordlink_qos, fjordlink_sessions, fjordlink_pairing = (
+        summarize_fjordlink(
+            data_root / "fjordlink",
+            max_sessions=args.fjordlink_max_sessions,
+            max_replies_per_session=args.fjordlink_max_replies_per_session,
+            minimum_overlap_s=args.fjordlink_minimum_overlap_s,
+        )
     )
     lens_coverage, lens_qos, lens_alignment = summarize_lens(
         data_root / "lens" / "public_measurement_subset",
@@ -864,13 +982,24 @@ def main() -> None:
         max_records_per_table=args.nexasphere_max_records_per_table,
     )
     coverage = pd.concat(
-        [nuwins_coverage, lens_coverage, sat_coverage, nexa_coverage],
+        [
+            nuwins_coverage,
+            fjordlink_coverage,
+            lens_coverage,
+            sat_coverage,
+            nexa_coverage,
+        ],
         ignore_index=True,
     )
-    qos = pd.concat([nuwins_qos, lens_qos, nexa_qos], ignore_index=True)
+    qos = pd.concat(
+        [nuwins_qos, fjordlink_qos, lens_qos, nexa_qos],
+        ignore_index=True,
+    )
     coverage.to_csv(output / "campaign_site_operator_coverage.csv", index=False)
     qos.to_csv(output / "path_qos_distributions.csv", index=False)
     lens_alignment.to_csv(output / "lens_telemetry_alignment.csv", index=False)
+    fjordlink_sessions.to_csv(output / "fjordlink_session_summary.csv", index=False)
+    fjordlink_pairing.to_csv(output / "fjordlink_pairing_audit.csv", index=False)
     sat_summary.to_csv(output / "sat_in_view_inference_summary.csv", index=False)
     nexa_summary.to_csv(output / "nexasphere_athens_private_summary.csv", index=False)
 
@@ -896,6 +1025,13 @@ def main() -> None:
             "coverage": len(coverage),
             "qos": len(qos),
             "lens_alignment": len(lens_alignment),
+            "fjordlink_sessions": len(fjordlink_sessions),
+            "fjordlink_pairing_audit": len(fjordlink_pairing),
+            "fjordlink_pairing_eligible": int(
+                fjordlink_pairing.get("pairing_eligible", pd.Series(dtype=bool))
+                .fillna(False)
+                .sum()
+            ),
             "sat_in_view_summary": len(sat_summary),
             "nexasphere_athens_summary": len(nexa_summary),
             "proxy_metrics": len(benchmark),
@@ -908,6 +1044,8 @@ def main() -> None:
         "claim_limits": [
             "The public traces are observational and are not randomized policy trials.",
             "LENS samples one Starlink path per site and does not provide a concurrent 5G alternative.",
+            "FjordLink is counted as paired multi-access evidence only for source-clock-overlapping sessions; a combined-dataset label alone is insufficient.",
+            "FjordLink timestamps retain the source logger clock because the public release does not declare a timezone.",
             "NUWiNS mainland per-operator files have no exact cross-operator key; coverage rows do not imply alignment.",
             "The benchmark endpoint is replayed future capacity for a fixed payload, not observed EO task completion.",
             "No adapter supplies serving-satellite, beam, gateway, RF, scheduler action, or operational EO acknowledgment fields.",

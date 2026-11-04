@@ -1,0 +1,12 @@
+campaign_id,acquisition_family,geography,access_paths,synchronized_opportunities,paired_outcome_available,independent_external_role,multi_access_gate_eligible,current_role,exclusion_or_scope_reason
+commect_denmark_drive,COMMECT,Denmark,"satellite;cellular",true,true,false,true,development_and_within_campaign_shadow,"single acquisition campaign; folds, dates, bins, sessions, and files do not create additional campaigns"
+nuwins_alaska_202406,NUWiNS,Alaska USA,"Starlink;AT&T;Verizon",false,false,true,false,external_capacity_qos_and_shift,"exact common-server timestamp pairing, paired next-interval outcomes, and actionable-opportunity audit remain pending"
+nuwins_hawaii_202408,NUWiNS,Maui Hawaii USA,"Starlink;AT&T;T-Mobile;Verizon",false,false,true,false,external_capacity_qos_and_shift,"exact common-server timestamp pairing, paired next-interval outcomes, and actionable-opportunity audit remain pending"
+nuwins_mainland_202411,NUWiNS,Los Angeles to Omaha USA,"Starlink;AT&T;T-Mobile;Verizon",false,false,true,false,external_qos_and_shift,"released per-operator files lack an exact cross-path key; eligible only after frozen one-to-one alignment passes"
+fjordlink_kiel_fjord_2024_2025,FjordLink,Kiel Fjord Germany,"Starlink;Telekom;Vodafone;cellular",false,false,true,false,external_qos_and_shift,"66 sessions and 586530 retained TWAMP replies but zero source-clock-overlapping Starlink-cellular sessions"
+wetlinks_enschede,WetLinks,Enschede Netherlands,Starlink,false,false,false,false,survival_training_and_internal_validation,"no concurrent terrestrial alternative path"
+wetlinks_osnabrueck,WetLinks,Osnabrueck Germany,Starlink,false,false,false,false,internal_site_validation,"same study family and no concurrent terrestrial alternative path"
+lens_multisite,LENS,"Brisbane;Ghana;Seattle;Victoria",Starlink,false,false,true,false,external_qos_calibration_and_shift,"multiple sites but one access path and one acquisition family"
+lens_oneweb_iowa,LENS OneWeb,Iowa USA,OneWeb,false,false,true,false,cross_operator_assignment_rf_and_rtt,"no concurrent terrestrial path or policy action/outcome"
+palo_alto_starlink_202405,Stanford Starlink,Palo Alto USA,Starlink,false,false,true,false,external_transport_stress,"one Starlink vantage and no concurrent terrestrial path"
+nexasphere_athens_202605,NEXASPHERE,Athens Greece,Starlink,false,false,true,false,private_external_qos,"separate measurement schedules; no concurrent alternative path; reuse terms unresolved"
