@@ -143,7 +143,7 @@ calibration-attributable scheduler benefit.
 ## Citation
 
 Use [CITATION.cff](CITATION.cff). This reviewer archive is frozen as version
-`1.2.0`. The source repository is initially maintained as a private GitHub
+`1.2.1`. The source repository is initially maintained as a private GitHub
 backup; a public URL will be advertised only after source-code licensing and
 coauthor review are complete.
 

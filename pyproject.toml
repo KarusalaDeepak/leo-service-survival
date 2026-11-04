@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "leo-service-survival"
-version = "1.2.0"
+version = "1.2.1"
 description = "Censoring-aware evaluation of usable-service duration predictions for LEO network decisions"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -21,6 +21,7 @@ dependencies = [
   "matplotlib==3.7.2",
   "xgboost==3.1.2",
   "python-docx==1.2.0",
+  "tabulate==0.8.10",
 ]
 
 [tool.setuptools.packages.find]
