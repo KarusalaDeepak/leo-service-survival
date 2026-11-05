@@ -1,8 +1,9 @@
 # Redistribution boundary
 
-This version 1.3.0 repository is an allowlisted, redistribution-safe reviewer
-package. Its Objective 4 integration files were imported from the verified R1
-submission archive. It is not a copy of the complete private working tree.
+This version 1.3.1 repository is an allowlisted, redistribution-safe reviewer
+package. It retains the verified v1.3.0 empirical core and adds current R3
+documentation and aggregate diagnostic provenance. It is not a copy of the
+complete private working tree.
 
 ## Included
 
@@ -68,6 +69,7 @@ days, or sessions as independent acquisition families.
 
 ## Public-release condition
 
-Do not publish this package as reusable open-source software until the authors
-select an explicit code license. Do not add a public repository URL to the
-manuscript until the repository and this boundary have been reviewed together.
+The current repository is private. Its manuscript URL identifies that private
+archive, not an anonymously accessible or open-source release. Public release
+and any grant of reuse rights require an explicit author decision; neither is
+performed by this documentation update.

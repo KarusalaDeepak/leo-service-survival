@@ -3,8 +3,8 @@
 This repository contains the Python implementation and redistribution-safe
 reproducibility artifacts for:
 
-> **Censoring-Aware Evaluation of Usable-Service Duration Predictions for LEO
-> Network Decisions**
+> **Integrated Offline Evaluation of Usable-Service Prediction, Cellular--LEO
+> Path Selection, and Earth-Observation Scheduling**
 
 The study asks a bounded network question: when a low-Earth-orbit (LEO) service
 is usable now, what is the probability that it remains within specified latency
@@ -44,6 +44,9 @@ ranking, reliable long-horizon calibration, or a better decision policy.
   a separate CC BY-SA 4.0 data notice
 - `aggregate_evidence/` — bounded, redistribution-safe scheduling-transfer,
   scheduler-release, and scheduler-to-path summaries
+- `aggregate_evidence/scheduler_diagnostics/P03_DIAGNOSTIC_PROVENANCE_R3.json`
+  — pinned RACS code/evidence hashes and independently recomputed scenario-mean
+  versus pooled-request denominators for the R3 manuscript
 - `prospective_trial/` — frozen schemas, runbooks, gate/canary/rollback rules,
   and a deterministic fake-data rehearsal for future installed-action testing
 - `docs/` — source provenance, evidence boundaries, parameter governance, and
@@ -85,7 +88,7 @@ canary/rollback behavior, and reproducibility manifests. One frozen-evidence
 audit is skipped unless the separately held row-level EOS bundle is present;
 its aggregate results are included in this repository.
 
-Verified release status for version `1.3.0`: **234 passed, 1 expected skip**
+Verified release status for version `1.3.1`: **234 passed, 1 expected skip**
 under the pinned Python 3.11 environment.
 
 ## Objective 4 integration boundary
@@ -169,10 +172,10 @@ calibration-attributable scheduler benefit.
 
 ## Citation
 
-Use [CITATION.cff](CITATION.cff). This reviewer archive is frozen as version
-`1.3.0`. The source repository is initially maintained as a private GitHub
-backup; a public URL will be advertised only after source-code licensing and
-coauthor review are complete.
+Use [CITATION.cff](CITATION.cff). This reviewer archive is version `1.3.1`.
+The GitHub repository is private; its URL identifies the author-maintained
+archive and does not imply anonymous access. Repository visibility and source-code
+reuse rights remain separate. No open-source license is asserted.
 
 ## License and third-party material
 

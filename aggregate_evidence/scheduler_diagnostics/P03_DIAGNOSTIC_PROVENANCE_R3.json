@@ -1,0 +1,83 @@
+{
+  "completion_aggregation": {
+    "full_margin": {
+      "equal_scenario_mean": 0.6055555555555556,
+      "interpretation": "The primary comparison uses equal-scenario means; pooled counts use different weights.",
+      "pooled_completed_requests": 261,
+      "pooled_request_completion": 0.8285714285714286,
+      "pooled_requested_tasks": 315,
+      "scenario_count": 9
+    },
+    "racs": {
+      "equal_scenario_mean": 0.6018518518518519,
+      "interpretation": "The primary comparison uses equal-scenario means; pooled counts use different weights.",
+      "pooled_completed_requests": 259,
+      "pooled_request_completion": 0.8222222222222222,
+      "pooled_requested_tasks": 315,
+      "scenario_count": 9
+    }
+  },
+  "data_boundary": "Only hashes and aggregate totals are included; raw contacts, observation windows, task records, schedules, and manuscript files are not copied.",
+  "evidence_tier": "controlled_synthetic_benchmark",
+  "file_fingerprints": [
+    {
+      "bytes": 12926,
+      "path": "scripts/run_camera_ready_diagnostics.py",
+      "sha256": "4cb25d5baefec3764f7dfa9c0ad2056dc948a39d0b4afc4d45a78608aec00479"
+    },
+    {
+      "bytes": 20245,
+      "path": "scripts/matched_scheduler.py",
+      "sha256": "0c87ea6135f917dc31b486d42459ef1c44cd0b922efc5a55b3dff932a40766f6"
+    },
+    {
+      "bytes": 3876,
+      "path": "results/camera_ready_diagnostics/camera_ready_diagnostics.json",
+      "sha256": "a34ddad4f5822e4ccc42ad988121ee16a3284cf8d52cb74db4454547c9ba1685"
+    },
+    {
+      "bytes": 561,
+      "path": "results/camera_ready_diagnostics/common_ledger_by_instance.csv",
+      "sha256": "69077025a6f86d1f8a554112bcd4549b9e142fc67fd97ffcf396d326c8b1ed7a"
+    },
+    {
+      "bytes": 461,
+      "path": "results/camera_ready_diagnostics/full_margin_mechanisms_by_instance.csv",
+      "sha256": "fc270a8044e0466f41255319f19098f99617768950f93384e01466080b748218"
+    },
+    {
+      "bytes": 4641,
+      "path": "results/camera_ready_diagnostics/publication_manifest.json",
+      "sha256": "ef5522c03bcf89b8f97d0fad01e38745fdd5a6cd9ed45d4f2e9d1c70603c8717"
+    },
+    {
+      "bytes": 1680,
+      "path": "results/reviewer_revision/restricted_plan_optimum.csv",
+      "sha256": "149eba527a3739da19722bfd43bf51e0771adde2d93e5a1e08803263b3164dd7"
+    },
+    {
+      "bytes": 100462,
+      "path": "results/reviewer_revision/instance_results.csv",
+      "sha256": "0b059121f4af7f8a2d0b1ef3e0f3c8f6ecce6985193b93280b161c4887bdb9b4"
+    },
+    {
+      "bytes": 11661,
+      "path": "results/parameter_robustness_complete_2026-11-02/score_outer_results.csv",
+      "sha256": "124a9a0e9758d2dbf8c60eb465f1d037515dfb4e8722ce604e8e6338cc5e1253"
+    }
+  ],
+  "operational_validation": "NOT_RUN",
+  "release_bundle": {
+    "filename": "P03_RACS_Scientific_Code_and_Evidence_2026-11-05.tar.gz",
+    "sha256": "fe8a344b344f0cfab6e7e4ded5f5654def3a43e0891e030cf63e78113268193c"
+  },
+  "release_manifest": {
+    "filename": "publication_manifest.json",
+    "sha256": "ef5522c03bcf89b8f97d0fad01e38745fdd5a6cd9ed45d4f2e9d1c70603c8717"
+  },
+  "schema_version": 1,
+  "shared_scheduler_path_outcome_experiment": false,
+  "source_binding": "The separate code/evidence package and exact file hashes identify the scheduling diagnostics used by Paper 4 R3.",
+  "source_commit": "f6dbb4b600ea0b919ef95ba31611ec4471b2b0e0",
+  "source_repository": "https://github.com/KarusalaDeepak/leo-eo-scheduling"
+}

@@ -1,9 +1,9 @@
 cff-version: 1.2.0
 message: "If you use this software, cite this repository and the accompanying manuscript."
-title: "Code for Censoring-Aware Evaluation of Usable-Service Duration Predictions for LEO Network Decisions"
+title: "Code for Integrated Offline Evaluation of Usable-Service Prediction, Cellular--LEO Path Selection, and Earth-Observation Scheduling"
 type: software
-version: 1.3.0
-date-released: 2026-11-04
+version: 1.3.1
+date-released: 2026-11-05
 authors:
   - family-names: Chowdary
     given-names: "K. Deepak"

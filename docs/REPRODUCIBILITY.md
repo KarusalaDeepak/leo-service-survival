@@ -4,6 +4,22 @@ This repository is an auditable code and aggregate-results package. It is not a
 self-contained data archive. Full reruns require the user to obtain the cited
 third-party inputs under their original terms.
 
+## R3 scheduling diagnostic provenance
+
+`aggregate_evidence/scheduler_diagnostics/P03_DIAGNOSTIC_PROVENANCE_R3.json`
+pins the separate RACS code commit, scientific code/evidence bundle, publication
+manifest, diagnostic producer, and source-table hashes. Its completion summaries
+are recomputed from the primary per-scenario `completed` and `tasks` columns.
+The benchmark percentages use an equal mean of nine scenario fractions;
+259/315 and 261/315 are separate pooled request diagnostics with different weights.
+
+The associated producer is `scripts/build_paper3_diagnostic_provenance.py`.
+Its `--help` lists the explicit code checkout, expected commit, bundle and
+manifest inputs. It emits only hashes and aggregate totals, never copies source
+contacts, individual task records, schedules, or manuscript files. The pinned
+benchmark evidence remains controlled simulation. The RACS/path bridge preserves
+geometry and record identity without combining the two studies' distinct outcomes.
+
 ## Reference environment
 
 - Python 3.11
