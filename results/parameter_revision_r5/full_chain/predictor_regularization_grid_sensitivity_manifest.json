@@ -1,0 +1,43 @@
+{
+  "best_extended_grid_c": 0.01,
+  "claim_boundary": "Search-range sensitivity on generated development data, not physical coefficient validation.",
+  "evidence_tier": "synthetic_simulation",
+  "extended_best_on_grid_boundary": false,
+  "extended_c_grid": [
+    1e-05,
+    0.0001,
+    0.001,
+    0.01,
+    0.1,
+    1.0,
+    10.0,
+    100.0,
+    1000.0
+  ],
+  "frozen_choice_retained_as_extended_best": true,
+  "frozen_model_sha256": "938d84927bd40fb51a29ec3d08c8e25c79898758954276ae31abe096df1e56ae",
+  "frozen_regularization_c": 0.01,
+  "model_or_calibration_changed": false,
+  "partition_roles_read_for_fitting": [
+    "training",
+    "tuning"
+  ],
+  "source_training_partition": {
+    "positive_endpoints": 4519,
+    "records_sha256": "2a053b8b396ec98fe690d4a961a5ca3a0a6fc96167c2a4d64ab7d47b73f41ecd",
+    "rows": 6000,
+    "seeds": [
+      2026112101
+    ]
+  },
+  "source_tuning_partition": {
+    "positive_endpoints": 2224,
+    "records_sha256": "764c10f68c0c30a284ba23761661e8ea405e26b8e7bd922d9d440dd08bb85da3",
+    "rows": 3000,
+    "seeds": [
+      2026112102
+    ]
+  },
+  "table_sha256": "851316bad9ec68ac0af040eac8c6ab8ddc1663eb747850ccae8f7c04a4685388",
+  "validation_or_evaluation_outcomes_used": false
+}

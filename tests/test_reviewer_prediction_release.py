@@ -209,7 +209,10 @@ def test_release_manifest_hashes_are_portable_and_complete() -> None:
         assert path.stat().st_size == item["bytes"]
         assert _sha256(path) == item["sha256"]
     for item in manifest["code_files"]:
-        path = ROOT / item["path"]
+        # This derivative was generated with the published v1.3.1 code. A later
+        # numerical-correctness revision must not rewrite its historical hashes.
+        # Verify the exact retained source snapshot, not today's edited model.
+        path = ROOT / "reproduction/empirical_core_v1_3_1" / item["path"]
         assert path.is_file()
         assert _sha256(path) == item["sha256"]
 

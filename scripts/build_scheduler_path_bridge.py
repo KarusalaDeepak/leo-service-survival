@@ -14,6 +14,10 @@ from leo_service_survival.scheduler_path_bridge import (
 
 
 ROOT = Path(__file__).resolve().parents[1]
+RESEARCH_ROOT = next(
+    (parent for parent in ROOT.parents if (parent / "00_Research_Overview").is_dir()),
+    ROOT.parent,
+)
 DEFAULT_SCENARIO = (
     ROOT
     / "data"
@@ -40,7 +44,7 @@ def main() -> None:
     parser.add_argument(
         "--paper3-root",
         type=Path,
-        default=ROOT.parent / "leo-eo-scheduling",
+        default=RESEARCH_ROOT / "03_Paper_RACS_EO_Scheduling" / "Code_and_Manuscript",
     )
     parser.add_argument(
         "--scheduler-release",

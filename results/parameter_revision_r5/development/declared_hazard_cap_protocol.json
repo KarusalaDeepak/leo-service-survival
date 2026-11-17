@@ -1,0 +1,77 @@
+{
+  "caps": [
+    0.95,
+    0.99,
+    0.99999999,
+    1.0
+  ],
+  "evidence_role": "development_sensitivity_only_not_retuning",
+  "frozen_model_modified": false,
+  "lower_floor": "1e-8 except probability-preserving [0,1] alternative",
+  "selected_configurations": [
+    {
+      "calibration_c": 1.0,
+      "calibration_c_at_expanded_lower_boundary": false,
+      "calibration_c_at_upper_boundary": true,
+      "configuration": {
+        "l2_regularization": 1.0,
+        "learning_rate": 0.03,
+        "max_iter": 240,
+        "max_leaf_nodes": 7,
+        "min_samples_leaf": 30
+      },
+      "fold": 0,
+      "learning_rate_at_expanded_lower_boundary": false,
+      "search": "original_grid",
+      "selected_without_outer_validation_outcomes": true
+    },
+    {
+      "calibration_c": 1.0,
+      "calibration_c_at_expanded_lower_boundary": false,
+      "calibration_c_at_upper_boundary": true,
+      "configuration": {
+        "l2_regularization": 1.0,
+        "learning_rate": 0.0075,
+        "max_iter": 240,
+        "max_leaf_nodes": 7,
+        "min_samples_leaf": 30
+      },
+      "fold": 0,
+      "learning_rate_at_expanded_lower_boundary": true,
+      "search": "expanded_grid",
+      "selected_without_outer_validation_outcomes": true
+    },
+    {
+      "calibration_c": 1.0,
+      "calibration_c_at_expanded_lower_boundary": false,
+      "calibration_c_at_upper_boundary": true,
+      "configuration": {
+        "l2_regularization": 2.0,
+        "learning_rate": 0.04,
+        "max_iter": 240,
+        "max_leaf_nodes": 15,
+        "min_samples_leaf": 50
+      },
+      "fold": 1,
+      "learning_rate_at_expanded_lower_boundary": false,
+      "search": "original_grid",
+      "selected_without_outer_validation_outcomes": true
+    },
+    {
+      "calibration_c": 1.0,
+      "calibration_c_at_expanded_lower_boundary": false,
+      "calibration_c_at_upper_boundary": true,
+      "configuration": {
+        "l2_regularization": 2.0,
+        "learning_rate": 0.04,
+        "max_iter": 240,
+        "max_leaf_nodes": 15,
+        "min_samples_leaf": 50
+      },
+      "fold": 1,
+      "learning_rate_at_expanded_lower_boundary": false,
+      "search": "expanded_grid",
+      "selected_without_outer_validation_outcomes": true
+    }
+  ]
+}

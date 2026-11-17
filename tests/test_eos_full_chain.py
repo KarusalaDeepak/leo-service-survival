@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+from dataclasses import replace
 
 import pandas as pd
 import pytest
@@ -12,6 +13,14 @@ from leo_service_survival.eos_full_chain import (
     parse_eos_bench_scenario,
     run_eos_full_chain_experiment,
     write_eos_full_chain_artifacts,
+    _build_common_actions,
+    _fit_simulation_domain_gate,
+    _realize_outcome,
+    _schedule_policy,
+    _seed_task_table,
+    DEFAULT_NETWORK_PROFILES,
+    prepare_full_chain_predictor,
+    robustness_network_profiles,
 )
 from leo_service_survival.integration import REQUIRED_COLUMNS, validate_full_chain_bundle
 
@@ -148,6 +157,10 @@ def test_full_chain_fixture_passes_strict_audit_and_is_paired(tmp_path):
         storage_stress_cap_bytes=500_000,
         bootstrap_resamples=50,
         bootstrap_seed=303,
+        predictor_training_rows=400,
+        predictor_tuning_rows=200,
+        predictor_calibration_rows=200,
+        predictor_validation_rows=200,
     )
     artifacts = run_eos_full_chain_experiment(scenario_path, config=config)
 
@@ -179,6 +192,15 @@ def test_full_chain_fixture_passes_strict_audit_and_is_paired(tmp_path):
     ).all()
     assert candidates["gate_feature_coverage"].eq(1.0).all()
     assert candidates["gate_ood_fraction"].isin([0.0, 1.0]).all()
+    assert candidates["completion_prediction_source"].eq(
+        "development_fitted_synthetic_completion"
+    ).all()
+    assert len(candidates["completion_predictor_sha256"].unique()) == 1
+    assert artifacts.run_manifest["predictor_partition_and_evaluation_seeds_disjoint"]
+    assert artifacts.predictor_manifest["validation_role"].startswith("report_only")
+    assert set(artifacts.predictor_tables["predictor_reference"]["partition"]) == {
+        "training", "tuning", "calibration", "validation",
+    }
 
     logical_counts = artifacts.ledger.groupby(
         ["simulation_seed", "logical_task_id"]
@@ -202,6 +224,116 @@ def test_full_chain_fixture_passes_strict_audit_and_is_paired(tmp_path):
     assert written["passed"].all()
     manifest = json.loads((output / "run_manifest.json").read_text())
     assert "task_ledger.csv" in manifest["artifact_sha256_before_manifest"]
+    assert (output / "predictor_manifest.json").exists()
+    assert (output / "predictor_coefficients.csv").exists()
 
     with pytest.raises(FileExistsError, match="not empty"):
         write_eos_full_chain_artifacts(artifacts, output)
+
+
+def test_predictor_partition_seeds_must_be_role_disjoint():
+    with pytest.raises(ValueError, match="disjoint"):
+        EOSFullChainConfig(seeds=(2026112101,))
+    with pytest.raises(ValueError, match="unique"):
+        EOSFullChainConfig(predictor_training_seed=2026112102)
+    with pytest.raises(ValueError, match="disjoint"):
+        EOSFullChainConfig(predictor_training_seed=2026102701)
+
+
+def test_simulation_gate_uses_finite_timing_fixture_not_an_invalid_infinity():
+    config = EOSFullChainConfig(seeds=(101,))
+    gate, evidence, _ = _fit_simulation_domain_gate(DEFAULT_NETWORK_PROFILES, config)
+    reference_center = pd.DataFrame([{
+        "rf_snr_db": profile.mean_snr_db,
+        "forecast_rate_mbps": profile.mean_rate_mbps,
+        "forecast_jitter_ms": profile.jitter_ms,
+        "forecast_handover_probability": profile.handover_probability,
+    } for profile in DEFAULT_NETWORK_PROFILES])
+    decision = gate.evaluate(reference_center, evidence)
+    assert decision.release_candidate, decision.reasons
+    assert "gate_criteria_invalid" not in decision.reasons
+    assert gate.criteria.maximum_control_loop_p95_ms == 28.0
+    assert decision.evidence_basis == "gate_logic_fixture"
+    assert not decision.statistical_evidence_generated
+
+
+def test_unassigned_action_scores_cannot_silently_enter_risk_ranking(tmp_path):
+    scenario_path = tmp_path / "fixture.json"
+    _write_fixture(scenario_path)
+    scenario = parse_eos_bench_scenario(scenario_path)
+    config = EOSFullChainConfig(seeds=(101,), release_spread_hours=0.0)
+    gate, evidence, _ = _fit_simulation_domain_gate(DEFAULT_NETWORK_PROFILES, config)
+    tasks = _seed_task_table(scenario, 101, config)
+    actions = _build_common_actions(
+        scenario, tasks, DEFAULT_NETWORK_PROFILES, 101, config, gate, evidence,
+    )
+    assert actions["completion_prediction_source"].eq("unassigned_not_a_prediction").all()
+    # Exercise the fail-fast boundary directly, irrespective of this small
+    # fixture's incidental position relative to the reference-domain screen.
+    actions["gate_release"] = actions["resource_feasible"]
+    assert actions["gate_release"].any()
+    with pytest.raises(ValueError, match="assigned development-fitted"):
+        _schedule_policy(tasks, actions, POLICY_INTEGRATED)
+    # Baseline ranking and screened fallback do not consume the unassigned scores.
+    _schedule_policy(tasks, actions, POLICY_BASELINE)
+    screened = actions.assign(gate_release=False)
+    _schedule_policy(tasks, screened, POLICY_INTEGRATED)
+
+
+def test_potential_outcomes_match_between_arms_for_identical_action(tmp_path):
+    scenario_path = tmp_path / "fixture.json"
+    _write_fixture(scenario_path)
+    scenario = parse_eos_bench_scenario(scenario_path)
+    config = EOSFullChainConfig(seeds=(101,), release_spread_hours=0.0)
+    gate, evidence, _ = _fit_simulation_domain_gate(DEFAULT_NETWORK_PROFILES, config)
+    tasks = _seed_task_table(scenario, 101, config)
+    actions = _build_common_actions(
+        scenario, tasks, DEFAULT_NETWORK_PROFILES, 101, config, gate, evidence,
+    )
+    action = actions.loc[actions["resource_feasible"]].iloc[0].to_dict()
+    task = tasks.loc[tasks["logical_task_id"].eq(action["logical_task_id"])].iloc[0].to_dict()
+    baseline = _realize_outcome(selected=action, task=task, seed=101, config=config)
+    integrated = _realize_outcome(selected={**action, "policy_arm": POLICY_INTEGRATED}, task=task, seed=101, config=config)
+    assert baseline == integrated
+
+
+def test_generated_predictor_is_frozen_independently_of_evaluation_seeds(tmp_path):
+    scenario_path = tmp_path / "fixture.json"
+    _write_fixture(scenario_path)
+    scenario = parse_eos_bench_scenario(scenario_path)
+    config = EOSFullChainConfig(
+        seeds=(101,), predictor_training_rows=400, predictor_tuning_rows=200,
+        predictor_calibration_rows=200, predictor_validation_rows=200,
+    )
+    first = prepare_full_chain_predictor(scenario, DEFAULT_NETWORK_PROFILES, config)
+    second = prepare_full_chain_predictor(
+        scenario, DEFAULT_NETWORK_PROFILES, replace(config, seeds=(202, 303)),
+    )
+    assert first.model.sha256 == second.model.sha256
+    pd.testing.assert_frame_equal(
+        first.tables["predictor_reference"], second.tables["predictor_reference"],
+    )
+    assert first.manifest["partitions"] == second.manifest["partitions"]
+    collision = replace(
+        config, gate_reference_seed=config.predictor_training_seed,
+        predictor_training_seed=2026112201, predictor_tuning_seed=2026112202,
+        predictor_calibration_seed=2026112203, predictor_validation_seed=2026112204,
+    )
+    with pytest.raises(ValueError, match="gate-reference"):
+        run_eos_full_chain_experiment(scenario_path, config=collision, frozen_predictor=first)
+
+
+def test_robustness_profiles_do_not_give_one_path_more_rate_capability():
+    for condition in ("snr_aligned", "neutral", "snr_reversed"):
+        high, low = robustness_network_profiles(condition)
+        assert high.mean_rate_mbps == low.mean_rate_mbps
+        assert high.rate_log_sd == low.rate_log_sd
+        if condition == "neutral":
+            assert high.outage_probability == low.outage_probability
+            assert high.handover_probability == low.handover_probability
+        elif condition == "snr_aligned":
+            assert high.mean_snr_db > low.mean_snr_db
+            assert high.outage_probability < low.outage_probability
+        else:
+            assert high.mean_snr_db > low.mean_snr_db
+            assert high.outage_probability > low.outage_probability

@@ -15,7 +15,11 @@ from leo_service_survival.scheduler_release import (
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-PAPER3_ROOT = PROJECT_ROOT.parent / "leo-eo-scheduling"
+RESEARCH_ROOT = next(
+    (parent for parent in PROJECT_ROOT.parents if (parent / "00_Research_Overview").is_dir()),
+    PROJECT_ROOT.parent,
+)
+PAPER3_ROOT = RESEARCH_ROOT / "03_Paper_RACS_EO_Scheduling" / "Code_and_Manuscript"
 
 
 def main() -> None:

@@ -15,10 +15,11 @@ after an action has been installed and are never supplied to a policy.
 
 from __future__ import annotations
 
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, field, replace
 from hashlib import sha256
 import json
 import math
+from itertools import product
 from pathlib import Path
 from typing import Any, Iterable, Mapping
 
@@ -37,10 +38,15 @@ from .gating import (
     GateCriteria,
     GateEvidence,
 )
+from .eos_full_chain_predictor import (
+    FullChainCompletionPredictor,
+    FullChainPredictorBundle,
+    fit_full_chain_predictor,
+)
 
 
 EVIDENCE_TIER = "synthetic_simulation"
-PROTOCOL_VERSION = "eos-full-chain-sim-v2"
+PROTOCOL_VERSION = "eos-full-chain-sim-v3-development-fitted"
 POLICY_BASELINE = "edf_reactive"
 POLICY_INTEGRATED = "integrated_risk_gated"
 
@@ -122,6 +128,8 @@ class EOSFullChainConfig:
     minimum_deadline_hours: float = 24.0
     priority_deadline_hours: float = 8.0
     deadline_jitter_hours: float = 30.0
+    # Deprecated, inactive compatibility metadata retained for old configs.
+    # The active domain screen is the fitted Mahalanobis quantile, not this z.
     gate_z_threshold: float = 2.75
     gate_reference_rows_per_profile: int = 2_000
     gate_reference_seed: int = 2026102701
@@ -134,6 +142,15 @@ class EOSFullChainConfig:
     slew_guard_s: float = 10.0
     bootstrap_resamples: int = 2_000
     bootstrap_seed: int = 20261201
+    predictor_training_rows: int = 6_000
+    predictor_tuning_rows: int = 3_000
+    predictor_calibration_rows: int = 3_000
+    predictor_validation_rows: int = 3_000
+    predictor_training_seed: int = 2026112101
+    predictor_tuning_seed: int = 2026112102
+    predictor_calibration_seed: int = 2026112103
+    predictor_validation_seed: int = 2026112104
+    predictor_c_grid: tuple[float, ...] = (0.01, 0.1, 1.0, 10.0)
 
     def __post_init__(self) -> None:
         if not self.seeds or len(set(self.seeds)) != len(self.seeds):
@@ -144,6 +161,23 @@ class EOSFullChainConfig:
             raise ValueError("bootstrap_resamples must be positive")
         if self.gate_reference_rows_per_profile < 100:
             raise ValueError("gate_reference_rows_per_profile must be at least 100")
+        predictor_seeds = (
+            self.predictor_training_seed, self.predictor_tuning_seed,
+            self.predictor_calibration_seed, self.predictor_validation_seed,
+        )
+        if len(set(predictor_seeds)) != 4 or (
+            set(predictor_seeds) & (set(self.seeds) | {self.gate_reference_seed})
+        ):
+            raise ValueError("predictor partition seeds must be unique and disjoint from evaluation/gate seeds")
+        if min(
+            self.predictor_training_rows, self.predictor_tuning_rows,
+            self.predictor_calibration_rows, self.predictor_validation_rows,
+        ) < 100:
+            raise ValueError("each synthetic predictor partition needs at least 100 rows")
+        if not self.predictor_c_grid or any(
+            not np.isfinite(value) or value <= 0 for value in self.predictor_c_grid
+        ):
+            raise ValueError("predictor regularization grid must contain positive finite values")
 
 
 @dataclass(frozen=True)
@@ -167,6 +201,8 @@ class EOSFullChainArtifacts:
     paired_inference: Mapping[str, Any]
     completion_status: Mapping[str, Any]
     run_manifest: Mapping[str, Any]
+    predictor_tables: Mapping[str, pd.DataFrame] = field(default_factory=dict)
+    predictor_manifest: Mapping[str, Any] = field(default_factory=dict)
 
 
 def _canonical_json(value: Any) -> str:
@@ -389,20 +425,132 @@ def _seed_task_table(scenario: ParsedEOSScenario, seed: int, config: EOSFullChai
     return pd.DataFrame(rows)
 
 
-def _prediction_probability(
+def _predictor_generation_profiles(
+    profiles: tuple[NetworkPathProfile, ...],
+) -> tuple[NetworkPathProfile, ...]:
+    """Cross declared profile attributes without evaluation outcome selection.
+
+    Crossing rate distributions, outage, handover and jitter prevents the
+    development design from making those variables perfectly collinear merely
+    because the two illustrative evaluation paths have fixed identities.  The
+    support is still declared by the simulator, not learned from a real network.
+    """
+
+    rates = sorted({(profile.mean_rate_mbps, profile.rate_log_sd) for profile in profiles})
+    outages = sorted({profile.outage_probability for profile in profiles})
+    handovers = sorted({profile.handover_probability for profile in profiles})
+    jitters = sorted({profile.jitter_ms for profile in profiles})
+    return tuple(
+        replace(
+            profiles[0], path_profile_id=f"predictor_development_profile_{index}",
+            mean_rate_mbps=rate[0], rate_log_sd=rate[1],
+            outage_probability=outage, handover_probability=handover,
+            jitter_ms=jitter, source="crossed_declared_simulator_profile_support",
+        )
+        for index, (rate, outage, handover, jitter) in enumerate(
+            product(rates, outages, handovers, jitters)
+        )
+    )
+
+
+def _generate_predictor_partition(
+    scenario: ParsedEOSScenario,
+    profiles: tuple[NetworkPathProfile, ...],
     *,
-    path_available: bool,
-    capacity_ratio: float,
-    jitter_ms: float,
-    outage_probability: float,
-    handover_probability: float,
-) -> float:
-    if not path_available:
-        return 0.0
-    capacity_term = 1.0 / (1.0 + math.exp(-4.0 * (capacity_ratio - 0.85)))
-    reliability = (1.0 - outage_probability) * (1.0 - 0.65 * handover_probability)
-    jitter_term = math.exp(-max(jitter_ms, 0.0) / 250.0)
-    return float(np.clip(0.98 * 0.99 * reliability * capacity_term * jitter_term, 0.0, 0.999))
+    partition: str,
+    seed: int,
+    rows: int,
+    config: EOSFullChainConfig,
+) -> pd.DataFrame:
+    """Generate forecast-feasible single-action outcomes using the exact simulator."""
+
+    required_values = scenario.tasks["required_bytes"].to_numpy(int)
+    if not len(required_values):
+        raise ValueError("predictor reference needs scenario task sizes")
+    catalog = _predictor_generation_profiles(profiles)
+    rng = _rng_for(seed, partition, "predictor_reference_telemetry")
+    records: list[dict[str, Any]] = []
+    attempts = 0
+    while len(records) < rows:
+        attempts += 1
+        if attempts > rows * 100:
+            raise RuntimeError("insufficient forecast-feasible predictor reference draws")
+        profile = catalog[int(rng.integers(len(catalog)))]
+        required_bytes = int(rng.choice(required_values))
+        forecast_rate = float(
+            profile.mean_rate_mbps * math.exp(rng.normal(0.0, profile.rate_log_sd))
+        )
+        capacity_bytes = int(forecast_rate * 1_000_000 / 8.0 * config.downlink_contact_s)
+        if capacity_bytes < required_bytes:
+            continue
+        row_id = f"{partition}::seed{seed}::draw{len(records)}"
+        selected = {
+            "candidate_path_id": row_id,
+            "forecast_capacity_ratio": capacity_bytes / required_bytes,
+            "profile_mean_rate_mbps": profile.mean_rate_mbps,
+            "profile_rate_log_sd": profile.rate_log_sd,
+            "profile_outage_probability": profile.outage_probability,
+            "forecast_handover_probability": float(np.clip(
+                profile.handover_probability + rng.normal(0.0, 0.015), 0.0, 0.95
+            )),
+            "forecast_jitter_ms": float(max(
+                0.1, profile.jitter_ms * math.exp(rng.normal(0.0, 0.18))
+            )),
+            "planned_downlink_duration_s": config.downlink_contact_s,
+            "observation_end_ns": 0,
+        }
+        task = {
+            "logical_task_id": row_id, "required_bytes": required_bytes,
+            "deadline_ns": int((config.downlink_contact_s + 1.0) * 1e9),
+        }
+        outcome = _realize_outcome(selected=selected, task=task, seed=seed, config=config)
+        records.append({
+            **selected, "required_bytes": required_bytes, "path_available": True,
+            "technical_completion": int(outcome["application_complete"]),
+            "reference_row_id": row_id, "reference_seed": seed,
+            "partition": partition, "development_profile_id": profile.path_profile_id,
+            "evidence_tier": EVIDENCE_TIER,
+        })
+    return pd.DataFrame(records)
+
+
+def prepare_full_chain_predictor(
+    scenario: ParsedEOSScenario,
+    profiles: tuple[NetworkPathProfile, ...],
+    config: EOSFullChainConfig,
+) -> FullChainPredictorBundle:
+    """Freeze a generated-data predictor before any scheduling evaluation."""
+
+    partitions = {
+        role: _generate_predictor_partition(
+            scenario, profiles, partition=role, seed=seed, rows=rows, config=config,
+        )
+        for role, seed, rows in (
+            ("training", config.predictor_training_seed, config.predictor_training_rows),
+            ("tuning", config.predictor_tuning_seed, config.predictor_tuning_rows),
+            ("calibration", config.predictor_calibration_seed, config.predictor_calibration_rows),
+            ("validation", config.predictor_validation_seed, config.predictor_validation_rows),
+        )
+    }
+    bundle = fit_full_chain_predictor(partitions, c_grid=config.predictor_c_grid)
+    manifest = {
+        **bundle.manifest,
+        "source_scenario_sha256": scenario.source_sha256,
+        "development_profile_catalog": [asdict(profile) for profile in _predictor_generation_profiles(profiles)],
+        "evaluation_seeds": list(config.seeds),
+        "gate_reference_seed": config.gate_reference_seed,
+        "predictor_and_evaluation_seeds_disjoint": True,
+        "generator": "exact_eos_full_chain_realize_outcome_with_forecast_feasible_draws",
+        "generator_assumptions": {
+            "network_profiles": [asdict(profile) for profile in profiles],
+            "downlink_contact_s": config.downlink_contact_s,
+            "install_failure_probability": config.install_failure_probability,
+            "acquisition_failure_probability": config.acquisition_failure_probability,
+            "product_invalid_probability": config.product_invalid_probability,
+            "realized_handover_rate_multiplier": 0.20,
+        },
+    }
+    return FullChainPredictorBundle(model=bundle.model, tables=bundle.tables, manifest=manifest)
 
 
 GATE_FEATURES: tuple[str, ...] = (
@@ -463,7 +611,11 @@ def _fit_simulation_domain_gate(
         maximum_ood_fraction=0.0,
         maximum_calibration_gap_upper=1.0,
         minimum_safety_effect_lower=-1.0,
-        maximum_control_loop_p95_ms=float("inf"),
+        # This comparison is a deterministic simulation fixture, not a field
+        # latency requirement.  The generic gate correctly rejects infinity;
+        # use the exact declared virtual-clock delay instead of disabling its
+        # numeric validity checks with a non-finite placeholder.
+        maximum_control_loop_p95_ms=config.integrated_decision_ms + config.install_latency_ms,
         maximum_endpoint_effect_ci_half_width=1.0,
         validation_tier="proof_of_method",
     )
@@ -501,6 +653,7 @@ def _build_common_actions(
     config: EOSFullChainConfig,
     domain_gate: EvidenceGate,
     gate_evidence: GateEvidence,
+    completion_predictor: FullChainCompletionPredictor | None = None,
 ) -> pd.DataFrame:
     satellite_lookup = scenario.satellites.set_index("satellite_id").to_dict(orient="index")
     contacts_by_task = {
@@ -576,13 +729,6 @@ def _build_common_actions(
                 capacity_bytes = int(max(0.0, rate_mbps * 1_000_000 / 8.0 * downlink_duration_s))
                 required_bytes = int(task["required_bytes"])
                 capacity_ratio = capacity_bytes / max(required_bytes, 1)
-                predicted = _prediction_probability(
-                    path_available=path_available,
-                    capacity_ratio=capacity_ratio,
-                    jitter_ms=jitter_ms,
-                    outage_probability=profile.outage_probability,
-                    handover_probability=handover_forecast,
-                )
                 z_snr = abs(snr_db - profile.mean_snr_db) / max(profile.snr_std_db, 1e-6)
                 z_rate = abs(math.log(max(rate_mbps, 1e-12) / profile.mean_rate_mbps)) / max(
                     profile.rate_log_sd, 1e-6
@@ -638,7 +784,9 @@ def _build_common_actions(
                         "geometry_allows_task": geometry_feasible,
                         "observation_feasible": geometry_feasible,
                         "resource_feasible": resource_feasible,
-                        "predicted_completion_probability": predicted,
+                        "predicted_completion_probability": 0.0,
+                        "completion_prediction_source": "unassigned_not_a_prediction",
+                        "completion_predictor_sha256": "unassigned",
                         "shift_score": shift_score,
                         "gate_release": gate_release,
                         "gate_feature_coverage": gate_decision.feature_coverage,
@@ -668,6 +816,12 @@ def _build_common_actions(
                         "evidence_tier": EVIDENCE_TIER,
                     }
                 )
+        if completion_predictor is not None:
+            probabilities = completion_predictor.predict(pd.DataFrame(task_action_rows))
+            for row, probability in zip(task_action_rows, probabilities):
+                row["predicted_completion_probability"] = float(probability)
+                row["completion_prediction_source"] = "development_fitted_synthetic_completion"
+                row["completion_predictor_sha256"] = completion_predictor.sha256
         action_hash = _hash_json(
             [
                 {
@@ -750,6 +904,13 @@ def _schedule_policy(
                 ["predicted_completion_probability", "window_start_ns", "candidate_path_id"],
                 ascending=[False, True, True],
             )
+            if not released.empty and (
+                "completion_prediction_source" not in released
+                or not released["completion_prediction_source"].eq(
+                    "development_fitted_synthetic_completion"
+                ).all()
+            ):
+                raise ValueError("full-chain risk ranking requires assigned development-fitted predictions")
             candidate_orders = []
             if not released.empty:
                 candidate_orders.append(
@@ -1257,12 +1418,29 @@ def run_eos_full_chain_experiment(
     *,
     config: EOSFullChainConfig | None = None,
     network_profile_csv: str | Path | None = None,
+    frozen_predictor: FullChainPredictorBundle | None = None,
+    network_profiles: tuple[NetworkPathProfile, ...] | None = None,
+    condition_label: str = "declared",
 ) -> EOSFullChainArtifacts:
     """Run paired baseline/integrated policies and return audited artifacts."""
 
     config = config or EOSFullChainConfig()
     scenario = parse_eos_bench_scenario(scenario_path)
-    profiles = load_network_profiles(network_profile_csv)
+    if network_profiles is not None and network_profile_csv is not None:
+        raise ValueError("supply either network profiles or a profile CSV, not both")
+    profiles = network_profiles or load_network_profiles(network_profile_csv)
+    predictor = frozen_predictor or prepare_full_chain_predictor(scenario, profiles, config)
+    predictor_seeds = {
+        int(seed)
+        for partition in predictor.manifest["partitions"].values()
+        for seed in partition["seeds"]
+    }
+    if predictor_seeds & (set(config.seeds) | {config.gate_reference_seed}):
+        raise ValueError("frozen predictor partitions overlap evaluation or gate-reference seeds")
+    if predictor.manifest.get("model_sha256") != predictor.model.sha256:
+        raise ValueError("frozen predictor model and provenance hashes disagree")
+    if predictor.manifest.get("source_scenario_sha256") != scenario.source_sha256:
+        raise ValueError("frozen predictor task-size source differs from the evaluated scenario")
     domain_gate, gate_evidence, gate_sha256 = _fit_simulation_domain_gate(
         profiles, config
     )
@@ -1270,11 +1448,13 @@ def run_eos_full_chain_experiment(
         "config": asdict(config),
         "network_profiles": [asdict(profile) for profile in profiles],
         "source_scenario_sha256": scenario.source_sha256,
+        "condition_label": condition_label,
     }
     config_sha256 = _hash_json(config_payload)
     model_sha256 = _hash_json(
         {
-            "prediction": "profile_reliability_x_logistic_capacity_x_exponential_jitter",
+            "prediction": "development_fitted_synthetic_completion",
+            "completion_predictor_sha256": predictor.model.sha256,
             "gate": "frozen_ledoit_wolf_mahalanobis",
             "gate_sha256": gate_sha256,
             "gate_scope": "simulation_release_only_not_field_authorization",
@@ -1294,6 +1474,7 @@ def run_eos_full_chain_experiment(
             config,
             domain_gate,
             gate_evidence,
+            predictor.model,
         )
         common_action_hashes[int(seed)] = _hash_json(
             common_actions[
@@ -1346,6 +1527,17 @@ def run_eos_full_chain_experiment(
         "config_sha256": config_sha256,
         "model_sha256": model_sha256,
         "seeds": list(config.seeds),
+        "condition_label": condition_label,
+        "completion_prediction_source": "development_fitted_synthetic_completion",
+        "completion_predictor_sha256": predictor.model.sha256,
+        "predictor_partition_and_evaluation_seeds_disjoint": True,
+        "inactive_legacy_parameters": {
+            "gate_z_threshold": {
+                "value": config.gate_z_threshold,
+                "status": "deprecated_inactive_metadata_not_used_in_domain_gate_or_ranking",
+            },
+        },
+        "domain_gate_reference_scope": "condition_specific_declared_synthetic_reference",
         "network_profile_csv": (
             None if network_profile_csv is None else str(Path(network_profile_csv).resolve())
         ),
@@ -1355,7 +1547,10 @@ def run_eos_full_chain_experiment(
         "audit_passed": bool(audit.passed),
         "future_outcome_leakage_control": (
             "Policies receive task specifications, EOS windows, current synthetic telemetry, frozen "
-            "profile parameters and forecast capacity only. Potential outcomes use a separate hash-keyed "
+            "profile parameters and forecast capacity only. Predictor training, regularization tuning, "
+            "calibration and probability-validation draws use four separately generated seed partitions, "
+            "all disjoint from evaluation seeds. Validation diagnostics do not select the model or policy. "
+            "Potential outcomes use a separate hash-keyed "
             "random stream after selection; the key excludes policy arm for common random numbers."
         ),
         "claim_boundary": "synthetic simulation, not operational or field evidence",
@@ -1369,6 +1564,8 @@ def run_eos_full_chain_experiment(
         paired_inference=paired_inference,
         completion_status=completion_status,
         run_manifest=run_manifest,
+        predictor_tables=predictor.tables,
+        predictor_manifest=predictor.manifest,
     )
 
 
@@ -1394,9 +1591,12 @@ def write_eos_full_chain_artifacts(
     artifacts.ledger.to_csv(destination / "task_ledger.csv", index=False)
     artifacts.policy_summary.to_csv(destination / "policy_summary.csv", index=False)
     artifacts.paired_seed_results.to_csv(destination / "paired_seed_results.csv", index=False)
+    for name, frame in artifacts.predictor_tables.items():
+        frame.to_csv(destination / f"{name}.csv", index=False)
     for name, payload in (
         ("paired_inference.json", artifacts.paired_inference),
         ("completion_status.json", artifacts.completion_status),
+        ("predictor_manifest.json", artifacts.predictor_manifest),
     ):
         (destination / name).write_text(
             json.dumps(payload, indent=2, sort_keys=True, default=str) + "\n",
@@ -1414,3 +1614,100 @@ def write_eos_full_chain_artifacts(
         encoding="utf-8",
     )
     return destination
+
+
+def robustness_network_profiles(condition: str) -> tuple[NetworkPathProfile, ...]:
+    """Declared matched-rate SNR--reliability contrasts, never result-selected.
+
+    The profile risks are synthetic generating assumptions.  Aligned, neutral
+    and reversed relations deliberately permit favorable, tied or adverse
+    comparisons with the current-SNR baseline.  Mean rate and rate dispersion
+    are identical across the two paths within each robustness condition.
+    """
+
+    if condition not in {"snr_aligned", "neutral", "snr_reversed"}:
+        raise ValueError(f"unknown full-chain robustness condition: {condition}")
+    reliable = dict(jitter_ms=8.0, outage_probability=0.045, handover_probability=0.045)
+    fragile = dict(jitter_ms=22.0, outage_probability=0.20, handover_probability=0.25)
+    middle = dict(jitter_ms=15.0, outage_probability=0.1225, handover_probability=0.1475)
+    states = {
+        "snr_aligned": (reliable, fragile),
+        "neutral": (middle, middle),
+        "snr_reversed": (fragile, reliable),
+    }[condition]
+    return tuple(
+        replace(
+            profile, path_profile_id=f"robustness_path_{index}",
+            mean_rate_mbps=0.032, rate_log_sd=0.18,
+            source=f"declared_{condition}_matched_rate_overlay", **state,
+        )
+        for index, (profile, state) in enumerate(zip(DEFAULT_NETWORK_PROFILES, states))
+    )
+
+
+def run_eos_full_chain_parameter_revision(
+    scenario_path: str | Path,
+    output_directory: str | Path,
+    *,
+    config: EOSFullChainConfig | None = None,
+) -> pd.DataFrame:
+    """Write the declared case and three non-selected frozen-model stress cases."""
+
+    config = config or EOSFullChainConfig()
+    destination = Path(output_directory)
+    if destination.exists() and any(destination.iterdir()):
+        raise FileExistsError(f"output directory is not empty: {destination}")
+    scenario = parse_eos_bench_scenario(scenario_path)
+    predictor = prepare_full_chain_predictor(scenario, DEFAULT_NETWORK_PROFILES, config)
+    summary_rows: list[dict[str, Any]] = []
+    for condition in ("declared", "snr_aligned", "neutral", "snr_reversed"):
+        profiles = DEFAULT_NETWORK_PROFILES if condition == "declared" else robustness_network_profiles(condition)
+        artifacts = run_eos_full_chain_experiment(
+            scenario_path, config=config, frozen_predictor=predictor,
+            network_profiles=profiles, condition_label=condition,
+        )
+        case_directory = destination if condition == "declared" else destination / "robustness" / condition
+        write_eos_full_chain_artifacts(artifacts, case_directory)
+        inference = artifacts.paired_inference
+        summary_rows.append({
+            "condition": condition,
+            "baseline_completion_rate": inference["baseline_completion_rate"],
+            "integrated_completion_rate": inference["integrated_completion_rate"],
+            "paired_completion_difference": inference["paired_completion_difference"],
+            "seed_cluster_ci_low": inference["cluster_bootstrap_95_ci"][0],
+            "seed_cluster_ci_high": inference["cluster_bootstrap_95_ci"][1],
+            "positive_seed_differences": inference["replications_with_positive_difference"],
+            "zero_seed_differences": inference["replications_with_zero_difference"],
+            "negative_seed_differences": inference["replications_with_negative_difference"],
+            "synthetic_replications": inference["synthetic_replications"],
+            "model_sha256": predictor.model.sha256,
+            "audit_passed": artifacts.audit.passed,
+            "evidence_tier": EVIDENCE_TIER,
+            "condition_used_for_model_selection": False,
+        })
+    summary = pd.DataFrame(summary_rows)
+    summary.to_csv(destination / "robustness_summary.csv", index=False)
+    robustness_manifest = {
+        "protocol_version": PROTOCOL_VERSION,
+        "predictor_frozen_before_all_evaluation_conditions": True,
+        "domain_gate_reference_scope": (
+            "Reference distribution is declared separately for each condition; "
+            "not a single fixed gate tested on unseen conditions."
+        ),
+        "model_sha256": predictor.model.sha256,
+        "all_conditions_reported_without_winner_selection": True,
+        "conditions": summary["condition"].tolist(),
+        "evidence_tier": EVIDENCE_TIER,
+        "claim_boundary": (
+            "Stress cases reuse generated geometry and seeds, not independent field campaigns. "
+            "No condition is selected to promote an empirical superiority claim."
+        ),
+        "artifact_sha256": {
+            str(path.relative_to(destination)): sha256(path.read_bytes()).hexdigest()
+            for path in sorted(destination.rglob("*")) if path.is_file()
+        },
+    }
+    (destination / "robustness_manifest.json").write_text(
+        json.dumps(robustness_manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
+    return summary

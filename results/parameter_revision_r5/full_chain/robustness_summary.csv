@@ -1,0 +1,5 @@
+condition,baseline_completion_rate,integrated_completion_rate,paired_completion_difference,seed_cluster_ci_low,seed_cluster_ci_high,positive_seed_differences,zero_seed_differences,negative_seed_differences,synthetic_replications,model_sha256,audit_passed,evidence_tier,condition_used_for_model_selection
+declared,0.557,0.744,0.187,0.148,0.231,10,0,0,10,938d84927bd40fb51a29ec3d08c8e25c79898758954276ae31abe096df1e56ae,True,synthetic_simulation,False
+snr_aligned,0.666,0.737,0.071,0.051,0.092,10,0,0,10,938d84927bd40fb51a29ec3d08c8e25c79898758954276ae31abe096df1e56ae,True,synthetic_simulation,False
+neutral,0.598,0.643,0.045,0.015,0.077,7,1,2,10,938d84927bd40fb51a29ec3d08c8e25c79898758954276ae31abe096df1e56ae,True,synthetic_simulation,False
+snr_reversed,0.559,0.749,0.19,0.159,0.216,10,0,0,10,938d84927bd40fb51a29ec3d08c8e25c79898758954276ae31abe096df1e56ae,True,synthetic_simulation,False

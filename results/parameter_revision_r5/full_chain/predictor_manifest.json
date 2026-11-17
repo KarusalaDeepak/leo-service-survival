@@ -1,0 +1,371 @@
+{
+  "claim_boundary": "Coefficients are fitted to generated technical outcomes, not measured physical hazards. Simulator risks, profile distributions, handover degradation and workload remain assumptions.",
+  "development_profile_catalog": [
+    {
+      "gateway_id": "synthetic_gateway_alpha",
+      "handover_probability": 0.045,
+      "interface_type": "synthetic_ntn",
+      "jitter_ms": 8.0,
+      "mean_rate_mbps": 0.028,
+      "mean_snr_db": 14.0,
+      "operator_id": "synthetic_operator_alpha",
+      "outage_probability": 0.045,
+      "path_profile_id": "predictor_development_profile_0",
+      "rate_log_sd": 0.15,
+      "snr_std_db": 1.8,
+      "source": "crossed_declared_simulator_profile_support"
+    },
+    {
+      "gateway_id": "synthetic_gateway_alpha",
+      "handover_probability": 0.045,
+      "interface_type": "synthetic_ntn",
+      "jitter_ms": 22.0,
+      "mean_rate_mbps": 0.028,
+      "mean_snr_db": 14.0,
+      "operator_id": "synthetic_operator_alpha",
+      "outage_probability": 0.045,
+      "path_profile_id": "predictor_development_profile_1",
+      "rate_log_sd": 0.15,
+      "snr_std_db": 1.8,
+      "source": "crossed_declared_simulator_profile_support"
+    },
+    {
+      "gateway_id": "synthetic_gateway_alpha",
+      "handover_probability": 0.25,
+      "interface_type": "synthetic_ntn",
+      "jitter_ms": 8.0,
+      "mean_rate_mbps": 0.028,
+      "mean_snr_db": 14.0,
+      "operator_id": "synthetic_operator_alpha",
+      "outage_probability": 0.045,
+      "path_profile_id": "predictor_development_profile_2",
+      "rate_log_sd": 0.15,
+      "snr_std_db": 1.8,
+      "source": "crossed_declared_simulator_profile_support"
+    },
+    {
+      "gateway_id": "synthetic_gateway_alpha",
+      "handover_probability": 0.25,
+      "interface_type": "synthetic_ntn",
+      "jitter_ms": 22.0,
+      "mean_rate_mbps": 0.028,
+      "mean_snr_db": 14.0,
+      "operator_id": "synthetic_operator_alpha",
+      "outage_probability": 0.045,
+      "path_profile_id": "predictor_development_profile_3",
+      "rate_log_sd": 0.15,
+      "snr_std_db": 1.8,
+      "source": "crossed_declared_simulator_profile_support"
+    },
+    {
+      "gateway_id": "synthetic_gateway_alpha",
+      "handover_probability": 0.045,
+      "interface_type": "synthetic_ntn",
+      "jitter_ms": 8.0,
+      "mean_rate_mbps": 0.028,
+      "mean_snr_db": 14.0,
+      "operator_id": "synthetic_operator_alpha",
+      "outage_probability": 0.2,
+      "path_profile_id": "predictor_development_profile_4",
+      "rate_log_sd": 0.15,
+      "snr_std_db": 1.8,
+      "source": "crossed_declared_simulator_profile_support"
+    },
+    {
+      "gateway_id": "synthetic_gateway_alpha",
+      "handover_probability": 0.045,
+      "interface_type": "synthetic_ntn",
+      "jitter_ms": 22.0,
+      "mean_rate_mbps": 0.028,
+      "mean_snr_db": 14.0,
+      "operator_id": "synthetic_operator_alpha",
+      "outage_probability": 0.2,
+      "path_profile_id": "predictor_development_profile_5",
+      "rate_log_sd": 0.15,
+      "snr_std_db": 1.8,
+      "source": "crossed_declared_simulator_profile_support"
+    },
+    {
+      "gateway_id": "synthetic_gateway_alpha",
+      "handover_probability": 0.25,
+      "interface_type": "synthetic_ntn",
+      "jitter_ms": 8.0,
+      "mean_rate_mbps": 0.028,
+      "mean_snr_db": 14.0,
+      "operator_id": "synthetic_operator_alpha",
+      "outage_probability": 0.2,
+      "path_profile_id": "predictor_development_profile_6",
+      "rate_log_sd": 0.15,
+      "snr_std_db": 1.8,
+      "source": "crossed_declared_simulator_profile_support"
+    },
+    {
+      "gateway_id": "synthetic_gateway_alpha",
+      "handover_probability": 0.25,
+      "interface_type": "synthetic_ntn",
+      "jitter_ms": 22.0,
+      "mean_rate_mbps": 0.028,
+      "mean_snr_db": 14.0,
+      "operator_id": "synthetic_operator_alpha",
+      "outage_probability": 0.2,
+      "path_profile_id": "predictor_development_profile_7",
+      "rate_log_sd": 0.15,
+      "snr_std_db": 1.8,
+      "source": "crossed_declared_simulator_profile_support"
+    },
+    {
+      "gateway_id": "synthetic_gateway_alpha",
+      "handover_probability": 0.045,
+      "interface_type": "synthetic_ntn",
+      "jitter_ms": 8.0,
+      "mean_rate_mbps": 0.036,
+      "mean_snr_db": 14.0,
+      "operator_id": "synthetic_operator_alpha",
+      "outage_probability": 0.045,
+      "path_profile_id": "predictor_development_profile_8",
+      "rate_log_sd": 0.22,
+      "snr_std_db": 1.8,
+      "source": "crossed_declared_simulator_profile_support"
+    },
+    {
+      "gateway_id": "synthetic_gateway_alpha",
+      "handover_probability": 0.045,
+      "interface_type": "synthetic_ntn",
+      "jitter_ms": 22.0,
+      "mean_rate_mbps": 0.036,
+      "mean_snr_db": 14.0,
+      "operator_id": "synthetic_operator_alpha",
+      "outage_probability": 0.045,
+      "path_profile_id": "predictor_development_profile_9",
+      "rate_log_sd": 0.22,
+      "snr_std_db": 1.8,
+      "source": "crossed_declared_simulator_profile_support"
+    },
+    {
+      "gateway_id": "synthetic_gateway_alpha",
+      "handover_probability": 0.25,
+      "interface_type": "synthetic_ntn",
+      "jitter_ms": 8.0,
+      "mean_rate_mbps": 0.036,
+      "mean_snr_db": 14.0,
+      "operator_id": "synthetic_operator_alpha",
+      "outage_probability": 0.045,
+      "path_profile_id": "predictor_development_profile_10",
+      "rate_log_sd": 0.22,
+      "snr_std_db": 1.8,
+      "source": "crossed_declared_simulator_profile_support"
+    },
+    {
+      "gateway_id": "synthetic_gateway_alpha",
+      "handover_probability": 0.25,
+      "interface_type": "synthetic_ntn",
+      "jitter_ms": 22.0,
+      "mean_rate_mbps": 0.036,
+      "mean_snr_db": 14.0,
+      "operator_id": "synthetic_operator_alpha",
+      "outage_probability": 0.045,
+      "path_profile_id": "predictor_development_profile_11",
+      "rate_log_sd": 0.22,
+      "snr_std_db": 1.8,
+      "source": "crossed_declared_simulator_profile_support"
+    },
+    {
+      "gateway_id": "synthetic_gateway_alpha",
+      "handover_probability": 0.045,
+      "interface_type": "synthetic_ntn",
+      "jitter_ms": 8.0,
+      "mean_rate_mbps": 0.036,
+      "mean_snr_db": 14.0,
+      "operator_id": "synthetic_operator_alpha",
+      "outage_probability": 0.2,
+      "path_profile_id": "predictor_development_profile_12",
+      "rate_log_sd": 0.22,
+      "snr_std_db": 1.8,
+      "source": "crossed_declared_simulator_profile_support"
+    },
+    {
+      "gateway_id": "synthetic_gateway_alpha",
+      "handover_probability": 0.045,
+      "interface_type": "synthetic_ntn",
+      "jitter_ms": 22.0,
+      "mean_rate_mbps": 0.036,
+      "mean_snr_db": 14.0,
+      "operator_id": "synthetic_operator_alpha",
+      "outage_probability": 0.2,
+      "path_profile_id": "predictor_development_profile_13",
+      "rate_log_sd": 0.22,
+      "snr_std_db": 1.8,
+      "source": "crossed_declared_simulator_profile_support"
+    },
+    {
+      "gateway_id": "synthetic_gateway_alpha",
+      "handover_probability": 0.25,
+      "interface_type": "synthetic_ntn",
+      "jitter_ms": 8.0,
+      "mean_rate_mbps": 0.036,
+      "mean_snr_db": 14.0,
+      "operator_id": "synthetic_operator_alpha",
+      "outage_probability": 0.2,
+      "path_profile_id": "predictor_development_profile_14",
+      "rate_log_sd": 0.22,
+      "snr_std_db": 1.8,
+      "source": "crossed_declared_simulator_profile_support"
+    },
+    {
+      "gateway_id": "synthetic_gateway_alpha",
+      "handover_probability": 0.25,
+      "interface_type": "synthetic_ntn",
+      "jitter_ms": 22.0,
+      "mean_rate_mbps": 0.036,
+      "mean_snr_db": 14.0,
+      "operator_id": "synthetic_operator_alpha",
+      "outage_probability": 0.2,
+      "path_profile_id": "predictor_development_profile_15",
+      "rate_log_sd": 0.22,
+      "snr_std_db": 1.8,
+      "source": "crossed_declared_simulator_profile_support"
+    }
+  ],
+  "evaluation_seeds": [
+    20261101,
+    20261102,
+    20261103,
+    20261104,
+    20261105,
+    20261106,
+    20261107,
+    20261108,
+    20261109,
+    20261110
+  ],
+  "evidence_tier": "synthetic_simulation",
+  "gate_reference_seed": 2026102701,
+  "generator": "exact_eos_full_chain_realize_outcome_with_forecast_feasible_draws",
+  "generator_assumptions": {
+    "acquisition_failure_probability": 0.01,
+    "downlink_contact_s": 90.0,
+    "install_failure_probability": 0.005,
+    "network_profiles": [
+      {
+        "gateway_id": "synthetic_gateway_alpha",
+        "handover_probability": 0.25,
+        "interface_type": "synthetic_ntn",
+        "jitter_ms": 22.0,
+        "mean_rate_mbps": 0.036,
+        "mean_snr_db": 14.0,
+        "operator_id": "synthetic_operator_alpha",
+        "outage_probability": 0.2,
+        "path_profile_id": "primary_high_snr",
+        "rate_log_sd": 0.22,
+        "snr_std_db": 1.8,
+        "source": "declared_stochastic_overlay"
+      },
+      {
+        "gateway_id": "synthetic_gateway_beta",
+        "handover_probability": 0.045,
+        "interface_type": "synthetic_ntn",
+        "jitter_ms": 8.0,
+        "mean_rate_mbps": 0.028,
+        "mean_snr_db": 10.5,
+        "operator_id": "synthetic_operator_beta",
+        "outage_probability": 0.045,
+        "path_profile_id": "resilient_lower_snr",
+        "rate_log_sd": 0.15,
+        "snr_std_db": 1.4,
+        "source": "declared_stochastic_overlay"
+      }
+    ],
+    "product_invalid_probability": 0.01,
+    "realized_handover_rate_multiplier": 0.2
+  },
+  "model": {
+    "calibration_intercept": -0.20272832367464136,
+    "calibration_rows": 3000,
+    "calibration_slope": 1.156185194565844,
+    "coefficients": [
+      0.02607903826906293,
+      0.05421004096607173,
+      0.03328714177443804,
+      -0.3563809475267997,
+      -0.37752391025255433,
+      0.020497743795375573
+    ],
+    "feature_names": [
+      "log_forecast_capacity_ratio",
+      "log_profile_mean_capacity_ratio",
+      "profile_rate_log_sd",
+      "profile_outage_probability",
+      "forecast_handover_probability",
+      "log1p_forecast_jitter_ms"
+    ],
+    "intercept": 1.1868384387521003,
+    "means": [
+      1.1032505294348107,
+      1.1045040129343549,
+      0.18505833333334007,
+      0.12172499999999938,
+      0.14684628693110394,
+      2.6665165528821175
+    ],
+    "regularization_c": 0.01,
+    "scales": [
+      0.3962494080544931,
+      0.3467808394156703,
+      0.03499995138885603,
+      0.07749612490312163,
+      0.1035528296883478,
+      0.4989600583033544
+    ],
+    "training_rows": 6000,
+    "tuning_rows": 3000
+  },
+  "model_sha256": "938d84927bd40fb51a29ec3d08c8e25c79898758954276ae31abe096df1e56ae",
+  "model_type": "development_fitted_logistic_with_fitted_monotone_logit_calibration",
+  "partitions": {
+    "calibration": {
+      "positive_endpoints": 2238,
+      "records_sha256": "ad14cd9a5ce9c659bee53ddee0514a1c6f116aa9d4c4e51eecf8f935d3e8813e",
+      "rows": 3000,
+      "seeds": [
+        2026112103
+      ]
+    },
+    "training": {
+      "positive_endpoints": 4519,
+      "records_sha256": "2a053b8b396ec98fe690d4a961a5ca3a0a6fc96167c2a4d64ab7d47b73f41ecd",
+      "rows": 6000,
+      "seeds": [
+        2026112101
+      ]
+    },
+    "tuning": {
+      "positive_endpoints": 2224,
+      "records_sha256": "764c10f68c0c30a284ba23761661e8ea405e26b8e7bd922d9d440dd08bb85da3",
+      "rows": 3000,
+      "seeds": [
+        2026112102
+      ]
+    },
+    "validation": {
+      "positive_endpoints": 2231,
+      "records_sha256": "6e522e87ba88e99e8ba45d562a2619f6cc9824217331466c5e90385b878c2ad1",
+      "rows": 3000,
+      "seeds": [
+        2026112104
+      ]
+    }
+  },
+  "predictor_and_evaluation_seeds_disjoint": true,
+  "regularization_c_grid": [
+    0.01,
+    0.1,
+    1.0,
+    10.0
+  ],
+  "selected_c_on_grid_boundary": true,
+  "source_scenario_sha256": "a97d1a340b2d67b690b2e02191afc1d2974a3ab2f2815a47402d8f8a076a119f",
+  "target": "single_action_technical_completion_conditional_on_forecast_feasibility",
+  "target_does_not_include": "multi-task resource competition or field service survival",
+  "training_tuning_calibration_validation_seeds_disjoint": true,
+  "validation_role": "report_only_no_model_calibration_or_policy_selection"
+}

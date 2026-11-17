@@ -12,6 +12,10 @@ import pandas as pd
 
 
 ROOT = Path(__file__).resolve().parents[1]
+RESEARCH_ROOT = next(
+    (parent for parent in ROOT.parents if (parent / "00_Research_Overview").is_dir()),
+    ROOT.parent,
+)
 SRC = ROOT / "src"
 if str(SRC) not in sys.path:
     sys.path.insert(0, str(SRC))
@@ -51,7 +55,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--paper2-root",
         type=Path,
-        default=ROOT.parent / "leo-merged-disagreement-evidence-14-page",
+        default=RESEARCH_ROOT / "02_Paper_Delay_Aware_Multi_Access" / "Manuscript",
     )
     return parser.parse_args()
 

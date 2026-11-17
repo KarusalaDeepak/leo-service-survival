@@ -1,0 +1,129 @@
+{
+  "boundary_flags": [
+    {
+      "calibration_c_at_expanded_lower_boundary": false,
+      "calibration_c_at_upper_boundary": true,
+      "fold": 0,
+      "learning_rate_at_expanded_lower_boundary": false,
+      "search": "original_grid"
+    },
+    {
+      "calibration_c_at_expanded_lower_boundary": false,
+      "calibration_c_at_upper_boundary": true,
+      "fold": 0,
+      "learning_rate_at_expanded_lower_boundary": true,
+      "search": "expanded_grid"
+    },
+    {
+      "calibration_c_at_expanded_lower_boundary": false,
+      "calibration_c_at_upper_boundary": true,
+      "fold": 1,
+      "learning_rate_at_expanded_lower_boundary": false,
+      "search": "original_grid"
+    },
+    {
+      "calibration_c_at_expanded_lower_boundary": false,
+      "calibration_c_at_upper_boundary": true,
+      "fold": 1,
+      "learning_rate_at_expanded_lower_boundary": false,
+      "search": "expanded_grid"
+    }
+  ],
+  "caution": "Boundary selection remains possible; broader grids reduce one concern but cannot prove unique coefficients, physical calibration, field false-alarm rates, or operational benefit.",
+  "hazard_cap_protocol_sha256": "84ea714e17d2784a3923dde488bd6001feb6daaad497892b9f23ad730ac90d71",
+  "input_sha256": {
+    "upstream/paper2/data/external/wetlinks_dataset/Preprocessed_Data/analysis_data_Enschede.csv": "a9bcdf7c1d54f91332b884b1b58aa24b0f746bb9b54d65709d59bb8006fbe816",
+    "upstream/paper2/data/external/wetlinks_dataset/Preprocessed_Data/analysis_data_Osnabr++ck.csv": "80528a056c5947e31f1922d5ef9e259d1b8d99a983e355a561868d1060b4a321"
+  },
+  "outputs_sha256": {
+    "calibration_sensitivity.csv": "2dc7f5cb539fad203883fb2ab49e7531f92bed5be446dbadcf9892cb60d32214",
+    "declared_hazard_cap_protocol.json": "fbd132da08fdd52a506d92a74e3899d3288946362005f4262a67c5da6bbdb843",
+    "declared_protocol.json": "7fb08ba648d126fc334d49fa4a2e048ae8b552f8ba2941205530815e42532c90",
+    "development_selection_freeze.json": "daa60f4c486c4a0aff0ec9d8f06056ac372121e955404baf8f96cc5a1ecb204b",
+    "feature_coverage_budget_sensitivity.csv": "249f744258c8b3989fd60a18f05425db8c80d5d91a8593fd8692ee77fdd72250",
+    "feature_guard_sensitivity.csv": "cc588f0fb2e89125b388531ca1c9d858b65df90eb5d98c63696dc737c190707a",
+    "feature_guard_site_calendar_batches.csv": "b62a26fe2a2aea14ade8acf66bb61d0763f0a3daff59fb93c27e8114d0c9d1d3",
+    "governance_logic_sensitivity.csv": "0d942474ff627ba8013aa8511d20c53f8c7c526d89ca59d82f8f41c944f0be3c",
+    "hazard_cap_hits.csv": "faa30d091ed9fa6e370ca9704cba3d669adf893e13b4e3c04c6057ec56a2b5b6",
+    "hazard_cap_sensitivity.csv": "64756f62236086ef1e413250fde6f332ddb49358cb83c87183fc69b13be562ae",
+    "monitor_logic_sensitivity.csv": "5746cee5a161c63a761cde7b6047b66f3de4ae0a32e9a0e4588da8e73865a239",
+    "paired.csv": "0b1d8f330f21064de85e308fbe2589087b0cecf44dc67049510f257becb545fd",
+    "parameter_coverage_addendum.csv": "541a09ebfc11afc88e92a89fc2f2515d1931befc021ffddd70fb2179c8b193f2",
+    "scores.csv": "abcdc430dc5c499f69beb03801370bd07a51acb9faf4032e248bbf120b5f5fa1",
+    "search.csv": "5b818af53b5a69a897e64bccee633a33d3acda8b797a901cc0a94664d13acb49",
+    "software_correctness_note.json": "c552e064ab0bccd3684685beb64ff5b40dac4d685fec5a0949452aaa2ade2e1e",
+    "summary.csv": "003866212b5150976811001a3f7ae2465fd7170dcba2ed18535aed3573bddf9b",
+    "temporal_fold_audit.json": "1f7361f318e56ee676f7db4b770169f24769b3c769c7986259df7eabad8ead78"
+  },
+  "partitions": {
+    "calibration": {
+      "calendar_blocks": [
+        "2024-W02",
+        "2024-W03",
+        "2024-W04",
+        "2024-W05"
+      ],
+      "rows": 816,
+      "sites": [
+        "uos-rz",
+        "utwente"
+      ]
+    },
+    "test": {
+      "calendar_blocks": [
+        "2024-W07",
+        "2024-W08",
+        "2024-W09",
+        "2024-W10",
+        "2024-W11"
+      ],
+      "rows": 821,
+      "sites": [
+        "uos-rz",
+        "utwente"
+      ]
+    },
+    "train": {
+      "calendar_blocks": [
+        "2023-W37",
+        "2023-W38",
+        "2023-W39",
+        "2023-W40",
+        "2023-W41",
+        "2023-W42",
+        "2023-W43",
+        "2023-W44",
+        "2023-W45",
+        "2023-W46",
+        "2023-W47",
+        "2023-W48",
+        "2023-W49",
+        "2023-W50",
+        "2023-W51",
+        "2023-W52"
+      ],
+      "rows": 4452,
+      "sites": [
+        "uos-rz",
+        "utwente"
+      ]
+    }
+  },
+  "protocol_sha256": "4c028c76424786173712eff1ce74aa695bbdffe1009fc8bcd43ad32cb596f16f",
+  "selection_sha256": "c7a9cb6d5ace64bb2a954416763bee63e5edad1db4b512c8fbc6970b33f13d0c",
+  "source_sha256": {
+    "scripts/run_parameter_defensibility.py": "1251a5e0170f0afc3f2160075697e6ec32c6c715e388233a390e6866ae1a6102",
+    "src/leo_service_survival/parameter_defensibility.py": "03423ed4da854a67c1a6f9c7a8cdcea4be50b3054f9f479dddeae279318c78eb"
+  },
+  "subsequent_software_correction_source_sha256": {
+    "src/leo_service_survival/models.py": "300a285cf8e36aeaf830b6ae68230323f898c7b18b3644379de6a53c3387b161",
+    "tests/test_parameter_defensibility.py": "dd571094a71bf773a8892f1cae7c6a530e31b4d0892b60decde0596ed8c5571a"
+  },
+  "versions": {
+    "numpy": "1.24.3",
+    "pandas": "2.0.3",
+    "python": "3.11.5",
+    "scipy": "1.11.1",
+    "sklearn": "1.3.0"
+  }
+}

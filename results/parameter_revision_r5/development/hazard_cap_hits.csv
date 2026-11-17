@@ -1,0 +1,17 @@
+fold,partition,cap,floor,episodes,hazard_cells,raw_hazard_cells_above_cap,raw_hazard_cells_below_floor,episodes_with_hazard_altered,maximum_raw_total_hazard,minimum_raw_total_hazard,maximum_hazard_adjustment,maximum_unadjusted_cif_mass_discrepancy,evidence_role
+0,past_calibration,0.95,1e-08,715,8580,0,0,0,0.0778104839701256,0.0004386769153017002,0.0,6.591949208711867e-16,development_only_cap_and_unadjusted_cif_diagnostic
+0,past_calibration,0.99,1e-08,715,8580,0,0,0,0.0778104839701256,0.0004386769153017002,0.0,6.591949208711867e-16,development_only_cap_and_unadjusted_cif_diagnostic
+0,past_calibration,0.99999999,1e-08,715,8580,0,0,0,0.0778104839701256,0.0004386769153017002,0.0,6.591949208711867e-16,development_only_cap_and_unadjusted_cif_diagnostic
+0,past_calibration,1.0,0.0,715,8580,0,0,0,0.0778104839701256,0.0004386769153017002,0.0,6.591949208711867e-16,development_only_cap_and_unadjusted_cif_diagnostic
+0,outer_development_validation,0.95,1e-08,637,7644,0,0,0,0.08225584736297459,0.00042559634085004663,0.0,6.678685382510707e-16,development_only_cap_and_unadjusted_cif_diagnostic
+0,outer_development_validation,0.99,1e-08,637,7644,0,0,0,0.08225584736297459,0.00042559634085004663,0.0,6.678685382510707e-16,development_only_cap_and_unadjusted_cif_diagnostic
+0,outer_development_validation,0.99999999,1e-08,637,7644,0,0,0,0.08225584736297459,0.00042559634085004663,0.0,6.678685382510707e-16,development_only_cap_and_unadjusted_cif_diagnostic
+0,outer_development_validation,1.0,0.0,637,7644,0,0,0,0.08225584736297459,0.00042559634085004663,0.0,6.678685382510707e-16,development_only_cap_and_unadjusted_cif_diagnostic
+1,past_calibration,0.95,1e-08,698,8376,0,0,0,0.11344106031935927,1.3403322445820838e-06,0.0,5.284401388694349e-16,development_only_cap_and_unadjusted_cif_diagnostic
+1,past_calibration,0.99,1e-08,698,8376,0,0,0,0.11344106031935927,1.3403322445820838e-06,0.0,5.284401388694349e-16,development_only_cap_and_unadjusted_cif_diagnostic
+1,past_calibration,0.99999999,1e-08,698,8376,0,0,0,0.11344106031935927,1.3403322445820838e-06,0.0,5.284401388694349e-16,development_only_cap_and_unadjusted_cif_diagnostic
+1,past_calibration,1.0,0.0,698,8376,0,0,0,0.11344106031935927,1.3403322445820838e-06,0.0,5.284401388694349e-16,development_only_cap_and_unadjusted_cif_diagnostic
+1,outer_development_validation,0.95,1e-08,800,9600,0,0,0,0.2542259127761574,1.446400925931079e-06,0.0,4.728205674209285e-16,development_only_cap_and_unadjusted_cif_diagnostic
+1,outer_development_validation,0.99,1e-08,800,9600,0,0,0,0.2542259127761574,1.446400925931079e-06,0.0,4.728205674209285e-16,development_only_cap_and_unadjusted_cif_diagnostic
+1,outer_development_validation,0.99999999,1e-08,800,9600,0,0,0,0.2542259127761574,1.446400925931079e-06,0.0,4.728205674209285e-16,development_only_cap_and_unadjusted_cif_diagnostic
+1,outer_development_validation,1.0,0.0,800,9600,0,0,0,0.2542259127761574,1.446400925931079e-06,0.0,4.728205674209285e-16,development_only_cap_and_unadjusted_cif_diagnostic

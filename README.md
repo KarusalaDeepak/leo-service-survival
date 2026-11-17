@@ -1,5 +1,20 @@
 # LEO usable-service survival evaluation
 
+## Local R5 parameter revision
+
+The working tree includes the unpublished 5 November R5 parameter revision:
+a development-fitted full-chain predictor, rebuilt endpoint sensitivity,
+training-only nested search/guard audits, and probability-mass correctness under
+hazard clipping. Selected aggregate evidence is in `results/parameter_revision_r5/`.
+Full private inputs and row-level experiments remain outside this checkout.
+See `docs/parameter_revision_results.txt` for results and limitations. No new Git
+release or push has been performed; the published release remains v1.3.1.
+
+The measured prediction derivative retains its original code hashes.
+`reproduction/empirical_core_v1_3_1/` is an exact read-only source snapshot, not
+another active project. New development uses the top-level `src/` tree.
+The local R5 suite passes 270 tests with one expected private-evidence skip.
+
 This repository contains the Python implementation and redistribution-safe
 reproducibility artifacts for:
 
@@ -88,7 +103,7 @@ canary/rollback behavior, and reproducibility manifests. One frozen-evidence
 audit is skipped unless the separately held row-level EOS bundle is present;
 its aggregate results are included in this repository.
 
-Verified release status for version `1.3.1`: **234 passed, 1 expected skip**
+Historical published release status for version `1.3.1`: **234 passed, 1 expected skip**
 under the pinned Python 3.11 environment.
 
 ## Objective 4 integration boundary

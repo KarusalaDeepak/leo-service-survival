@@ -1,0 +1,176 @@
+[
+  {
+    "fold": 0,
+    "inner_calibration": {
+      "blocks": [
+        "2023-W43",
+        "2023-W44"
+      ],
+      "end": "2023-11-05T23:55:00+00:00",
+      "events": 14,
+      "label_resolution_end": "2023-11-06T00:55:00+00:00",
+      "purged_confirmation_lookahead_rows": 0,
+      "rows": 827,
+      "start": "2023-10-23T00:10:00+00:00"
+    },
+    "inner_fit": {
+      "blocks": [
+        "2023-W37",
+        "2023-W38",
+        "2023-W39",
+        "2023-W40",
+        "2023-W41"
+      ],
+      "end": "2023-10-15T23:50:00+00:00",
+      "events": 14,
+      "label_resolution_end": "2023-10-16T00:10:00+00:00",
+      "purged_confirmation_lookahead_rows": 0,
+      "rows": 506,
+      "start": "2023-09-14T15:10:00+00:00"
+    },
+    "inner_validation": {
+      "blocks": [
+        "2023-W46",
+        "2023-W47"
+      ],
+      "end": "2023-11-26T23:50:00+00:00",
+      "events": 12,
+      "label_resolution_end": "2023-11-27T00:15:00+00:00",
+      "purged_confirmation_lookahead_rows": 0,
+      "rows": 715,
+      "start": "2023-11-13T00:00:00+00:00"
+    },
+    "outer_calibration": {
+      "blocks": [
+        "2023-W46",
+        "2023-W47"
+      ],
+      "end": "2023-11-26T23:50:00+00:00",
+      "events": 12,
+      "label_resolution_end": "2023-11-27T00:15:00+00:00",
+      "purged_confirmation_lookahead_rows": 0,
+      "rows": 715,
+      "start": "2023-11-13T00:00:00+00:00"
+    },
+    "outer_fit": {
+      "blocks": [
+        "2023-W37",
+        "2023-W38",
+        "2023-W39",
+        "2023-W40",
+        "2023-W41",
+        "2023-W42",
+        "2023-W43",
+        "2023-W44"
+      ],
+      "end": "2023-11-05T23:55:00+00:00",
+      "events": 30,
+      "label_resolution_end": "2023-11-06T00:55:00+00:00",
+      "purged_confirmation_lookahead_rows": 0,
+      "rows": 1568,
+      "start": "2023-09-14T15:10:00+00:00"
+    },
+    "outer_validation": {
+      "blocks": [
+        "2023-W49",
+        "2023-W50"
+      ],
+      "end": "2023-12-17T23:35:00+00:00",
+      "events": 16,
+      "label_resolution_end": "2023-12-18T00:20:00+00:00",
+      "purged_confirmation_lookahead_rows": 0,
+      "rows": 637,
+      "start": "2023-12-04T00:00:00+00:00"
+    },
+    "scope": "original_training_only"
+  },
+  {
+    "fold": 1,
+    "inner_calibration": {
+      "blocks": [
+        "2023-W45",
+        "2023-W46"
+      ],
+      "end": "2023-11-19T23:50:00+00:00",
+      "events": 4,
+      "label_resolution_end": "2023-11-20T00:35:00+00:00",
+      "purged_confirmation_lookahead_rows": 0,
+      "rows": 771,
+      "start": "2023-11-06T00:20:00+00:00"
+    },
+    "inner_fit": {
+      "blocks": [
+        "2023-W37",
+        "2023-W38",
+        "2023-W39",
+        "2023-W40",
+        "2023-W41",
+        "2023-W42",
+        "2023-W43"
+      ],
+      "end": "2023-10-29T23:10:00+00:00",
+      "events": 28,
+      "label_resolution_end": "2023-10-30T00:15:00+00:00",
+      "purged_confirmation_lookahead_rows": 0,
+      "rows": 1156,
+      "start": "2023-09-14T15:10:00+00:00"
+    },
+    "inner_validation": {
+      "blocks": [
+        "2023-W48",
+        "2023-W49"
+      ],
+      "end": "2023-12-10T23:00:00+00:00",
+      "events": 20,
+      "label_resolution_end": "2023-12-11T00:05:00+00:00",
+      "purged_confirmation_lookahead_rows": 0,
+      "rows": 698,
+      "start": "2023-11-27T00:20:00+00:00"
+    },
+    "outer_calibration": {
+      "blocks": [
+        "2023-W48",
+        "2023-W49"
+      ],
+      "end": "2023-12-10T23:00:00+00:00",
+      "events": 20,
+      "label_resolution_end": "2023-12-11T00:05:00+00:00",
+      "purged_confirmation_lookahead_rows": 0,
+      "rows": 698,
+      "start": "2023-11-27T00:20:00+00:00"
+    },
+    "outer_fit": {
+      "blocks": [
+        "2023-W37",
+        "2023-W38",
+        "2023-W39",
+        "2023-W40",
+        "2023-W41",
+        "2023-W42",
+        "2023-W43",
+        "2023-W44",
+        "2023-W45",
+        "2023-W46"
+      ],
+      "end": "2023-11-19T23:50:00+00:00",
+      "events": 34,
+      "label_resolution_end": "2023-11-20T00:35:00+00:00",
+      "purged_confirmation_lookahead_rows": 0,
+      "rows": 2339,
+      "start": "2023-09-14T15:10:00+00:00"
+    },
+    "outer_validation": {
+      "blocks": [
+        "2023-W51",
+        "2023-W52"
+      ],
+      "end": "2023-12-31T23:10:00+00:00",
+      "events": 30,
+      "label_resolution_end": "2023-12-31T23:50:00+00:00",
+      "purged_confirmation_lookahead_rows": 0,
+      "rows": 800,
+      "start": "2023-12-18T00:25:00+00:00"
+    },
+    "scope": "original_training_only"
+  }
+]

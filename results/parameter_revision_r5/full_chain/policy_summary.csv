@@ -1,0 +1,3 @@
+evidence_tier,policy_arm,tasks,independent_clusters,completion_rate,control_loop_p95_ms
+synthetic_simulation,edf_reactive,1000,10,0.557,22.000128
+synthetic_simulation,integrated_risk_gated,1000,10,0.744,28.0

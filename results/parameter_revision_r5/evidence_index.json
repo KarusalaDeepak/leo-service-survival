@@ -1,0 +1,331 @@
+{
+  "aggregate_only": true,
+  "excluded": [
+    "raw measurements",
+    "measured episode predictions",
+    "EOS source scenarios",
+    "task/action/outcome rows",
+    "generated predictor references and validation rows",
+    "fitted executable model objects"
+  ],
+  "field_trial_status": "NOT_RUN",
+  "files": [
+    {
+      "export_transformation": "aggregate copy; JSON paths made portable; cadence path reduced to basename",
+      "original_sha256": "c5e8140cd0492864b5a4bebccaf85183df03096fbaf9f7726156b0f8e6dba298",
+      "original_source": "results/eos_full_chain_parameter_revision_v1/policy_summary.csv",
+      "package_path": "full_chain/policy_summary.csv",
+      "sha256": "c5e8140cd0492864b5a4bebccaf85183df03096fbaf9f7726156b0f8e6dba298",
+      "source": "results/parameter_revision_r5_v1/full_chain/policy_summary.csv"
+    },
+    {
+      "export_transformation": "aggregate copy; JSON paths made portable; cadence path reduced to basename",
+      "original_sha256": "ecaea6dbf611bfca2fa72439cef965b504c467253060e789af2c75727399b2b6",
+      "original_source": "results/eos_full_chain_parameter_revision_v1/paired_inference.json",
+      "package_path": "full_chain/paired_inference.json",
+      "sha256": "ecaea6dbf611bfca2fa72439cef965b504c467253060e789af2c75727399b2b6",
+      "source": "results/parameter_revision_r5_v1/full_chain/paired_inference.json"
+    },
+    {
+      "export_transformation": "aggregate copy; JSON paths made portable; cadence path reduced to basename",
+      "original_sha256": "9b76ec14e87a5cfd299d0f482f65c4078b580a4b74777dd6073db730653a6796",
+      "original_source": "results/eos_full_chain_parameter_revision_v1/paired_seed_results.csv",
+      "package_path": "full_chain/paired_seed_results.csv",
+      "sha256": "9b76ec14e87a5cfd299d0f482f65c4078b580a4b74777dd6073db730653a6796",
+      "source": "results/parameter_revision_r5_v1/full_chain/paired_seed_results.csv"
+    },
+    {
+      "export_transformation": "aggregate copy; JSON paths made portable; cadence path reduced to basename",
+      "original_sha256": "2f60b6a421087845a5b5dfa0271c36093d720eb37f2233ea033d5bed8b4c99c9",
+      "original_source": "results/eos_full_chain_parameter_revision_v1/full_chain_audit.csv",
+      "package_path": "full_chain/full_chain_audit.csv",
+      "sha256": "2f60b6a421087845a5b5dfa0271c36093d720eb37f2233ea033d5bed8b4c99c9",
+      "source": "results/parameter_revision_r5_v1/full_chain/full_chain_audit.csv"
+    },
+    {
+      "export_transformation": "aggregate copy; JSON paths made portable; cadence path reduced to basename",
+      "original_sha256": "4ff3e651ed10bf20f2e20282d2d7d589058d348d062ed5d5f59bbbb02c15ad07",
+      "original_source": "results/eos_full_chain_parameter_revision_v1/robustness_summary.csv",
+      "package_path": "full_chain/robustness_summary.csv",
+      "sha256": "4ff3e651ed10bf20f2e20282d2d7d589058d348d062ed5d5f59bbbb02c15ad07",
+      "source": "results/parameter_revision_r5_v1/full_chain/robustness_summary.csv"
+    },
+    {
+      "export_transformation": "aggregate copy; JSON paths made portable; cadence path reduced to basename",
+      "original_sha256": "aa510e46a7ed7de11eb5d015c71246346d43269ca60b6164bd5e42c018ccf7d4",
+      "original_source": "results/eos_full_chain_parameter_revision_v1/robustness_manifest.json",
+      "package_path": "full_chain/robustness_manifest.json",
+      "sha256": "aa510e46a7ed7de11eb5d015c71246346d43269ca60b6164bd5e42c018ccf7d4",
+      "source": "results/parameter_revision_r5_v1/full_chain/robustness_manifest.json"
+    },
+    {
+      "export_transformation": "aggregate copy; JSON paths made portable; cadence path reduced to basename",
+      "original_sha256": "f93a24af40c7554cbe8e6b998fc9404ff8a7c37ad6f202b8a7057acfe981b6d8",
+      "original_source": "results/eos_full_chain_parameter_revision_v1/predictor_coefficients.csv",
+      "package_path": "full_chain/predictor_coefficients.csv",
+      "sha256": "f93a24af40c7554cbe8e6b998fc9404ff8a7c37ad6f202b8a7057acfe981b6d8",
+      "source": "results/parameter_revision_r5_v1/full_chain/predictor_coefficients.csv"
+    },
+    {
+      "export_transformation": "aggregate copy; JSON paths made portable; cadence path reduced to basename",
+      "original_sha256": "654d1b055e3ec48a94330afb1511f4a24ca58ffac436134d57dae1c350553880",
+      "original_source": "results/eos_full_chain_parameter_revision_v1/predictor_regularization_selection.csv",
+      "package_path": "full_chain/predictor_regularization_selection.csv",
+      "sha256": "654d1b055e3ec48a94330afb1511f4a24ca58ffac436134d57dae1c350553880",
+      "source": "results/parameter_revision_r5_v1/full_chain/predictor_regularization_selection.csv"
+    },
+    {
+      "export_transformation": "aggregate copy; JSON paths made portable; cadence path reduced to basename",
+      "original_sha256": "76db028f7027c2e15cbd88e882479a21ef9bdcdd2f417e7cfdd9993ac6a05550",
+      "original_source": "results/eos_full_chain_parameter_revision_v1/predictor_probability_diagnostics.csv",
+      "package_path": "full_chain/predictor_probability_diagnostics.csv",
+      "sha256": "76db028f7027c2e15cbd88e882479a21ef9bdcdd2f417e7cfdd9993ac6a05550",
+      "source": "results/parameter_revision_r5_v1/full_chain/predictor_probability_diagnostics.csv"
+    },
+    {
+      "export_transformation": "aggregate copy; JSON paths made portable; cadence path reduced to basename",
+      "original_sha256": "914eb7f0da472a7f70b1c7f1fadce75577b1aa6099a5e28bf9df27e28816df54",
+      "original_source": "results/eos_full_chain_parameter_revision_v1/predictor_calibration_bins.csv",
+      "package_path": "full_chain/predictor_calibration_bins.csv",
+      "sha256": "914eb7f0da472a7f70b1c7f1fadce75577b1aa6099a5e28bf9df27e28816df54",
+      "source": "results/parameter_revision_r5_v1/full_chain/predictor_calibration_bins.csv"
+    },
+    {
+      "export_transformation": "aggregate copy; JSON paths made portable; cadence path reduced to basename",
+      "original_sha256": "b83c85c158854b239c53ad8d0e25c7dc52e843ff80f442b9130bf70603b2c799",
+      "original_source": "results/eos_full_chain_parameter_revision_v1/predictor_manifest.json",
+      "package_path": "full_chain/predictor_manifest.json",
+      "sha256": "b83c85c158854b239c53ad8d0e25c7dc52e843ff80f442b9130bf70603b2c799",
+      "source": "results/parameter_revision_r5_v1/full_chain/predictor_manifest.json"
+    },
+    {
+      "export_transformation": "aggregate copy; JSON paths made portable; cadence path reduced to basename",
+      "original_sha256": "851316bad9ec68ac0af040eac8c6ab8ddc1663eb747850ccae8f7c04a4685388",
+      "original_source": "results/eos_full_chain_parameter_revision_v1/predictor_regularization_grid_sensitivity.csv",
+      "package_path": "full_chain/predictor_regularization_grid_sensitivity.csv",
+      "sha256": "851316bad9ec68ac0af040eac8c6ab8ddc1663eb747850ccae8f7c04a4685388",
+      "source": "results/parameter_revision_r5_v1/full_chain/predictor_regularization_grid_sensitivity.csv"
+    },
+    {
+      "export_transformation": "aggregate copy; JSON paths made portable; cadence path reduced to basename",
+      "original_sha256": "a5253641e8cfe9a637397172f10b0434f80258b1218966fdde2d51e2e636b4b8",
+      "original_source": "results/eos_full_chain_parameter_revision_v1/predictor_regularization_grid_sensitivity_manifest.json",
+      "package_path": "full_chain/predictor_regularization_grid_sensitivity_manifest.json",
+      "sha256": "a5253641e8cfe9a637397172f10b0434f80258b1218966fdde2d51e2e636b4b8",
+      "source": "results/parameter_revision_r5_v1/full_chain/predictor_regularization_grid_sensitivity_manifest.json"
+    },
+    {
+      "export_transformation": "aggregate copy; JSON paths made portable; cadence path reduced to basename",
+      "original_sha256": "618ba5ea48a4e11586e16d3c7ba7de7367dc5fced00b2ed48b05f56fa86d2666",
+      "original_source": "results/endpoint_parameter_sensitivity_v1/endpoint_parameter_sensitivity.csv",
+      "package_path": "endpoint/endpoint_parameter_sensitivity.csv",
+      "sha256": "618ba5ea48a4e11586e16d3c7ba7de7367dc5fced00b2ed48b05f56fa86d2666",
+      "source": "results/parameter_revision_r5_v1/endpoint/endpoint_parameter_sensitivity.csv"
+    },
+    {
+      "export_transformation": "aggregate copy; JSON paths made portable; cadence path reduced to basename",
+      "original_sha256": "ee2b544d1c1e3ae856c82cb9b82ee35b295d242edff1a1e1217fc9ab27eec6d7",
+      "original_source": "results/endpoint_parameter_sensitivity_v1/sensitivity_coverage.csv",
+      "package_path": "endpoint/sensitivity_coverage.csv",
+      "sha256": "ee2b544d1c1e3ae856c82cb9b82ee35b295d242edff1a1e1217fc9ab27eec6d7",
+      "source": "results/parameter_revision_r5_v1/endpoint/sensitivity_coverage.csv"
+    },
+    {
+      "export_transformation": "aggregate copy; JSON paths made portable; cadence path reduced to basename",
+      "original_sha256": "18e28bc03e51e11fea1e838b6a47e5abfb9993a971bea0fb69f8c395f0fb53d7",
+      "original_source": "results/endpoint_parameter_sensitivity_v1/all_profile_support.csv",
+      "package_path": "endpoint/all_profile_support.csv",
+      "sha256": "18e28bc03e51e11fea1e838b6a47e5abfb9993a971bea0fb69f8c395f0fb53d7",
+      "source": "results/parameter_revision_r5_v1/endpoint/all_profile_support.csv"
+    },
+    {
+      "export_transformation": "aggregate copy; JSON paths made portable; cadence path reduced to basename",
+      "original_sha256": "d5af0c5570f53c609717355b1dfb651f60578065804206191768c463bf0a9668",
+      "original_source": "results/endpoint_parameter_sensitivity_v1/source_cadence.csv",
+      "package_path": "endpoint/source_cadence.csv",
+      "sha256": "b4cc0375bbb1f7d92b4d220a459c236a24f2a249a61a5e5a47ba756547daabc1",
+      "source": "results/parameter_revision_r5_v1/endpoint/source_cadence.csv"
+    },
+    {
+      "export_transformation": "aggregate copy; JSON paths made portable; cadence path reduced to basename",
+      "original_sha256": "9b923a59ba0aa7d40e3bf16ed6293a2d3284aaf19b83150e65d111c2490079f4",
+      "original_source": "results/endpoint_parameter_sensitivity_v1/summary.json",
+      "package_path": "endpoint/summary.json",
+      "sha256": "cf30440bf0337becc9a3089e6d7e5282b6a0277c20535d0c3283e9654d0c4f31",
+      "source": "results/parameter_revision_r5_v1/endpoint/summary.json"
+    },
+    {
+      "export_transformation": "aggregate copy; JSON paths made portable; cadence path reduced to basename",
+      "original_sha256": "2477b6f5d3123072e1d9948d060f95e756b755d2d541bb12bd2b8c033016ef40",
+      "original_source": "results/endpoint_parameter_sensitivity_v1/manifest.json",
+      "package_path": "endpoint/manifest.json",
+      "sha256": "e3add1ef97a5e52aa2fe4aa5550ef34f2a2cedb0bb9a66f6b6cce78db2275452",
+      "source": "results/parameter_revision_r5_v1/endpoint/manifest.json"
+    },
+    {
+      "export_transformation": "aggregate copy; JSON paths made portable; cadence path reduced to basename",
+      "original_sha256": "7fb08ba648d126fc334d49fa4a2e048ae8b552f8ba2941205530815e42532c90",
+      "original_source": "results/parameter_defensibility_v1/declared_protocol.json",
+      "package_path": "development/declared_protocol.json",
+      "sha256": "335fcfd8fc581cb39667a6288d90238cb249f4b88c73bf1daaaa55bcc1fa24f1",
+      "source": "results/parameter_revision_r5_v1/development/declared_protocol.json"
+    },
+    {
+      "export_transformation": "aggregate copy; JSON paths made portable; cadence path reduced to basename",
+      "original_sha256": "daa60f4c486c4a0aff0ec9d8f06056ac372121e955404baf8f96cc5a1ecb204b",
+      "original_source": "results/parameter_defensibility_v1/development_selection_freeze.json",
+      "package_path": "development/development_selection_freeze.json",
+      "sha256": "88b99d2f2143aa375289ba0b2367bf96dcaef7cf22f6924de2adb0e03d5f0118",
+      "source": "results/parameter_revision_r5_v1/development/development_selection_freeze.json"
+    },
+    {
+      "export_transformation": "aggregate copy; JSON paths made portable; cadence path reduced to basename",
+      "original_sha256": "1f7361f318e56ee676f7db4b770169f24769b3c769c7986259df7eabad8ead78",
+      "original_source": "results/parameter_defensibility_v1/temporal_fold_audit.json",
+      "package_path": "development/temporal_fold_audit.json",
+      "sha256": "37333c10fa80af4921212a5676aa09a8257639cdb3cac5bfeda3054a326120fe",
+      "source": "results/parameter_revision_r5_v1/development/temporal_fold_audit.json"
+    },
+    {
+      "export_transformation": "aggregate copy; JSON paths made portable; cadence path reduced to basename",
+      "original_sha256": "5b818af53b5a69a897e64bccee633a33d3acda8b797a901cc0a94664d13acb49",
+      "original_source": "results/parameter_defensibility_v1/search.csv",
+      "package_path": "development/search.csv",
+      "sha256": "5b818af53b5a69a897e64bccee633a33d3acda8b797a901cc0a94664d13acb49",
+      "source": "results/parameter_revision_r5_v1/development/search.csv"
+    },
+    {
+      "export_transformation": "aggregate copy; JSON paths made portable; cadence path reduced to basename",
+      "original_sha256": "abcdc430dc5c499f69beb03801370bd07a51acb9faf4032e248bbf120b5f5fa1",
+      "original_source": "results/parameter_defensibility_v1/scores.csv",
+      "package_path": "development/scores.csv",
+      "sha256": "abcdc430dc5c499f69beb03801370bd07a51acb9faf4032e248bbf120b5f5fa1",
+      "source": "results/parameter_revision_r5_v1/development/scores.csv"
+    },
+    {
+      "export_transformation": "aggregate copy; JSON paths made portable; cadence path reduced to basename",
+      "original_sha256": "003866212b5150976811001a3f7ae2465fd7170dcba2ed18535aed3573bddf9b",
+      "original_source": "results/parameter_defensibility_v1/summary.csv",
+      "package_path": "development/summary.csv",
+      "sha256": "003866212b5150976811001a3f7ae2465fd7170dcba2ed18535aed3573bddf9b",
+      "source": "results/parameter_revision_r5_v1/development/summary.csv"
+    },
+    {
+      "export_transformation": "aggregate copy; JSON paths made portable; cadence path reduced to basename",
+      "original_sha256": "0b1d8f330f21064de85e308fbe2589087b0cecf44dc67049510f257becb545fd",
+      "original_source": "results/parameter_defensibility_v1/paired.csv",
+      "package_path": "development/paired.csv",
+      "sha256": "0b1d8f330f21064de85e308fbe2589087b0cecf44dc67049510f257becb545fd",
+      "source": "results/parameter_revision_r5_v1/development/paired.csv"
+    },
+    {
+      "export_transformation": "aggregate copy; JSON paths made portable; cadence path reduced to basename",
+      "original_sha256": "2dc7f5cb539fad203883fb2ab49e7531f92bed5be446dbadcf9892cb60d32214",
+      "original_source": "results/parameter_defensibility_v1/calibration_sensitivity.csv",
+      "package_path": "development/calibration_sensitivity.csv",
+      "sha256": "2dc7f5cb539fad203883fb2ab49e7531f92bed5be446dbadcf9892cb60d32214",
+      "source": "results/parameter_revision_r5_v1/development/calibration_sensitivity.csv"
+    },
+    {
+      "export_transformation": "aggregate copy; JSON paths made portable; cadence path reduced to basename",
+      "original_sha256": "cc588f0fb2e89125b388531ca1c9d858b65df90eb5d98c63696dc737c190707a",
+      "original_source": "results/parameter_defensibility_v1/feature_guard_sensitivity.csv",
+      "package_path": "development/feature_guard_sensitivity.csv",
+      "sha256": "cc588f0fb2e89125b388531ca1c9d858b65df90eb5d98c63696dc737c190707a",
+      "source": "results/parameter_revision_r5_v1/development/feature_guard_sensitivity.csv"
+    },
+    {
+      "export_transformation": "aggregate copy; JSON paths made portable; cadence path reduced to basename",
+      "original_sha256": "b62a26fe2a2aea14ade8acf66bb61d0763f0a3daff59fb93c27e8114d0c9d1d3",
+      "original_source": "results/parameter_defensibility_v1/feature_guard_site_calendar_batches.csv",
+      "package_path": "development/feature_guard_site_calendar_batches.csv",
+      "sha256": "b62a26fe2a2aea14ade8acf66bb61d0763f0a3daff59fb93c27e8114d0c9d1d3",
+      "source": "results/parameter_revision_r5_v1/development/feature_guard_site_calendar_batches.csv"
+    },
+    {
+      "export_transformation": "aggregate copy; JSON paths made portable; cadence path reduced to basename",
+      "original_sha256": "249f744258c8b3989fd60a18f05425db8c80d5d91a8593fd8692ee77fdd72250",
+      "original_source": "results/parameter_defensibility_v1/feature_coverage_budget_sensitivity.csv",
+      "package_path": "development/feature_coverage_budget_sensitivity.csv",
+      "sha256": "249f744258c8b3989fd60a18f05425db8c80d5d91a8593fd8692ee77fdd72250",
+      "source": "results/parameter_revision_r5_v1/development/feature_coverage_budget_sensitivity.csv"
+    },
+    {
+      "export_transformation": "aggregate copy; JSON paths made portable; cadence path reduced to basename",
+      "original_sha256": "0d942474ff627ba8013aa8511d20c53f8c7c526d89ca59d82f8f41c944f0be3c",
+      "original_source": "results/parameter_defensibility_v1/governance_logic_sensitivity.csv",
+      "package_path": "development/governance_logic_sensitivity.csv",
+      "sha256": "0d942474ff627ba8013aa8511d20c53f8c7c526d89ca59d82f8f41c944f0be3c",
+      "source": "results/parameter_revision_r5_v1/development/governance_logic_sensitivity.csv"
+    },
+    {
+      "export_transformation": "aggregate copy; JSON paths made portable; cadence path reduced to basename",
+      "original_sha256": "5746cee5a161c63a761cde7b6047b66f3de4ae0a32e9a0e4588da8e73865a239",
+      "original_source": "results/parameter_defensibility_v1/monitor_logic_sensitivity.csv",
+      "package_path": "development/monitor_logic_sensitivity.csv",
+      "sha256": "5746cee5a161c63a761cde7b6047b66f3de4ae0a32e9a0e4588da8e73865a239",
+      "source": "results/parameter_revision_r5_v1/development/monitor_logic_sensitivity.csv"
+    },
+    {
+      "export_transformation": "aggregate copy; JSON paths made portable; cadence path reduced to basename",
+      "original_sha256": "fbd132da08fdd52a506d92a74e3899d3288946362005f4262a67c5da6bbdb843",
+      "original_source": "results/parameter_defensibility_v1/declared_hazard_cap_protocol.json",
+      "package_path": "development/declared_hazard_cap_protocol.json",
+      "sha256": "430b52ccae88dbed4cac6f570b120c7f8b8f28ff20f1a61df442a8315fd8fa18",
+      "source": "results/parameter_revision_r5_v1/development/declared_hazard_cap_protocol.json"
+    },
+    {
+      "export_transformation": "aggregate copy; JSON paths made portable; cadence path reduced to basename",
+      "original_sha256": "64756f62236086ef1e413250fde6f332ddb49358cb83c87183fc69b13be562ae",
+      "original_source": "results/parameter_defensibility_v1/hazard_cap_sensitivity.csv",
+      "package_path": "development/hazard_cap_sensitivity.csv",
+      "sha256": "64756f62236086ef1e413250fde6f332ddb49358cb83c87183fc69b13be562ae",
+      "source": "results/parameter_revision_r5_v1/development/hazard_cap_sensitivity.csv"
+    },
+    {
+      "export_transformation": "aggregate copy; JSON paths made portable; cadence path reduced to basename",
+      "original_sha256": "faa30d091ed9fa6e370ca9704cba3d669adf893e13b4e3c04c6057ec56a2b5b6",
+      "original_source": "results/parameter_defensibility_v1/hazard_cap_hits.csv",
+      "package_path": "development/hazard_cap_hits.csv",
+      "sha256": "faa30d091ed9fa6e370ca9704cba3d669adf893e13b4e3c04c6057ec56a2b5b6",
+      "source": "results/parameter_revision_r5_v1/development/hazard_cap_hits.csv"
+    },
+    {
+      "export_transformation": "aggregate copy; JSON paths made portable; cadence path reduced to basename",
+      "original_sha256": "541a09ebfc11afc88e92a89fc2f2515d1931befc021ffddd70fb2179c8b193f2",
+      "original_source": "results/parameter_defensibility_v1/parameter_coverage_addendum.csv",
+      "package_path": "development/parameter_coverage_addendum.csv",
+      "sha256": "541a09ebfc11afc88e92a89fc2f2515d1931befc021ffddd70fb2179c8b193f2",
+      "source": "results/parameter_revision_r5_v1/development/parameter_coverage_addendum.csv"
+    },
+    {
+      "export_transformation": "aggregate copy; JSON paths made portable; cadence path reduced to basename",
+      "original_sha256": "c552e064ab0bccd3684685beb64ff5b40dac4d685fec5a0949452aaa2ade2e1e",
+      "original_source": "results/parameter_defensibility_v1/software_correctness_note.json",
+      "package_path": "development/software_correctness_note.json",
+      "sha256": "9e6a767fac55532c68e8e4cd689026655814bf713760b30561b077f80964c15b",
+      "source": "results/parameter_revision_r5_v1/development/software_correctness_note.json"
+    },
+    {
+      "export_transformation": "aggregate copy; JSON paths made portable; cadence path reduced to basename",
+      "original_sha256": "56325c0afcbe847c3f35b01584e32bc764dd926e5181534494bdef543ee18f22",
+      "original_source": "results/parameter_defensibility_v1/run_manifest.json",
+      "package_path": "development/run_manifest.json",
+      "sha256": "52cd9809ab6392bb6d627cc89bbb7603b76cb6f3fb795cc6afacdf708b69f7f5",
+      "source": "results/parameter_revision_r5_v1/development/run_manifest.json"
+    },
+    {
+      "export_transformation": "exact copy",
+      "original_sha256": "2d8d7040912e1675652848b329dfb92a705c67179eb1dcbf0c45dd80f72aecee",
+      "original_source": "configs/parameter_registry.csv",
+      "package_path": "parameter_registry.csv",
+      "sha256": "2d8d7040912e1675652848b329dfb92a705c67179eb1dcbf0c45dd80f72aecee",
+      "source": "results/parameter_revision_r5_v1/parameter_registry.csv"
+    }
+  ],
+  "interpretation": "New retrospective numerical-choice audits and generated-predictor validation; no physical coefficient identification, untouched confirmation, field benefit or universal superiority.",
+  "new_code_pushed": false,
+  "primary_empirical_fit_replaced": false,
+  "published_code_release": "v1.3.1",
+  "revision": "R5"
+}

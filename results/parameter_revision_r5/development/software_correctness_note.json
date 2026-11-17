@@ -1,0 +1,36 @@
+{
+  "affected_source": "src/leo_service_survival/models.py",
+  "cause_hazard_ratio_preserved_when_clipping_activates": true,
+  "correction": "The current active DiscreteHazardModel computes one shared bounded hazard total and rescales its cause hazards proportionally to that same total. Exactly zero raw learned event mass stays zero instead of introducing a numerical-floor failure with no cause.",
+  "correction_id": "current_active_discrete_cif_mass_consistency_v1",
+  "exact_zero_raw_total_survival": "Current survival remains exactly one; the old code multiplied by 1-1e-8 each step. The maximum difference at twelve consecutive exact-zero steps is 1.1999999405265527e-7.",
+  "frozen_empirical_artifacts_modified": false,
+  "full_primary_empirical_run_reexecuted": false,
+  "interpretation_boundary": "The correction establishes probability-mass consistency of the current software, not physical hazard calibration or a new operational benefit. Existing frozen empirical tables remain the original retained evidence. The hazard_cap_hits.csv unadjusted-CIF column intentionally diagnoses the pre-correction formula.",
+  "positive_hazard_survival_bounds_unchanged": [
+    1e-08,
+    0.95
+  ],
+  "problem": "The frozen uncalibrated CIF calculation used raw cause hazards while survival used a bounded total hazard. When a bound activated, cumulative cause mass could differ from one minus survival.",
+  "regression_cases": [
+    "upper-bound activation with raw loss and latency hazards 0.60 and 0.39",
+    "lower-floor activation with positive raw cause hazards 1e-12 and 5e-13",
+    "exact-zero raw event mass with named causes",
+    "no event causes and empty cumulative-incidence map",
+    "ordinary unbounded positive hazards"
+  ],
+  "retained_development_audit": {
+    "cells_hitting_upper_or_lower_bounds": 0,
+    "expected_correction_effect_on_these_audited_predictions": "zero, because the bounds are inactive and no raw total is exactly zero",
+    "fitted_models": 2,
+    "hazard_cells_per_cap_including_fold_overlap": 34200,
+    "maximum_pre_correction_cif_mass_discrepancy": 6.678685382510707e-16,
+    "past_calibration_plus_outer_validation_rows_including_fold_overlap": 2850,
+    "raw_total_hazard_range": "strictly positive and below 0.255 in every audited calibration/validation row"
+  },
+  "scope": "software correctness correction after the retained hazard-cap diagnostic, not a new empirical performance claim",
+  "survival_formula_unchanged_for_positive_raw_total": true,
+  "test_command": "PYTHONPATH=src OMP_NUM_THREADS=1 python3 -m pytest -q tests/test_parameter_defensibility.py tests/test_core.py",
+  "tests_passed": 62,
+  "uncalibrated_and_calibrated_mass_identity_tested": true
+}

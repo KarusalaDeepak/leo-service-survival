@@ -10,6 +10,7 @@ from pathlib import Path
 from leo_service_survival.eos_full_chain import (
     EOSFullChainConfig,
     run_eos_full_chain_experiment,
+    run_eos_full_chain_parameter_revision,
     write_eos_full_chain_artifacts,
 )
 
@@ -24,7 +25,7 @@ DEFAULT_SCENARIO = (
     / "output_re_s3"
     / "Sats3_M100_T7d_cities_08.json"
 )
-DEFAULT_OUTPUT = PROJECT_ROOT / "results" / "eos_full_chain_synthetic_v2"
+DEFAULT_OUTPUT = PROJECT_ROOT / "results" / "eos_full_chain_parameter_revision_v1"
 
 
 def _parse_seeds(value: str) -> tuple[int, ...]:
@@ -62,12 +63,28 @@ def main() -> None:
         ),
     )
     parser.add_argument("--bootstrap-resamples", type=int, default=2_000)
+    parser.add_argument(
+        "--robustness", action="store_true",
+        help="also report aligned, neutral and reversed synthetic profile contrasts using one frozen predictor",
+    )
     args = parser.parse_args()
 
     config = EOSFullChainConfig(
         seeds=args.seeds,
         bootstrap_resamples=args.bootstrap_resamples,
     )
+    if args.robustness:
+        if args.ns3_profile_csv is not None:
+            parser.error("--robustness uses the declared matched-rate profile contrasts, not a custom CSV")
+        summary = run_eos_full_chain_parameter_revision(
+            args.scenario, args.output, config=config,
+        )
+        print(json.dumps({
+            "output": str(args.output.resolve()),
+            "robustness_summary": summary.to_dict(orient="records"),
+            "claim_boundary": "synthetic simulation, not operational or field evidence",
+        }, indent=2, sort_keys=True))
+        return
     artifacts = run_eos_full_chain_experiment(
         args.scenario,
         config=config,

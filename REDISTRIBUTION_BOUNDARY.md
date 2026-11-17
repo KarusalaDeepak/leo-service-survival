@@ -5,6 +5,13 @@ package. It retains the verified v1.3.0 empirical core and adds current R3
 documentation and aggregate diagnostic provenance. It is not a copy of the
 complete private working tree.
 
+The local unpublished R5 update additionally includes author-written parameter
+audit code, an explicit aggregate-only `results/parameter_revision_r5/` export,
+and the exact empirical-source snapshot needed to verify unchanged historical
+prediction provenance. It excludes the new measured episode predictions,
+generated training/validation examples, EOS task/action rows and source scenarios.
+This does not alter repository visibility, source rights or data licences.
+
 ## Included
 
 - Author-written software, tests, configurations, protocol documents, schemas,

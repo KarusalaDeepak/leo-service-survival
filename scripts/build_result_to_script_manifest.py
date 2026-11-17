@@ -26,6 +26,13 @@ PUBLIC_MANIFEST_EXCLUSIONS = {
 
 RULES = (
     (
+        "results/parameter_revision_r5/",
+        "scripts/build_parameter_revision_evidence.py",
+        "main",
+        "explicit aggregate-only export of separate endpoint, development and synthetic parameter audits",
+        "aggregate_public",
+    ),
+    (
         "results/review_audit/ipcw_boundary_",
         "scripts/audit_ipcw_boundaries.py",
         "main",

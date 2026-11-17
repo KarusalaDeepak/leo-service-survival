@@ -1,0 +1,102 @@
+{
+  "analysis_id": "parameter_defensibility_v1",
+  "expanded_calibration_c_grid": [
+    0.003,
+    0.01,
+    0.03,
+    0.1,
+    0.3,
+    1.0
+  ],
+  "expanded_focal_grid": [
+    {
+      "l2_regularization": 1.0,
+      "learning_rate": 0.03,
+      "max_iter": 240,
+      "max_leaf_nodes": 7,
+      "min_samples_leaf": 30
+    },
+    {
+      "l2_regularization": 0.5,
+      "learning_rate": 0.06,
+      "max_iter": 180,
+      "max_leaf_nodes": 15,
+      "min_samples_leaf": 30
+    },
+    {
+      "l2_regularization": 2.0,
+      "learning_rate": 0.04,
+      "max_iter": 240,
+      "max_leaf_nodes": 15,
+      "min_samples_leaf": 50
+    },
+    {
+      "l2_regularization": 1.0,
+      "learning_rate": 0.015,
+      "max_iter": 240,
+      "max_leaf_nodes": 7,
+      "min_samples_leaf": 30
+    },
+    {
+      "l2_regularization": 1.0,
+      "learning_rate": 0.0075,
+      "max_iter": 240,
+      "max_leaf_nodes": 7,
+      "min_samples_leaf": 30
+    }
+  ],
+  "feature_coverage_budget_grid": [
+    0.9,
+    0.95,
+    1.0
+  ],
+  "governance_scope": "risk-budget grid uses supplied logic fixture, not campaign-derived statistical bounds",
+  "guard_quantile_grid": [
+    0.975,
+    0.99,
+    0.995
+  ],
+  "guard_scope": "two measured sites from one acquisition family; not false-alarm calibration or deployment authorization",
+  "heldout_outcome_scoring": false,
+  "heldout_use": "features only, after declaration; descriptive shift sensitivity, no threshold selection",
+  "inference": "two overlapping temporal development folds; no independent-campaign CI or significance claim",
+  "minimum_calibration_support_grid": [
+    25,
+    50,
+    100
+  ],
+  "monitor_logic_grid": {
+    "alpha": [
+      0.005,
+      0.01,
+      0.05
+    ],
+    "betting_fraction": [
+      0.5,
+      1.0,
+      2.0
+    ],
+    "null_mean": [
+      0.05,
+      0.1,
+      0.2
+    ]
+  },
+  "ood_fraction_budget_grid": [
+    0.05,
+    0.1,
+    0.2
+  ],
+  "primary_model_replaced": false,
+  "primary_run_modified": false,
+  "probability_clip_grid": [
+    1e-08,
+    1e-06,
+    0.0001
+  ],
+  "random_person_period_early_stopping": false,
+  "risk_budget_selection": "none; all declared alternatives reported; not learned from test",
+  "search_budget_rationale": "append two lower learning rates and two stronger calibration penalties to probe prior lower boundaries while holding other settings fixed; finite grid never establishes universal optimum",
+  "search_scope": "nested_calendar_block_folds_inside_original_training_partition_only",
+  "status": "retrospective_add_on_not_preregistered"
+}

@@ -1,0 +1,19 @@
+parameter,value,profile_id,status,endpoint_rebuild_executed,result,note
+endpoint.bin_minutes,1.0,bin_minutes_1,not_supported,False,,
+endpoint.bin_minutes,5.0,primary,executed,True,not_a_gap_contrast,"Repeated primary row is the same reference, not another independent run"
+endpoint.bin_minutes,10.0,bin_minutes_10,executed,True,not_a_gap_contrast,
+endpoint.latency_limit_ms,70.0,latency_limit_ms_70,executed,True,not_a_gap_contrast,
+endpoint.latency_limit_ms,80.0,primary,executed,True,not_a_gap_contrast,"Repeated primary row is the same reference, not another independent run"
+endpoint.latency_limit_ms,90.0,latency_limit_ms_90,executed,True,not_a_gap_contrast,
+endpoint.loss_limit_pct,0.5,loss_limit_pct_0.5,executed,True,not_a_gap_contrast,
+endpoint.loss_limit_pct,1.0,primary,executed,True,not_a_gap_contrast,"Repeated primary row is the same reference, not another independent run"
+endpoint.loss_limit_pct,2.0,loss_limit_pct_2,executed,True,not_a_gap_contrast,
+endpoint.sustained_bad_bins,1.0,sustained_bad_bins_1,executed,True,not_a_gap_contrast,
+endpoint.sustained_bad_bins,2.0,primary,executed,True,not_a_gap_contrast,"Repeated primary row is the same reference, not another independent run"
+endpoint.sustained_bad_bins,3.0,sustained_bad_bins_3,executed,True,not_a_gap_contrast,
+endpoint.maximum_gap_bins,1.0,maximum_gap_bins_1,executed,True,structurally_invariant_missing_bin_immediately_censors,
+endpoint.maximum_gap_bins,2.0,primary,executed,True,not_a_gap_contrast,"Repeated primary row is the same reference, not another independent run"
+endpoint.maximum_gap_bins,3.0,maximum_gap_bins_3,executed,True,structurally_invariant_missing_bin_immediately_censors,
+endpoint.analysis_horizon_bins,6.0,analysis_horizon_bins_6,executed,True,not_a_gap_contrast,
+endpoint.analysis_horizon_bins,9.0,analysis_horizon_bins_9,executed,True,not_a_gap_contrast,
+endpoint.analysis_horizon_bins,12.0,primary,executed,True,not_a_gap_contrast,"Repeated primary row is the same reference, not another independent run"

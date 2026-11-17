@@ -251,6 +251,25 @@ def _expand_person_period(
     )
 
 
+def _bounded_cause_hazards(probabilities: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+    """Use the same bounded hazard mass for survival and cause incidence.
+
+    The pre-existing positive-hazard safeguards remain 1e-8 and 0.95.  When
+    either activates, cause hazards are scaled proportionally to that total;
+    using their unadjusted mass would break ``sum CIF = 1 - survival``.
+    An exactly zero learned event mass stays zero rather than inventing a
+    failure with no event cause.  This affects survival only for exact-zero
+    classifier probabilities, where the previous implementation inserted the
+    artificial 1e-8 floor.
+    """
+
+    causes = np.asarray(probabilities[:, :, 1:], dtype=float)
+    raw_total = causes.sum(axis=2)
+    total = np.where(raw_total > 0.0, np.clip(raw_total, 1e-8, 0.95), 0.0)
+    multiplier = np.divide(total, raw_total, out=np.zeros_like(total), where=raw_total > 0.0)
+    return total, causes * multiplier[:, :, None]
+
+
 class DiscreteHazardModel(SurvivalModel):
     def __init__(
         self,
@@ -337,13 +356,13 @@ class DiscreteHazardModel(SurvivalModel):
         horizons = np.asarray(list(horizons), dtype=int)
         max_horizon = int(max(horizons))
         probabilities = self._step_probabilities(frame, max_horizon)
-        total_hazard = np.clip(probabilities[:, :, 1:].sum(axis=2), 1e-8, 0.95)
+        total_hazard, _cause_hazards = _bounded_cause_hazards(probabilities)
         survival_steps = np.cumprod(1.0 - total_hazard, axis=1)
         return survival_steps[:, horizons - 1]
 
     def predict_cumulative_incidence(self, frame: pd.DataFrame, horizon: int) -> dict[str, np.ndarray]:
         probabilities = self._step_probabilities(frame, int(horizon))
-        total_hazard = np.clip(probabilities[:, :, 1:].sum(axis=2), 1e-8, 0.95)
+        total_hazard, cause_hazards = _bounded_cause_hazards(probabilities)
         survival_before = np.column_stack(
             [np.ones(len(frame)), np.cumprod(1.0 - total_hazard[:, :-1], axis=1)]
         )
@@ -351,7 +370,7 @@ class DiscreteHazardModel(SurvivalModel):
         for cause, class_index in self.cause_to_class_.items():
             if class_index >= probabilities.shape[2]:
                 continue
-            result[cause] = (survival_before * probabilities[:, :, class_index]).sum(axis=1)
+            result[cause] = (survival_before * cause_hazards[:, :, class_index - 1]).sum(axis=1)
         return result
 
 

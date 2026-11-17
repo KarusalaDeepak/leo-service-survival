@@ -1,0 +1,68 @@
+PAPER 4 R5 — COEFFICIENT AND PARAMETER REVISION
+5 November 2026
+
+What was implemented
+
+1. The full-chain prediction formula no longer uses the hand-written constants
+   0.98, 0.99, 0.65, 4, 0.85 and 250. Logistic coefficients are fitted on 6,000
+   generated development examples. Separate 3,000-example partitions tune
+   regularization, calibrate probabilities and check those probabilities.
+   Evaluation uses disjoint seeds. A wider development-only regularization
+   audit still selects C=0.01, now inside the expanded range.
+
+2. The endpoint audit rebuilds 15 profiles and records the unsupported one-minute
+   profile. It varies latency, loss, persistence, horizon and supported bin sizes.
+   One-minute measurements are not invented. Changing the gap parameter has no
+   effect because an unobserved bin already censors the episode; that is a
+   property of this implementation, not evidence that missing service was good.
+
+3. Two nested chronological development folds compare original and wider search
+   ranges. Mean IBS is 0.041444 for the original grid and 0.041549 for the wider
+   grid. Lower is better: the wider grid does not improve this descriptive result.
+   Some choices remain at search boundaries, so no universal optimum is claimed.
+
+4. Calibration-support limits, probability clipping, total-hazard bounds and
+   feature-domain budgets are tested explicitly. Hazard bounds do not activate
+   on the audited development rows. A separate correctness fix makes the active
+   cause-incidence probabilities agree with the same bounded total used by
+   survival. Earlier measured results are preserved rather than relabelled.
+
+Fresh full-chain controlled results
+
+Condition          Baseline   Integrated   Difference   Seed-cluster 95% interval
+Declared             55.7%       74.4%      +18.7 pp       [14.8, 23.1] pp
+SNR aligned          66.6%       73.7%       +7.1 pp        [5.1, 9.2] pp
+Neutral              59.8%       64.3%       +4.5 pp        [1.5, 7.7] pp
+SNR reversed         55.9%       74.9%      +19.0 pp       [15.9, 21.6] pp
+
+These conditions reuse one EOS-Bench geometry and ten generated seeds. Two
+neutral-condition seeds favour the baseline and one ties. The predictor stays
+fixed across conditions, but the domain-gate reference is condition-specific.
+The intervals are not simultaneous independent-campaign bounds. These results
+do not establish field benefit or a causal benefit from calibration alone.
+
+The new endpoint comparison is also mixed. Under the primary profile the audit
+learner's IBS is 0.077581 versus 0.077983 for Kaplan–Meier. At a 70-ms latency
+limit the values are 0.102512 versus 0.099682. The simpler model is better in
+that second comparison. Different service definitions can change the ordering.
+
+What is deliberately not claimed
+
+The original Paper 1 geometry, beam and atmospheric coefficients have not been
+estimated from matched physical observations. This revision addresses learned
+service-level prediction, numerical transparency and controlled robustness;
+it does not validate those physical mechanisms. Application requirements and
+risk budgets remain declared choices, not coefficients that should be learned
+by maximizing test performance. The measured analyses remain retrospective.
+Live hardware execution remains NOT_RUN; no new GitHub push was performed.
+
+Authoritative evidence
+
+results/eos_full_chain_parameter_revision_v1/
+results/endpoint_parameter_sensitivity_v1/
+results/parameter_defensibility_v1/
+results/parameter_revision_r5_v1/evidence_index.json
+
+The first three directories retain full private reproducibility details; the
+last is an explicit aggregate-only export. Raw measurements, source scenarios,
+task/action rows and generated training records are not in that safe export.

@@ -1,0 +1,21 @@
+{
+  "baseline_completion_rate": 0.557,
+  "cluster_bootstrap_95_ci": [
+    0.148,
+    0.231
+  ],
+  "conditional_task_pair_mcnemar_p": 8.607646096546486e-32,
+  "conditional_task_pair_mcnemar_scope": "Diagnostic only. The calculation treats task pairs as independent, which is not a defensible field-inference model because all tasks reuse one generated scenario and share simulated resources. The seed-cluster interval is the primary controlled-experiment uncertainty summary and is still not an independent-campaign interval.",
+  "evidence_tier": "synthetic_simulation",
+  "improved_task_pairs": 231,
+  "inference_unit_note": "The bootstrap resamples stochastic seeds as clusters. Seeds reuse one generated EOS-Bench scenario and are not independent field campaigns.",
+  "integrated_completion_rate": 0.744,
+  "paired_completion_difference": 0.187,
+  "paired_tasks": 1000,
+  "regressed_task_pairs": 44,
+  "replications_with_negative_difference": 0,
+  "replications_with_positive_difference": 10,
+  "replications_with_zero_difference": 0,
+  "synthetic_replications": 10,
+  "tied_task_pairs": 725
+}

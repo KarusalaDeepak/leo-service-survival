@@ -1,0 +1,9 @@
+fold,cap,floor,cap_description,frozen_calibration_c,fitted_calibration_horizons,raw_integrated_brier,calibrated_integrated_brier,maximum_raw_probability_change_from_cap_095,mean_raw_probability_change_from_cap_095,maximum_calibrated_probability_change_from_cap_095,cap_selected_using_validation,evidence_role
+0,0.95,1e-08,total_hazard_model_safeguard,1.0,12,0.03653774584958835,0.03607322220923254,0.0,0.0,0.0,False,outer_development_cap_sensitivity_not_retuning
+0,0.99,1e-08,total_hazard_model_safeguard,1.0,12,0.03653774584958835,0.03607322220923254,0.0,0.0,0.0,False,outer_development_cap_sensitivity_not_retuning
+0,0.99999999,1e-08,total_hazard_model_safeguard,1.0,12,0.03653774584958835,0.03607322220923254,0.0,0.0,0.0,False,outer_development_cap_sensitivity_not_retuning
+0,1.0,0.0,probability_preserving_no_artificial_floor_or_upper_cap,1.0,12,0.03653774584958835,0.03607322220923254,0.0,0.0,0.0,False,outer_development_cap_sensitivity_not_retuning
+1,0.95,1e-08,total_hazard_model_safeguard,1.0,12,0.0477796440359552,0.04702556214558549,0.0,0.0,0.0,False,outer_development_cap_sensitivity_not_retuning
+1,0.99,1e-08,total_hazard_model_safeguard,1.0,12,0.0477796440359552,0.04702556214558549,0.0,0.0,0.0,False,outer_development_cap_sensitivity_not_retuning
+1,0.99999999,1e-08,total_hazard_model_safeguard,1.0,12,0.0477796440359552,0.04702556214558549,0.0,0.0,0.0,False,outer_development_cap_sensitivity_not_retuning
+1,1.0,0.0,probability_preserving_no_artificial_floor_or_upper_cap,1.0,12,0.0477796440359552,0.04702556214558549,0.0,0.0,0.0,False,outer_development_cap_sensitivity_not_retuning
