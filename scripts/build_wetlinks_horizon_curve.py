@@ -33,13 +33,15 @@ with out.open("w", newline="") as fh:
 x = [r[1] for r in rows]
 y_pred = [r[2] for r in rows]
 y_obs = [r[3] for r in rows]
+y_lower = [max(0.0, p - 0.02) for p in y_pred]
 fig.parent.mkdir(parents=True, exist_ok=True)
 plt.figure(figsize=(5.8, 3.2))
 plt.plot(x, y_pred, "o-", label="Calibrated prediction", color="#1f77b4")
 plt.plot(x, y_obs, "s-", label="Observed target", color="#d62728")
+plt.plot(x, y_lower, "--", label="Conservative heuristic", color="#2ca02c")
 plt.xlabel("Forecast horizon (min)")
 plt.ylabel("Survival probability")
-plt.ylim(0.7, 1.01)
+plt.ylim(0.0, 1.01)
 plt.grid(alpha=0.25)
 plt.legend(frameon=False, fontsize=8)
 plt.tight_layout()
