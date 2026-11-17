@@ -41,8 +41,12 @@ arms = ["deterministic_paper3", "point_calibrated", "ipcw_conformal", "evidence_
 for ax, metric, ylabel in zip(axes, ["completion", "wasted_fraction"], ["Completed mission priority", "Wasted battery/downlink fraction"]):
     x = np.arange(4); width = 0.36
     for j, regime in enumerate(["nominal", "shifted"]):
-        vals = [np.mean([r[3 if metric=="completion" else 4] for r in rows if r[0]==regime and r[2]==a]) for a in arms]
-        ax.bar(x + (j-.5)*width, vals, width, label=regime.title() if metric=="completion" else None)
+        vals = []; errs = []
+        for a in arms:
+            vv = np.asarray([r[3 if metric=="completion" else 4] for r in rows if r[0]==regime and r[2]==a])
+            vals.append(vv.mean()); errs.append(1.96*vv.std(ddof=1)/np.sqrt(len(vv)))
+        ax.bar(x + (j-.5)*width, vals, width, yerr=errs, capsize=2,
+               label=regime.title() if metric=="completion" else None)
     ax.set_xticks(x, labels, rotation=35, ha="right", fontsize=7); ax.set_ylabel(ylabel, fontsize=8); ax.grid(axis="y", alpha=.2)
 axes[0].legend(frameon=False, fontsize=7)
 fig.suptitle("Controlled four-arm nominal/shifted simulation (synthetic adapter)", fontsize=9)
