@@ -1,5 +1,13 @@
 # LEO usable-service survival evaluation
 
+## Current R34 correction and reproduction package
+
+Start with [R34 correction and results](reproduction/r34/paper4/docs/r34_correction_and_results.md) and [reproduction instructions](reproduction/r34/paper4/docs/r34_reviewer_instructions.md). The allowlisted snapshot contains causal chunk/recovery code, matched EDF and survival controllers, protocols, tests, and all assignment-level aggregates from 1,440 runs. It contains no manuscript, raw measurements, benchmark scenario, or private correspondence.
+
+**Scientific correction:** the earlier R33 recovery contrast used future-failure storage initialization and is excluded. Historical four-arm score-response outputs also are not valid estimates of a calibrated predictor-to-scheduler effect. They remain historical artifacts, not current manuscript claims. R34 shares a fixed contact timeline across chunk sizes and reveals results causally. All 59 scaffold-admitted requests complete for every tested method; all-request priority is 0.726631. Occupied time differs, but calibrated completion superiority is not established. Long reserved windows previously contained only 4.05 seconds of nominal payload; a separate declared constrained-rate panel addresses actual transmission duration.
+
+The external scenario still requires lawful acquisition and the exact transformation/input hash. The existing WetLinks prediction derivative has a separate CC BY-SA 4.0 notice. Public visibility does **not** change the source-code rights in [NOTICE.md](NOTICE.md). Older release and local-worktree notes below describe their named historical revisions, not the current R34 conclusion.
+
 ## Local R5 parameter revision
 
 The working tree includes the unpublished 5 November R5 parameter revision:

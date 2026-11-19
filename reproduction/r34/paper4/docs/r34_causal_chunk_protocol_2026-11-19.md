@@ -1,0 +1,23 @@
+# R34 causal delivery-queue simulation — protocol frozen before execution
+
+## Correction and purpose
+
+R33 initializes storage correction records for failures at all original future downlinks before processing recovery events. This may make earlier decisions depend on later failures. Its performance contrast is therefore excluded pending a causal replacement. R34 is a fresh simulator, not a relabelling of R33. Previously inspected WetLinks data mean this remains exploratory, even though this execution protocol is frozen before its first run.
+
+## Fixed inputs and transfer assumptions
+
+- Take a common earliest-finish Paper 3 observation/relay/acquisition scaffold from the R31 45-minute transformed overlay. Independently validate it. All arms retain that scaffold; they do not optimize acquisition or repeat imaging. All original 100 requests remain in the completion denominator, including requests not admitted by the scaffold.
+- Form same-spacecraft delivery jobs from each scaffold plan's downlink payload. Jobs become ready only after all its observations and relays are complete. Model a delivery-queue storage admission check at that time; this is not a replay of full acquisition-stage onboard storage. Fixed observation/relay busy intervals remain unavailable to downlinks.
+- Give each **original S2G window** one SHA-256-keyed episode from the W09-W10 complete-at-60-minute pool. That identity, event onset, and frozen/isotonic forecast curve never change with policy, chunk length, or retry. Thus splitting does not redraw an outcome. No orbital-to-WetLinks feature equivalence is claimed; this is unsynchronized service replay.
+- Create mixed synthetic window lengths {5,15,30,45} minutes by outcome-independent contact-identity hash. This is a constructed workload, not propagated orbit geometry. Use the original nominal rates. Do not inject geometry-dependent favorable outcome correlations.
+- Replay 20 assignments and payload multipliers {1.0,1.3,1.5} relative to the common 45-minute scaffold payload. These are offered-load multipliers, **not measured demand/capacity ratios**. Checkpoint/setup overhead {0,10,30} seconds; no result-selected configuration.
+
+## Shared causal engine and policies
+
+All policies have partial/chunked delivery, the same exact resource checks, deadline constraints, and recovery. Each chunk is at most 15 minutes; per-contact cumulative exposure is measured from original window start, not from a new attempt. Good payload accrues at the nominal rate only before the assigned QoS onset. A violation is revealed at end of its second five-minute bin. A failed contact is then blocked until its end; a new job on that same contact cannot reset its lifetime. Simulated successful/chunk completion is a separate event, not an immediately applied future outcome. Jobs retain undelivered bytes; an alternative feasible contact can be used after 10 seconds. Resource ownership is checked against all fixed and active reservations. No future outcome may appear in a policy's observation object.
+
+Policies: EDF with maximum feasible chunk; fixed five-minute EDF; frozen-survival expected-byte-per-occupied-second chunk choice; temporal-isotonic same chunk choice. All order jobs by deadline then priority then fixed ID; the only score difference is chosen contact/chunk. Candidate chunks are 5/10/15 minutes plus exact residual-completion time, bounded by contact, deadline, and fixed reservations. Survival policies use `S(end)/S(start)` conditional on observed service so far and maximize expected nominal bytes / occupied seconds, then earliest finish. That conditional use of episode-start forecasts is a simulation assumption, not a validated landmark predictor. No safety or conformal guarantee.
+
+## Reporting and scope
+
+Report strict priority completed by deadline, payload delivered/requested, occupied time, post-onset occupied time, storage rejections, and number of chunks. Compare calibrated and frozen policies to both capability-matched EDFs. Use 20 paired assignment means, deterministic paired bootstrap CIs, exact sign-flip tests where feasible, and Holm correction over all declared primary calibrated-vs-EDF/frozen contrasts (all loads/overheads). Assignment-level inference is conditional on these fixed sources, not independent-campaign inference. Keep all cells; no winner selection. Causal unit tests include future-outcome noninterference, no outcome reset on splitting, two-bin detection delay, storage/bytes conservation, resource exclusion, and deadlines. Archive code-only reproducibility materials locally; no public repository visibility change or publication without author approval.

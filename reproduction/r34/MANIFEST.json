@@ -1,0 +1,90 @@
+[
+  {
+    "path": "paper4/scripts/run_r30_wetlinks_eo_trace.py",
+    "sha256": "b40c65e8723ed66f1176043365bf1e58257d1a06d2337ed87bf2078feb810f65"
+  },
+  {
+    "path": "paper4/scripts/run_r31_long_contact_probe.py",
+    "sha256": "fd025ae3313a1fada7c78e7b7501b7c903ca75a73bcfc63325d26d641287e914"
+  },
+  {
+    "path": "paper4/scripts/run_r32_checkpoint_capacity.py",
+    "sha256": "89d78e0d9efbb4fb8c46ec040f7710e08345e59ac4a43110d17a8adebd2806a3"
+  },
+  {
+    "path": "paper4/scripts/run_r34_causal_chunks.py",
+    "sha256": "7a88cda24d204178e420654159a7ba7864d82e41a1696a7fb2a4f7d3d70b1ea5"
+  },
+  {
+    "path": "paper4/scripts/summarize_r34_causal_chunks.py",
+    "sha256": "e028df59f6524df13b9b068505558ce6b8dd4b11c94d928a9dae92011a7accdc"
+  },
+  {
+    "path": "paper4/scripts/package_r34_review.py",
+    "sha256": "71581a11476876689e098e35828b7fcf4ffd26791708d367bdc49b8d7d7aa4ab"
+  },
+  {
+    "path": "paper4/src/leo_service_survival/metrics.py",
+    "sha256": "082f32d74926370eb39a0ef4c0fac5aa702b3aadc87bba2887b0e6338afd516b"
+  },
+  {
+    "path": "paper3/scripts/matched_scheduler.py",
+    "sha256": "782797fa6e79ede28896a37541dd094fa2b800ca57adb9170b328cd4ae6078e0"
+  },
+  {
+    "path": "paper3/scripts/parameter_registry.py",
+    "sha256": "9fa29190bf82cbf1905be5327d5640d0689b2a7bca79fe642820ddebac2363c3"
+  },
+  {
+    "path": "paper4/tests/test_r34_causal_chunks.py",
+    "sha256": "d394fbfd9d16b7c6974e713c77df18d161d4f557dd4db8afb9504e2bfa694aa6"
+  },
+  {
+    "path": "paper4/docs/r34_causal_chunk_protocol_2026-11-19.md",
+    "sha256": "f9d50005f23d7934739d0886b575044f8a61daa206f64b40fcc54ad4df3c6f0e"
+  },
+  {
+    "path": "paper4/docs/r34_duration_matching_addendum_2026-11-19.md",
+    "sha256": "45298fe26cacbc23e06b598347a7cf28cef8fceef071109dca52876cdaff2fa5"
+  },
+  {
+    "path": "paper4/docs/r34_correction_and_results.md",
+    "sha256": "f0a8326cb06f2b11d2822bb47dbc62899b0fdd1fb8040590ff9253f616f05796"
+  },
+  {
+    "path": "paper4/docs/r34_reviewer_instructions.md",
+    "sha256": "d1531ffac747d3ba560ad7490980519f84fd9ed912506cfbcbf5c8de730a03a0"
+  },
+  {
+    "path": "aggregates/r34_causal_native_verified_2026-11-19/runs.csv",
+    "sha256": "b4b87026bbe6e0cfc0a079397dbda702e42f21b51e2747dfab6e0282c54f5913"
+  },
+  {
+    "path": "aggregates/r34_causal_native_verified_2026-11-19/summary.csv",
+    "sha256": "1cdf42a808536adf280c0a6c2c21418fc40da91f012319684618d8818e754e6a"
+  },
+  {
+    "path": "aggregates/r34_causal_native_verified_2026-11-19/paired_inference.csv",
+    "sha256": "59aeac069f35ec7a90438fce45ab5851e21daa507efbfa74f18134aacb02ed07"
+  },
+  {
+    "path": "aggregates/r34_causal_native_verified_2026-11-19/inference_scope.json",
+    "sha256": "0ebf53083403957b8c27ee2d4d55258e3268a806df531389ad748e50810b688d"
+  },
+  {
+    "path": "aggregates/r34_causal_duration_verified_2026-11-19/runs.csv",
+    "sha256": "e461de185b7cc422bacfb90c2c31bb842caf9807677709fd015f26799b0933b6"
+  },
+  {
+    "path": "aggregates/r34_causal_duration_verified_2026-11-19/summary.csv",
+    "sha256": "efcba17cf7bb0d43a99e3a6285c490c686b0f55bfad894b4e95043180373993f"
+  },
+  {
+    "path": "aggregates/r34_causal_duration_verified_2026-11-19/paired_inference.csv",
+    "sha256": "7cd929c1cc9c27a27ae66f9d0dff97b212e30fda1033f52eac2fd09197d50f4b"
+  },
+  {
+    "path": "aggregates/r34_causal_duration_verified_2026-11-19/inference_scope.json",
+    "sha256": "0ebf53083403957b8c27ee2d4d55258e3268a806df531389ad748e50810b688d"
+  }
+]

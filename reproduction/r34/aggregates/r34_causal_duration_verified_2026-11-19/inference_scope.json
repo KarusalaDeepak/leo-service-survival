@@ -1,0 +1,7 @@
+{
+  "units": "20 paired assignment seeds conditional on fixed acquired scaffold and trace pool",
+  "bootstrap": "10000 paired seed resamples; nominal percentile 95% interval",
+  "tests": "two-sided exact sign flips, symmetric-difference null assumption",
+  "multiplicity": "Holm across 27 primary priority contrasts; separate 27 goodput contrasts",
+  "status": "exploratory previously inspected source data; not campaign-level confirmation"
+}

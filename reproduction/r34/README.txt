@@ -1,0 +1,1 @@
+Start with paper4/docs/r34_reviewer_instructions.md. Author-written code and aggregate outputs only. No raw data, row-level predictions, manuscript, credentials, or Git history. Repository visibility is controlled separately.

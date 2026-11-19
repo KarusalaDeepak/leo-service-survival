@@ -1,5 +1,7 @@
 # Redistribution boundary
 
+Current R34 public-release update: the author approved public visibility after a reachable-history audit. The code-only snapshot under `reproduction/r34/` includes author-written code and aggregate results, not source scenarios, raw measurements, manuscripts or correspondence. The historical private-release language below records earlier versions; it does not describe the current visibility. Public visibility grants no new source-code licence; NOTICE.md remains authoritative. The separately attributed WetLinks derivative and LENS/OneWeb summaries retain their source data terms.
+
 This version 1.3.1 repository is an allowlisted, redistribution-safe reviewer
 package. It retains the verified v1.3.0 empirical core and adds current R3
 documentation and aggregate diagnostic provenance. It is not a copy of the
@@ -76,7 +78,5 @@ days, or sessions as independent acquisition families.
 
 ## Public-release condition
 
-The current repository is private. Its manuscript URL identifies that private
-archive, not an anonymously accessible or open-source release. Public release
-and any grant of reuse rights require an explicit author decision; neither is
-performed by this documentation update.
+The earlier v1.3.1 repository was private. R34 changes visibility under explicit
+author approval after audit, without granting a new source-code licence.
